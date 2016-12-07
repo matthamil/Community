@@ -4,6 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Community.Models
 {
+    /**
+     * Class: Achievements
+     * Purpose: Stores information about an achievement
+     */
     public class Achievements
     {
         [Key]

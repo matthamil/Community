@@ -4,17 +4,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Community.Models
 {
-    public class EventChatroomMessage
+    /**
+     * Class: VolunteerAchievements
+     * Purpose: Achievement associated with a volunteer
+     */
+    public class VolunteerAchievements
     {
         [Key]
-        public int EventChatroomMessageId { get; set; }
+        public int VolunteerAchievementsId { get; set; }
 
         [Required]
-        public int EventMemberId { get; set; }
+        public int VolunteerId { get; set; }
 
         [Required]
-        [StringLength(1000, MinimumLength = 1, ErrorMessage = "Message is longer than 1000 characters.")]
-        public string Message { get; set; }
+        public int AchievementId { get; set; }
 
         [Required]
         [DataType(DataType.Date)]

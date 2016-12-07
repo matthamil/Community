@@ -4,20 +4,34 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Community.Models
 {
-    public class Organization
+    /**
+     * Class: EventMember
+     * Purpose: Registered event volunteer
+     */
+    public class EventMember
     {
         [Key]
-        public int OrganizationId { get; set; }
+        public int EventMemberId { get; set; }
+
+        public string VolunteerId { get; set; }
+        public ApplicationUser Volunteer { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public string JobTitle { get; set; }
 
         [Required]
         [StringLength(255, ErrorMessage = "The organization description cannot exceed 255 characters. ")]
         public string Description { get; set; }
 
         [Required]
-        public bool IsActive { get; set; }
+        public DateTime StartTime { get; set; }
+
+        [Required]
+        public DateTime EndTime { get; set; }
+
+        public bool ChatMuted { get; set; }
+
+        public int AttendeePoints { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
