@@ -4,6 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Community.Models
 {
+    /**
+     * Class: Event
+     * Purpose: An event that an organization created
+     */
     public class Event
     {
         [Key]

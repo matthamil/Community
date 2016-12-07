@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Community.Models
 {
-    // Add profile data for application users by adding properties to the ApplicationUser class
+    /**
+     * Class: ApplicationUser
+     * Purpose: User class
+     */
     public class ApplicationUser : IdentityUser
     {
         [Required]
