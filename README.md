@@ -1,40 +1,46 @@
-# Welcome to ASP.NET Core
+# Community
 
-We've made some big updates in this release, so it’s **important** that you spend a few minutes to learn what’s new.
+Community is a full-stack application helping connect volunteers with local nonprofit organizations. Community uses an ASP.NET backend with a React client.
 
-You've created a new ASP.NET Core project. [Learn what's new](https://go.microsoft.com/fwlink/?LinkId=518016)
+## Table of Contents
 
-## This application consists of:
+1. [Background](#background)
 
-*   Sample pages using ASP.NET Core MVC
-*   [Bower](https://go.microsoft.com/fwlink/?LinkId=518004) for managing client-side libraries
-*   Theming using [Bootstrap](https://go.microsoft.com/fwlink/?LinkID=398939)
+1. [Install](#install)
 
-## How to
+1. [Usage](#usage)
 
-*   [Add a Controller and View](https://go.microsoft.com/fwlink/?LinkID=398600)
-*   [Add an appsetting in config and access it in app.](https://go.microsoft.com/fwlink/?LinkID=699562)
-*   [Manage User Secrets using Secret Manager.](https://go.microsoft.com/fwlink/?LinkId=699315)
-*   [Use logging to log a message.](https://go.microsoft.com/fwlink/?LinkId=699316)
-*   [Add packages using NuGet.](https://go.microsoft.com/fwlink/?LinkId=699317)
-*   [Add client packages using Bower.](https://go.microsoft.com/fwlink/?LinkId=699318)
-*   [Target development, staging or production environment.](https://go.microsoft.com/fwlink/?LinkId=699319)
+1. [API](#api)
 
-## Overview
+1. [License](#license)
 
-*   [Conceptual overview of what is ASP.NET Core](https://go.microsoft.com/fwlink/?LinkId=518008)
-*   [Fundamentals of ASP.NET Core such as Startup and middleware.](https://go.microsoft.com/fwlink/?LinkId=699320)
-*   [Working with Data](https://go.microsoft.com/fwlink/?LinkId=398602)
-*   [Security](https://go.microsoft.com/fwlink/?LinkId=398603)
-*   [Client side development](https://go.microsoft.com/fwlink/?LinkID=699321)
-*   [Develop on different platforms](https://go.microsoft.com/fwlink/?LinkID=699322)
-*   [Read more on the documentation site](https://go.microsoft.com/fwlink/?LinkID=699323)
+## Background
 
-## Run & Deploy
+Community is my full-stack capstone project for [Nashville Software School](http://www.nashvillesoftwareschool).
 
-*   [Run your app](https://go.microsoft.com/fwlink/?LinkID=517851)
-*   [Run tools such as EF migrations and more](https://go.microsoft.com/fwlink/?LinkID=517853)
-*   [Publish to Microsoft Azure Web Apps](https://go.microsoft.com/fwlink/?LinkID=398609)
+Community is a platform to connect volunteers with local nonprofit organizations. It serves nonprofit organizations by creating a platform where volunteers can sign up for events and event organizers can send all event-related communications through the application. Volunteers are rewarded for their service with badges and points. Stretch goals include offering local businesses the opportunity to create business accounts to sponsor events. Businesses can sponsor events by offering incentives to volunteers to help nonprofit organizations by offering discounts or coupons to those who contribute their time (e.g. a coffee shop offering a free cup of coffee for anyone who volunteers at an event).
 
-We would love to hear your [feedback](https://go.microsoft.com/fwlink/?LinkId=518015)
-Community
+This project is scheduled to be completed by Nashville Software School's Demo Day on January 10, 2017.
+
+## Install
+
+This project uses [.NET Core](https://www.microsoft.com/net/core) and [npm](https://www.npmjs.com/) to manage frontend dependencies.
+
+Clone or download the project to your machine and run the following commands:
+
+```sh
+dotnet restore
+dotnet run
+```
+
+## Usage
+
+## API
+
+## Contribute
+
+Feel free to dive in! [Open an issue](https://github.com/matthamil/Community/issues/new) or submit a PR. Please adhere to the [semantic commit message style](https://seesparkbox.com/foundry/semantic_commit_messages) when contributing.
+
+## License
+
+MIT (c) Matt Hamil
