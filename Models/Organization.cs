@@ -17,6 +17,9 @@ namespace Community.Models
         public string Description { get; set; }
 
         [Required]
+        public bool IsActive { get; set; }
+
+        [Required]
         [DataType(DataType.Date)]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime DateCreated { get; set; }
