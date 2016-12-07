@@ -4,15 +4,15 @@ Community is a full-stack application helping connect volunteers with local nonp
 
 ## Table of Contents
 
-1. [Background](#background)
+* [Background](#background)
 
-1. [Install](#install)
+* [Install](#install)
 
-1. [Usage](#usage)
+* [Usage](#usage)
 
-1. [API](#api)
+* [API](#api)
 
-1. [License](#license)
+* [License](#license)
 
 ## Background
 
