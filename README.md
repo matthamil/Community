@@ -1,7 +1,7 @@
 # Community
 
 [![GitHub issues](https://img.shields.io/github/issues/matthamil/community.svg)](https://github.com/matthamil/Community/issues/)
-[![GitHub closed issues](https://img.shields.io/github/issues-closed/matthamil/Community.svg)]
+[GitHub closed issues](https://img.shields.io/github/issues-closed/matthamil/Community.svg)
 
 Community is a full-stack application helping connect volunteers with local nonprofit organizations. Community uses an ASP.NET backend with a React client.
 
