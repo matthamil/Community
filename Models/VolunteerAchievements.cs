@@ -4,17 +4,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Community.Models
 {
-    public class Organization
+    public class VolunteerAchievements
     {
         [Key]
-        public int OrganizationId { get; set; }
+        public int VolunteerAchievementsId { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public int VolunteerId { get; set; }
 
         [Required]
-        [StringLength(255, ErrorMessage = "The organization description cannot exceed 255 characters. ")]
-        public string Description { get; set; }
+        public int AchievementId { get; set; }
 
         [Required]
         [DataType(DataType.Date)]

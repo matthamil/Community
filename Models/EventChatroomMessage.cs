@@ -4,17 +4,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Community.Models
 {
-    public class Organization
+    public class EventChatroomMessage
     {
         [Key]
-        public int OrganizationId { get; set; }
+        public int EventChatroomMessageId { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public int EventMemberId { get; set; }
 
         [Required]
-        [StringLength(255, ErrorMessage = "The organization description cannot exceed 255 characters. ")]
-        public string Description { get; set; }
+        [StringLength(1000, MinimumLength = 1, ErrorMessage = "Message is longer than 1000 characters.")]
+        public string Message { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
