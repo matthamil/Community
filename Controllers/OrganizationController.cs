@@ -15,6 +15,17 @@ using Community.Data;
 
 namespace Community.Controllers
 {
+    /**
+     * Class: OrganizationController
+     * Purpose: API endpoints for managing organizations
+     * Methods:
+     *   Get() - Get all organizations
+     *   Get(int id) - Get single organization
+     *   GetAllVolunteersForOrganization(int id) - All who have volunteered for an organization
+     *   Create(Organzation organization) - Create a new organization
+     *   Edit(Organization organization) - Edit an existing organization
+     *   Delete(int id) - Disable an existing organization
+     */
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class OrganizationController : Controller
