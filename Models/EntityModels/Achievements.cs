@@ -5,10 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Community.Models
 {
     /**
-     * Class: Achievements
+     * Class: Achievement
      * Purpose: Stores information about an achievement
      */
-    public class Achievements
+    public class Achievement
     {
         [Key]
         public int AchievementId { get; set; }
@@ -25,6 +25,6 @@ namespace Community.Models
         [Required]
         [DataType(DataType.Date)]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime DateEarned { get; set; }
+        public DateTime DateCreated { get; set; }
     }
 }
