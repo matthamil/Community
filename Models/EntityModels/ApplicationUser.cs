@@ -1,4 +1,6 @@
+using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Community.Models
@@ -23,5 +25,10 @@ namespace Community.Models
 
         [Required]
         public int ZipCode { get; set; }
+
+        [Required]
+        [DataType(DataType.Date)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public DateTime DateCreated { get; set; }
     }
 }

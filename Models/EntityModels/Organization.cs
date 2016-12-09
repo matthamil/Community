@@ -24,6 +24,12 @@ namespace Community.Models
         public bool IsActive { get; set; }
 
         [Required]
+        public string OrganizerId { get; set; }
+
+        [Required]
+        public ApplicationUser Organizer { get; set; }
+
+        [Required]
         [DataType(DataType.Date)]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime DateCreated { get; set; }
