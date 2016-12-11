@@ -14,6 +14,7 @@ namespace Community.Models
         public int EventId { get; set; }
 
         [Required]
+        public int OrganizationId { get; set; }
         public Organization Organization { get; set; }
 
         [Required]

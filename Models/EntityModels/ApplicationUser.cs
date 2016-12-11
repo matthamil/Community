@@ -12,9 +12,11 @@ namespace Community.Models
     public class ApplicationUser : IdentityUser
     {
         [Required]
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
         [Required]
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
         [Required]
@@ -22,9 +24,6 @@ namespace Community.Models
 
         [Required]
         public string State { get; set; }
-
-        [Required]
-        public int ZipCode { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
