@@ -2,17 +2,14 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Community.Models
+namespace Community.Models.OrganizationViewModels
 {
     /**
-     * Class: Organization
-     * Purpose: Organization created by a user
+     * Class: OrganizationViewModel
+     * Purpose: Used when creating a new organization via POST
      */
-    public class Organization
+    public class OrganizationCreateViewModel
     {
-        [Key]
-        public int OrganizationId { get; set; }
-
         [Required]
         public string Name { get; set; }
 
@@ -25,16 +22,5 @@ namespace Community.Models
 
         [Required]
         public string State { get; set; }
-
-        [Required]
-        public bool IsActive { get; set; }
-
-        [Required]
-        public ApplicationUser Organizer { get; set; }
-
-        [Required]
-        [DataType(DataType.Date)]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime DateCreated { get; set; }
     }
 }

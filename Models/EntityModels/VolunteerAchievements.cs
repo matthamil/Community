@@ -14,10 +14,10 @@ namespace Community.Models
         public int VolunteerAchievementsId { get; set; }
 
         [Required]
-        public int VolunteerId { get; set; }
+        public ApplicationUser Volunteer { get; set; }
 
         [Required]
-        public int AchievementId { get; set; }
+        public Achievement Achievement { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
