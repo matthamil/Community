@@ -16,9 +16,9 @@ namespace Community.Models.EventMemberViewModels
         public EventMemberViewModel(EventMember e)
         {
             EventMemberId = e.EventMemberId;
-            if (e.Volunteer != null)
+            if (e.ApplicationUser != null)
             {
-                Volunteer = new ApplicationUserViewModel(e.Volunteer);
+                Volunteer = new ApplicationUserViewModel(e.ApplicationUser);
             }
             JobTitle = e.JobTitle;
             Description = e.Description;

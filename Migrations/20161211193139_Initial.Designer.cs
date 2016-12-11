@@ -8,7 +8,7 @@ using Community.Data;
 namespace Community.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20161211090452_Initial")]
+    [Migration("20161211193139_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -391,7 +391,7 @@ namespace Community.Migrations
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Community.Models.ApplicationUser", "Volunteer")
+                    b.HasOne("Community.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("VolunteerId");
                 });

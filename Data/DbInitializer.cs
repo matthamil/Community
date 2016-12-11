@@ -3,12 +3,16 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Community.Models;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Community.Data
 {
+    /**
+     * Class: DbInitializer
+     * Purpose: Seeds the database with data during development
+     * Methods:
+     *   InitializeAsync() - Initializes the database
+     */
     public static class DbInitializer
     {
         public static async void InitializeAsync(IServiceProvider serviceProvider)
@@ -160,7 +164,7 @@ namespace Community.Data
                 {
                     new EventMember {
                         Event = context.Event.Where(e => e.Name == "Hour of Code").SingleOrDefault(),
-                        Volunteer = context.ApplicationUser.Where(u => u.FirstName == "Matt").SingleOrDefault(),
+                        ApplicationUser = context.ApplicationUser.Where(u => u.FirstName == "Matt").SingleOrDefault(),
                         StartTime = DateTime.Today.AddDays(2).AddHours(3),
                         EndTime = DateTime.Today.AddDays(2).AddHours(4),
                         JobTitle = "Mentor",
@@ -170,7 +174,7 @@ namespace Community.Data
                     },
                     new EventMember {
                         Event = context.Event.Where(e => e.Name == "Hour of Code").SingleOrDefault(),
-                        Volunteer = context.ApplicationUser.Where(u => u.FirstName == "Steve").SingleOrDefault(),
+                        ApplicationUser = context.ApplicationUser.Where(u => u.FirstName == "Steve").SingleOrDefault(),
                         StartTime = DateTime.Today.AddDays(2).AddHours(3),
                         EndTime = DateTime.Today.AddDays(2).AddHours(4),
                         JobTitle = "Mentor",
@@ -180,7 +184,7 @@ namespace Community.Data
                     },
                     new EventMember {
                         Event = context.Event.Where(e => e.Name == "Highway Cleanup").SingleOrDefault(),
-                        Volunteer = context.ApplicationUser.Where(u => u.FirstName == "Matt").SingleOrDefault(),
+                        ApplicationUser = context.ApplicationUser.Where(u => u.FirstName == "Matt").SingleOrDefault(),
                         StartTime = DateTime.Today.AddDays(4).AddHours(5),
                         EndTime = DateTime.Today.AddDays(4).AddHours(8),
                         JobTitle = "Street Cleaner",
@@ -217,7 +221,7 @@ namespace Community.Data
                     },
                     new EventMember {
                         Event = context.Event.Where(e => e.Name == "Puppy Therapy").SingleOrDefault(),
-                        Volunteer = context.ApplicationUser.Where(u => u.FirstName == "Morgan").SingleOrDefault(),
+                        ApplicationUser = context.ApplicationUser.Where(u => u.FirstName == "Morgan").SingleOrDefault(),
                         StartTime = DateTime.Today.AddDays(12).AddHours(2),
                         EndTime = DateTime.Today.AddDays(12).AddHours(6),
                         JobTitle = "Dog Pin Supervisor",

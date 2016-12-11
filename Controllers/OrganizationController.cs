@@ -1,33 +1,27 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Logging;
 using Community.Models;
 using Community.Models.AccountViewModels;
-using Community.Services;
 using Community.Data;
 using Community.Models.OrganizationViewModels;
+using System;
 
 namespace Community.Controllers
 {
     /**
      * Class: OrganizationController
-     * Purpose: API endpoints for managing organizations
+     * Purpose: Manages Organization API endpoints
      * Methods:
-     *   Get() - Get all organizations
-     *   Get(int id) - Get single organization
-     *   GetAllVolunteersForOrganization(int id) - All who have volunteered for an organization
-     *   Create(Organzation organization) - Create a new organization
-     *   Edit(Organization organization) - Edit an existing organization
+     *   All() - Get all Organizations
+     *   Id(int id) - Get single organization
+     *   OrganizerId(int id) - Get organizations organized by user
+     *   Location(string city, string state) - Search for organizations by location
+     *   Create(OrganizationCreateViewModel organization) - Create a new organization
+     *   Edit(OrganizationViewModel organization) - Edit an existing organization
      *   Delete(int id) - Disable an existing organization
      */
     [Produces("application/json")]
@@ -44,7 +38,12 @@ namespace Community.Controllers
 
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
-        // GET /organization/all
+        /**
+         * GET /organization/all
+         * Purpose: Get all organizations
+         * Return:
+         *      List<OrganizationViewModel>
+         */
         [HttpGet]
         public async Task<IActionResult> All()
         {
@@ -64,7 +63,14 @@ namespace Community.Controllers
             return Json(model);
         }
 
-        // GET /organization/id?=3
+        /**
+         * GET /organization/id?=3
+         * Purpose: Get a specific organization by ID
+         * Args:
+         *      int id - Organization ID
+         * Return:
+         *      OrganizationViewModel
+         */
         [HttpGet]
         public async Task<IActionResult> Id([FromQuery]int id)
         {
@@ -73,7 +79,14 @@ namespace Community.Controllers
             return Json(new OrganizationViewModel(organization));
         }
 
-        // GET /organization/organizerId?=cd377dd3-f75e-4ad9-b35c-9aba57a76878
+        /**
+         * GET /organization/organizerId?=cd377dd3-f75e-4ad9-b35c-9aba57a76878
+         * Purpose: Get a list of organizations organized by a specific user
+         * Args:
+         *      string id - User id
+         * Return:
+         *      List<OrganizationViewModel>
+         */
         [HttpGet]
         public async Task<IActionResult> OrganizerId([FromQuery]string id)
         {
@@ -87,7 +100,15 @@ namespace Community.Controllers
             return Json(model);
         }
 
-        // GET /organization/location?city=Nashville&state=TN
+        /**
+         * GET /organization/location?city=Nashville&state=TN
+         * Purpose: Search for organizations by city and/or state
+         * Args:
+         *      string city - (Optional) search by city
+         *      string state - (Optional) search by state
+         * Return:
+         *      List<OrganizationViewModel>
+         */
         [HttpGet]
         public async Task<IActionResult> Location(string city, string state)
         {
@@ -118,25 +139,14 @@ namespace Community.Controllers
             return Json(model);
         }
 
-        // TODO: Move to a volunteers controller?
-        // GET /organization/3/volunteers
-        [HttpGet]
-        [RouteAttribute("{id}/volunteers")]
-        public async Task<IActionResult> GetAllVolunteersForOrganization([FromQuery]int id)
-        {
-            // ApplicationUser -> EventMember -> Event -> Organization
-            // TODO
-            // var volunteers = await (
-            //     from user in context.ApplicationUser
-            //     from eventMember in context.EventMember
-            //     from orgEvent in context.Event
-            //     where eventMember.VolunteerId == ApplicationUser.Id
-            //     where
-            //     ).toListAsync();
-            return Ok();
-        }
-
-        // POST /organization/create
+        /**
+         * POST /organization/create
+         * Purpose: Create a new organization
+         * Args:
+         *      OrganizationCreateViewModel organization - New organization
+         * Return:
+         *      OrganizationViewModel
+         */
         [HttpPost]
         // [Authorize]
         public async Task<IActionResult> Create([FromBody]OrganizationCreateViewModel organization)
@@ -144,7 +154,7 @@ namespace Community.Controllers
             if (ModelState.IsValid)
             {
                 var user = await GetCurrentUserAsync();
-                // Uncomment for testing
+                // For testing purposes, uncomment the line below and comment the GetCurrentUserAsync() line.
                 // ApplicationUser user = await context.ApplicationUser.SingleAsync(u => u.FirstName == "Matt");
 
                 Organization org = new Organization()
@@ -167,6 +177,14 @@ namespace Community.Controllers
             return BadRequest();
         }
 
+        /**
+         * POST /organization/edit
+         * Purpose: Edit an existing organization
+         * Args:
+         *      OrganizationViewModel - Existing organization with updated fields
+         * Return:
+         *      OrganizationViewModel
+         */
         [HttpPost]
         // [Authorize]
         public async Task<IActionResult> Edit([FromBody]OrganizationViewModel organization)
@@ -179,6 +197,7 @@ namespace Community.Controllers
 
             Organization originalOrg = await context.Organization.Include(o => o.Organizer).SingleOrDefaultAsync(o => o.OrganizationId == organization.OrganizationId);
 
+            // Organization must be organized by the current user
             if (originalOrg == null || originalOrg.Organizer != user) {
                 return BadRequest(new
                 {
@@ -206,6 +225,14 @@ namespace Community.Controllers
             return Json(ModelState);
         }
 
+        /**
+         * DELETE /organization/delete/3
+         * Purpose: Deletes an organization, all of their future events, and any event members & chat messages for those events
+         * Args:
+         *      int id - Organization ID
+         * Return:
+         *      NoContentResult
+         */
         [HttpDelete]
         // [Authorize]
         public async Task<IActionResult> Delete([FromRoute]int id)
@@ -213,7 +240,7 @@ namespace Community.Controllers
             // Confirm that the logged in user is the organizer
             var user = await GetCurrentUserAsync();
 
-            // For testing purposes
+            // For testing purposes, uncomment the line below and comment the GetCurrentUserAsync() line.
             // ApplicationUser user = await context.ApplicationUser.SingleOrDefaultAsync(u => u.FirstName == "Matt");
 
             Organization originalOrg = await context.Organization.Include(o => o.Organizer).SingleOrDefaultAsync(o => o.OrganizationId == id);
@@ -227,6 +254,17 @@ namespace Community.Controllers
             }
 
             originalOrg.IsActive = false;
+
+            // Remove all future events from database
+            Event[] organizationEvents = await context.Event.Include(e => e.Organization).Where(e => e.Organization.OrganizationId == id && e.Date > DateTime.Now).ToArrayAsync();
+            // Remove all event members from future events from database
+            EventMember[] eventMembers = await context.EventMember.Include(e => e.Event).ThenInclude(ev => ev.Organization).Where(e => e.Event.Organization.OrganizationId == id && e.Event.Date > DateTime.Now).ToArrayAsync();
+            // Remove all chatroom messages from future events from database
+            EventChatroomMessage[] chatMessages = await context.EventChatroomMessage.Include(e => e.EventMember).ThenInclude(ev => ev.Event).ThenInclude(eve => eve.Organization).Where(e => e.EventMember.Event.Organization.OrganizationId == id && e.EventMember.Event.Date > DateTime.Now).ToArrayAsync();
+
+            context.RemoveRange(chatMessages);
+            context.RemoveRange(eventMembers);
+            context.RemoveRange(organizationEvents);
 
             context.Entry(originalOrg).State = EntityState.Modified;
             context.Update(originalOrg);

@@ -16,13 +16,12 @@ namespace Community.Models
         [ForeignKey("Event")]
         public int EventId { get; set; }
 
-        [Required]
         public Event Event { get; set; }
 
-        [ForeignKey("Volunteer")]
         public string VolunteerId { get; set; }
 
-        public ApplicationUser Volunteer { get; set; }
+        [ForeignKey("VolunteerId")]
+        public ApplicationUser ApplicationUser { get; set; }
 
         [Required]
         public string JobTitle { get; set; }

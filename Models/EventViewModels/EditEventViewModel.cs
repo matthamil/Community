@@ -1,21 +1,19 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Community.Models
+namespace Community.Models.EventViewModels
 {
     /**
-     * Class: Event
-     * Purpose: An event that an organization created
+     * Class: EditEventViewModel
+     * Purpose: Edit an existing event from the client
      */
-    public class Event
+    public class EditEventViewModel
     {
-        [Key]
-        public int EventId { get; set; }
+        [Required]
+        public int OrganizationId { get; set; }
 
         [Required]
-        public Organization Organization { get; set; }
+        public int EventId { get; set; }
 
         [Required]
         public string Name { get; set; }
@@ -43,12 +41,5 @@ namespace Community.Models
 
         [Required]
         public string Description { get; set; }
-
-        public ICollection<EventMember> EventMembers { get; set; }
-
-        [Required]
-        [DataType(DataType.Date)]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime DateCreated { get; set; }
     }
 }

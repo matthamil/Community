@@ -23,17 +23,29 @@ namespace Community.Models.EventViewModels
             Name = e.Name;
             City = e.City;
             State = e.State;
+            Address = e.Address;
             ZipCode = e.ZipCode;
             Date = e.Date;
             StartTime = e.StartTime;
             EndTime = e.EndTime;
             Description = e.Description;
-            if (e.EventMembers != null)
+        }
+        public EventViewModel(Event e, ICollection<EventMember> eMemberList)
+        {
+            EventId = e.EventId;
+            Organization = new OrganizationViewModel(e.Organization);
+            Name = e.Name;
+            City = e.City;
+            State = e.State;
+            Address = e.Address;
+            ZipCode = e.ZipCode;
+            Date = e.Date;
+            StartTime = e.StartTime;
+            EndTime = e.EndTime;
+            Description = e.Description;
+            foreach (EventMember eventMember in eMemberList)
             {
-                foreach (EventMember eventMember in e.EventMembers)
-                {
-                    EventMembers.Add(new EventMemberViewModel(eventMember));
-                }
+                EventMembers.Add(new EventMemberViewModel(eventMember));
             }
         }
 
@@ -41,33 +53,24 @@ namespace Community.Models.EventViewModels
 
         public OrganizationViewModel Organization { get; set; }
 
-        [Required]
         public string Name { get; set; }
 
-        [Required]
         public string Address { get; set; }
 
-        [Required]
         public string City { get; set; }
 
-        [Required]
         public string State { get; set; }
 
-        [Required]
         public string ZipCode { get; set; }
 
-        [Required]
         public DateTime Date { get; set; }
 
-        [Required]
         public DateTime StartTime { get; set; }
 
-        [Required]
         public DateTime EndTime { get; set; }
 
-        [Required]
         public string Description { get; set; }
 
-        public List<EventMemberViewModel> EventMembers { get; set; }
+        public List<EventMemberViewModel> EventMembers { get; set; } = new List<EventMemberViewModel>();
     }
 }

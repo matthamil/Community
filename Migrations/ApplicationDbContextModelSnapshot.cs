@@ -390,7 +390,7 @@ namespace Community.Migrations
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Community.Models.ApplicationUser", "Volunteer")
+                    b.HasOne("Community.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("VolunteerId");
                 });
