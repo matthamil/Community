@@ -14,7 +14,7 @@ namespace Community.Models
         public int EventChatroomMessageId { get; set; }
 
         [Required]
-        public int EventMemberId { get; set; }
+        public EventMember EventMember { get; set; }
 
         [Required]
         [StringLength(1000, MinimumLength = 1, ErrorMessage = "Message is longer than 1000 characters.")]

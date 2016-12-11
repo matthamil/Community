@@ -13,7 +13,7 @@ namespace Community.Migrations
                 columns: table => new
                 {
                     AchievementId = table.Column<int>(nullable: false)
-                        .Annotation("Autoincrement", true),
+                        .Annotation("Sqlite:Autoincrement", true),
                     DateCreated = table.Column<DateTime>(nullable: false, defaultValueSql: "strftime('%Y-%m-%d %H:%M:%S')"),
                     Metric = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: false),
@@ -55,36 +55,6 @@ namespace Community.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EventChatroomMessage",
-                columns: table => new
-                {
-                    EventChatroomMessageId = table.Column<int>(nullable: false)
-                        .Annotation("Autoincrement", true),
-                    DateCreated = table.Column<DateTime>(nullable: false, defaultValueSql: "strftime('%Y-%m-%d %H:%M:%S')"),
-                    EventMemberId = table.Column<int>(nullable: false),
-                    Message = table.Column<string>(maxLength: 1000, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EventChatroomMessage", x => x.EventChatroomMessageId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "VolunteerAchievements",
-                columns: table => new
-                {
-                    VolunteerAchievementsId = table.Column<int>(nullable: false)
-                        .Annotation("Autoincrement", true),
-                    AchievementId = table.Column<int>(nullable: false),
-                    DateCreated = table.Column<DateTime>(nullable: false, defaultValueSql: "strftime('%Y-%m-%d %H:%M:%S')"),
-                    VolunteerId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_VolunteerAchievements", x => x.VolunteerAchievementsId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -113,37 +83,11 @@ namespace Community.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EventMember",
-                columns: table => new
-                {
-                    EventMemberId = table.Column<int>(nullable: false)
-                        .Annotation("Autoincrement", true),
-                    AttendeePoints = table.Column<int>(nullable: false),
-                    ChatMuted = table.Column<bool>(nullable: false),
-                    DateCreated = table.Column<DateTime>(nullable: false, defaultValueSql: "strftime('%Y-%m-%d %H:%M:%S')"),
-                    Description = table.Column<string>(maxLength: 255, nullable: false),
-                    EndTime = table.Column<DateTime>(nullable: false),
-                    JobTitle = table.Column<string>(nullable: false),
-                    StartTime = table.Column<DateTime>(nullable: false),
-                    VolunteerId = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EventMember", x => x.EventMemberId);
-                    table.ForeignKey(
-                        name: "FK_EventMember_AspNetUsers_VolunteerId",
-                        column: x => x.VolunteerId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Organization",
                 columns: table => new
                 {
                     OrganizationId = table.Column<int>(nullable: false)
-                        .Annotation("Autoincrement", true),
+                        .Annotation("Sqlite:Autoincrement", true),
                     City = table.Column<string>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false, defaultValueSql: "strftime('%Y-%m-%d %H:%M:%S')"),
                     Description = table.Column<string>(maxLength: 255, nullable: false),
@@ -164,11 +108,38 @@ namespace Community.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "VolunteerAchievements",
+                columns: table => new
+                {
+                    VolunteerAchievementsId = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    AchievementId = table.Column<int>(nullable: false),
+                    DateCreated = table.Column<DateTime>(nullable: false, defaultValueSql: "strftime('%Y-%m-%d %H:%M:%S')"),
+                    VolunteerId = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VolunteerAchievements", x => x.VolunteerAchievementsId);
+                    table.ForeignKey(
+                        name: "FK_VolunteerAchievements_Achievement_AchievementId",
+                        column: x => x.AchievementId,
+                        principalTable: "Achievement",
+                        principalColumn: "AchievementId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_VolunteerAchievements_AspNetUsers_VolunteerId",
+                        column: x => x.VolunteerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Autoincrement", true),
+                        .Annotation("Sqlite:Autoincrement", true),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true),
                     UserId = table.Column<string>(nullable: false)
@@ -209,7 +180,7 @@ namespace Community.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Autoincrement", true),
+                        .Annotation("Sqlite:Autoincrement", true),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true),
                     RoleId = table.Column<string>(nullable: false)
@@ -254,18 +225,18 @@ namespace Community.Migrations
                 columns: table => new
                 {
                     EventId = table.Column<int>(nullable: false)
-                        .Annotation("Autoincrement", true),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Address = table.Column<string>(nullable: false),
                     City = table.Column<string>(nullable: false),
                     Date = table.Column<DateTime>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false, defaultValueSql: "strftime('%Y-%m-%d %H:%M:%S')"),
-                    Description = table.Column<string>(maxLength: 255, nullable: false),
+                    Description = table.Column<string>(nullable: false),
                     EndTime = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     OrganizationId = table.Column<int>(nullable: false),
                     StartTime = table.Column<DateTime>(nullable: false),
                     State = table.Column<string>(nullable: false),
-                    ZipCode = table.Column<int>(nullable: false)
+                    ZipCode = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -275,6 +246,60 @@ namespace Community.Migrations
                         column: x => x.OrganizationId,
                         principalTable: "Organization",
                         principalColumn: "OrganizationId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EventMember",
+                columns: table => new
+                {
+                    EventMemberId = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    AttendeePoints = table.Column<int>(nullable: false),
+                    ChatMuted = table.Column<bool>(nullable: false),
+                    DateCreated = table.Column<DateTime>(nullable: false, defaultValueSql: "strftime('%Y-%m-%d %H:%M:%S')"),
+                    Description = table.Column<string>(nullable: false),
+                    EndTime = table.Column<DateTime>(nullable: false),
+                    EventId = table.Column<int>(nullable: false),
+                    JobTitle = table.Column<string>(nullable: false),
+                    StartTime = table.Column<DateTime>(nullable: false),
+                    VolunteerId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EventMember", x => x.EventMemberId);
+                    table.ForeignKey(
+                        name: "FK_EventMember_Event_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Event",
+                        principalColumn: "EventId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EventMember_AspNetUsers_VolunteerId",
+                        column: x => x.VolunteerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EventChatroomMessage",
+                columns: table => new
+                {
+                    EventChatroomMessageId = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    DateCreated = table.Column<DateTime>(nullable: false, defaultValueSql: "strftime('%Y-%m-%d %H:%M:%S')"),
+                    EventMemberId = table.Column<int>(nullable: false),
+                    Message = table.Column<string>(maxLength: 1000, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EventChatroomMessage", x => x.EventChatroomMessageId);
+                    table.ForeignKey(
+                        name: "FK_EventChatroomMessage_EventMember_EventMemberId",
+                        column: x => x.EventMemberId,
+                        principalTable: "EventMember",
+                        principalColumn: "EventMemberId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -295,6 +320,16 @@ namespace Community.Migrations
                 column: "OrganizationId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_EventChatroomMessage_EventMemberId",
+                table: "EventChatroomMessage",
+                column: "EventMemberId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EventMember_EventId",
+                table: "EventMember",
+                column: "EventId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_EventMember_VolunteerId",
                 table: "EventMember",
                 column: "VolunteerId");
@@ -305,9 +340,20 @@ namespace Community.Migrations
                 column: "OrganizerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_VolunteerAchievements_AchievementId",
+                table: "VolunteerAchievements",
+                column: "AchievementId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_VolunteerAchievements_VolunteerId",
+                table: "VolunteerAchievements",
+                column: "VolunteerId");
+
+            migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
-                column: "NormalizedName");
+                column: "NormalizedName",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -328,26 +374,12 @@ namespace Community.Migrations
                 name: "IX_AspNetUserRoles_RoleId",
                 table: "AspNetUserRoles",
                 column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserRoles_UserId",
-                table: "AspNetUserRoles",
-                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Achievement");
-
-            migrationBuilder.DropTable(
-                name: "Event");
-
-            migrationBuilder.DropTable(
                 name: "EventChatroomMessage");
-
-            migrationBuilder.DropTable(
-                name: "EventMember");
 
             migrationBuilder.DropTable(
                 name: "VolunteerAchievements");
@@ -368,10 +400,19 @@ namespace Community.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Organization");
+                name: "EventMember");
+
+            migrationBuilder.DropTable(
+                name: "Achievement");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Event");
+
+            migrationBuilder.DropTable(
+                name: "Organization");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,7 +15,6 @@ namespace Community.Models
         public int EventId { get; set; }
 
         [Required]
-        public int OrganizationId { get; set; }
         public Organization Organization { get; set; }
 
         [Required]
@@ -30,7 +30,7 @@ namespace Community.Models
         public string State { get; set; }
 
         [Required]
-        public int ZipCode { get; set; }
+        public string ZipCode { get; set; }
 
         [Required]
         public DateTime Date { get; set; }
@@ -42,8 +42,9 @@ namespace Community.Models
         public DateTime EndTime { get; set; }
 
         [Required]
-        [StringLength(255, ErrorMessage = "The organization description cannot exceed 255 characters. ")]
         public string Description { get; set; }
+
+        public List<EventMember> EventMembers { get; set; }
 
         [Required]
         [DataType(DataType.Date)]

@@ -31,7 +31,6 @@ namespace Community.Controllers
      *   Delete(int id) - Disable an existing organization
      */
     [Produces("application/json")]
-    //[Route("api/[controller]")]
     public class OrganizationController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -74,6 +73,20 @@ namespace Community.Controllers
             return Json(new OrganizationViewModel(organization));
         }
 
+        // GET /organization/organizerId?=cd377dd3-f75e-4ad9-b35c-9aba57a76878
+        [HttpGet]
+        public async Task<IActionResult> OrganizerId([FromQuery]string id)
+        {
+            Organization[] organizations = await context.Organization.Include(o => o.Organizer).Where(o => o.Organizer.Id == id).ToArrayAsync();
+            if (organizations == null) return NotFound();
+            List<OrganizationViewModel> model = new List<OrganizationViewModel>();
+            foreach (Organization org in organizations)
+            {
+                model.Add(new OrganizationViewModel(org));
+            }
+            return Json(model);
+        }
+
         // GET /organization/location?city=Nashville&state=TN
         [HttpGet]
         public async Task<IActionResult> Location(string city, string state)
@@ -105,6 +118,7 @@ namespace Community.Controllers
             return Json(model);
         }
 
+        // TODO: Move to a volunteers controller?
         // GET /organization/3/volunteers
         [HttpGet]
         [RouteAttribute("{id}/volunteers")]

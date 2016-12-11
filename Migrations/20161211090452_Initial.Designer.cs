@@ -8,13 +8,13 @@ using Community.Data;
 namespace Community.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20161210222501_Initial")]
+    [Migration("20161211090452_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.0.1");
+                .HasAnnotation("ProductVersion", "1.1.0-rtm-22752");
 
             modelBuilder.Entity("Community.Models.Achievement", b =>
                 {
@@ -40,7 +40,8 @@ namespace Community.Migrations
 
             modelBuilder.Entity("Community.Models.ApplicationUser", b =>
                 {
-                    b.Property<string>("Id");
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<int>("AccessFailedCount");
 
@@ -121,8 +122,7 @@ namespace Community.Migrations
                         .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 255);
+                        .IsRequired();
 
                     b.Property<DateTime>("EndTime");
 
@@ -136,7 +136,8 @@ namespace Community.Migrations
                     b.Property<string>("State")
                         .IsRequired();
 
-                    b.Property<int>("ZipCode");
+                    b.Property<string>("ZipCode")
+                        .IsRequired();
 
                     b.HasKey("EventId");
 
@@ -162,6 +163,8 @@ namespace Community.Migrations
 
                     b.HasKey("EventChatroomMessageId");
 
+                    b.HasIndex("EventMemberId");
+
                     b.ToTable("EventChatroomMessage");
                 });
 
@@ -179,10 +182,11 @@ namespace Community.Migrations
                         .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 255);
+                        .IsRequired();
 
                     b.Property<DateTime>("EndTime");
+
+                    b.Property<int>("EventId");
 
                     b.Property<string>("JobTitle")
                         .IsRequired();
@@ -192,6 +196,8 @@ namespace Community.Migrations
                     b.Property<string>("VolunteerId");
 
                     b.HasKey("EventMemberId");
+
+                    b.HasIndex("EventId");
 
                     b.HasIndex("VolunteerId");
 
@@ -243,16 +249,22 @@ namespace Community.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
 
-                    b.Property<int>("VolunteerId");
+                    b.Property<string>("VolunteerId")
+                        .IsRequired();
 
                     b.HasKey("VolunteerAchievementsId");
+
+                    b.HasIndex("AchievementId");
+
+                    b.HasIndex("VolunteerId");
 
                     b.ToTable("VolunteerAchievements");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
                 {
-                    b.Property<string>("Id");
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -266,6 +278,7 @@ namespace Community.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
+                        .IsUnique()
                         .HasName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");
@@ -337,8 +350,6 @@ namespace Community.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("AspNetUserRoles");
                 });
 
@@ -365,8 +376,21 @@ namespace Community.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Community.Models.EventChatroomMessage", b =>
+                {
+                    b.HasOne("Community.Models.EventMember", "EventMember")
+                        .WithMany()
+                        .HasForeignKey("EventMemberId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Community.Models.EventMember", b =>
                 {
+                    b.HasOne("Community.Models.Event", "Event")
+                        .WithMany("EventMembers")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("Community.Models.ApplicationUser", "Volunteer")
                         .WithMany()
                         .HasForeignKey("VolunteerId");
@@ -377,6 +401,19 @@ namespace Community.Migrations
                     b.HasOne("Community.Models.ApplicationUser", "Organizer")
                         .WithMany()
                         .HasForeignKey("OrganizerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Community.Models.VolunteerAchievements", b =>
+                {
+                    b.HasOne("Community.Models.Achievement", "Achievement")
+                        .WithMany()
+                        .HasForeignKey("AchievementId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Community.Models.ApplicationUser", "Volunteer")
+                        .WithMany()
+                        .HasForeignKey("VolunteerId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

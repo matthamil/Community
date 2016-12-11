@@ -13,14 +13,21 @@ namespace Community.Models
         [Key]
         public int EventMemberId { get; set; }
 
+        [ForeignKey("Event")]
+        public int EventId { get; set; }
+
+        [Required]
+        public Event Event { get; set; }
+
+        [ForeignKey("Volunteer")]
         public string VolunteerId { get; set; }
+
         public ApplicationUser Volunteer { get; set; }
 
         [Required]
         public string JobTitle { get; set; }
 
         [Required]
-        [StringLength(255, ErrorMessage = "The organization description cannot exceed 255 characters. ")]
         public string Description { get; set; }
 
         [Required]
@@ -29,8 +36,10 @@ namespace Community.Models
         [Required]
         public DateTime EndTime { get; set; }
 
+        [Required]
         public bool ChatMuted { get; set; }
 
+        [Required]
         public int AttendeePoints { get; set; }
 
         [Required]
