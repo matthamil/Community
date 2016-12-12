@@ -15,6 +15,7 @@ namespace Community.Models.EventMemberViewModels
         public EventMemberViewModel() { }
         public EventMemberViewModel(EventMember e)
         {
+            EventId = e.EventId;
             EventMemberId = e.EventMemberId;
             if (e.ApplicationUser != null)
             {
@@ -27,6 +28,8 @@ namespace Community.Models.EventMemberViewModels
             ChatMuted = e.ChatMuted;
             AttendeePoints = e.AttendeePoints;
         }
+
+        public int EventId { get; set; }
 
         public int EventMemberId { get; set; }
 
