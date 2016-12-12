@@ -23,6 +23,7 @@ namespace Community.Controllers
      * Purpose: Manages EventMember API endpoints
      * Methods:
      *   All() - Gets all of the event members assigned to the user
+     *   Id(int id) - Gets single event member by id
      *   Upcoming() - Gets all upcoming event members assigned to the user
      *   Past() - Gets all past event members assigned to the user
      *   Create(CreateEventMemberViewModel eMember) - Creates a new event member
@@ -65,6 +66,22 @@ namespace Community.Controllers
             {
                 model.Add(new EventMemberViewModel(eMember));
             }
+            return Json(model);
+        }
+
+        /**
+         * GET /eventmember/id?=3
+         * Purpose: Gets a single of the event member by id
+         * Args:
+         *      int id - event member id
+         * Return:
+         *      EventMemberViewModel
+         */
+        [HttpGet]
+        public async Task<IActionResult> Id([FromQuery]int id)
+        {
+            EventMember eMember = await context.EventMember.Include(e => e.ApplicationUser).Where(e => e.EventMemberId == id).SingleOrDefaultAsync();
+            EventMemberViewModel model = new EventMemberViewModel(eMember);
             return Json(model);
         }
 
