@@ -20,6 +20,9 @@ namespace Community.Models
         [StringLength(1000, MinimumLength = 1, ErrorMessage = "Message is longer than 1000 characters.")]
         public string Message { get; set; }
 
+        [DataType(DataType.Date)]
+        public DateTime? LastModified { get; set; }
+
         [Required]
         [DataType(DataType.Date)]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
