@@ -12,6 +12,9 @@ namespace Community.Models.EventChatroomMessageViewModels
     public class EditEventChatroomMessageViewModel
     {
         [Required]
+        public int EventMemberId { get; set; }
+
+        [Required]
         public int EventChatroomMessageId { get; set; }
 
         [Required]

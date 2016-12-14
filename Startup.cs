@@ -18,8 +18,6 @@ using Microsoft.AspNetCore.SignalR.Infrastructure;
 using Community.Data;
 using Community.Models;
 using Community.Services;
-using Community.Interfaces;
-using Community.Repositories;
 
 namespace Community
 {
@@ -64,10 +62,7 @@ namespace Community
                                             provider => serializer,
                                             ServiceLifetime.Transient));
 
-            services.AddSignalR(options =>
-            {
-                options.Hubs.EnableDetailedErrors = true;
-            });
+            services.AddSignalR(options => options.Hubs.EnableDetailedErrors = true);
 
             services.AddMvc();
 

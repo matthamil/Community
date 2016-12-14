@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.SignalR.Hubs;
 using Community.Models.EventChatroomMessageViewModels;
 using System.Collections.Generic;
 
-namespace Community.Hubs {
+namespace Community.Hubs
+{
     public class EventChatroomMessageHub : Hub
     {
         // 🏜

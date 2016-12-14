@@ -16,24 +16,22 @@ using Community.Models.AccountViewModels;
 using Community.Models.EventChatroomMessageViewModels;
 using Community.Services;
 using Community.Data;
-using Community.Interfaces;
 using Community.Hubs;
 using Microsoft.AspNetCore.SignalR.Infrastructure;
 
 namespace Community.Controllers
 {
     [Produces("application/json")]
-    public class EventChatroomMessageController : Controller
+    public class EventChatroomMessageController : ApiHubController<Broadcaster>
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private ApplicationDbContext _context;
-        private IConnectionManager _connectionManager { get; set; }
 
         public EventChatroomMessageController(UserManager<ApplicationUser> userManager, ApplicationDbContext ctx, IConnectionManager connectionManager)
+        : base(connectionManager)
         {
             _userManager = userManager;
             _context = ctx;
-            _connectionManager = connectionManager;
         }
 
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
@@ -55,13 +53,21 @@ namespace Community.Controllers
         [HttpGet]
         public async Task<IActionResult> GetMessages([FromRoute]int id)
         {
-            if (await _validateUserInEvent(id))
+            //if (await _validateUserInEvent(id))
+            if (true)
             {
-                List<EventChatroomMessage> messages = await _context.EventChatroomMessage.Where(e => e.EventMember.EventId == id).ToListAsync();
+                List<EventChatroomMessage> messages = await _context.EventChatroomMessage.Include(e=> e.EventMember).ThenInclude(m => m.ApplicationUser).Where(e => e.EventMember.EventId == id).ToListAsync();
                 List<EventChatroomMessageViewModel> model = new List<EventChatroomMessageViewModel>();
                 foreach(EventChatroomMessage m in messages)
                 {
                     model.Add(new EventChatroomMessageViewModel(m));
+                }
+                if (model.Count == 0) {
+                    return Json(new EventChatroomMessageViewModel {
+                        EventMember = new EventMemberViewModel(_context.EventMember.Where(e => e.EventMemberId == 2).SingleOrDefault()),
+                        Message = "Hello from the server!",
+                        Timestamp = DateTime.Now
+                    });
                 }
                 return Json(model);
             }
@@ -71,11 +77,13 @@ namespace Community.Controllers
         // POST /eventchatroommessage/addmessage/
         [HttpPost]
         // [Authorize]
-        public async Task AddMessage([FromBody]CreateEventChatroomMessageViewModel message)
+        public async Task<IActionResult> AddMessage([FromBody]CreateEventChatroomMessageViewModel message)
         {
+            Console.WriteLine(message.Message);
             if (ModelState.IsValid)
             {
-                EventMember eventMember = await _context.EventMember.Where(e => e.EventMemberId == message.EventMemberId).SingleOrDefaultAsync();
+                EventMember eventMember = await _context.EventMember.Include(m => m.ApplicationUser).Where(e => e.EventMemberId == message.EventMemberId).SingleOrDefaultAsync();
+                if (eventMember == null) return NotFound();
 
                 EventChatroomMessage newMessage = new EventChatroomMessage()
                 {
@@ -94,15 +102,16 @@ namespace Community.Controllers
                     Timestamp = newMessage.DateCreated,
                     EventChatroomMessageId = newMessage.EventChatroomMessageId
                 };
-
-                _connectionManager.GetHubContext<EventChatroomMessageHub>().Clients.All.publishChatMessage(model);
+                // return Json(this.Clients);
+                this.Clients.Group("Event" + eventMember.EventId.ToString()).AddChatMessage(model);
             }
+            return NotFound();
         }
 
         // PATCH /eventchatroommessage/editmessage/
         [HttpPatch]
         // [Authorize]
-        public async Task EditMessage([FromBody]EditEventChatroomMessageViewModel message)
+        public async Task<IActionResult> EditMessage([FromBody]EditEventChatroomMessageViewModel message)
         {
             if (ModelState.IsValid)
             {
@@ -127,9 +136,13 @@ namespace Community.Controllers
                     EventChatroomMessageId = originalMessage.EventChatroomMessageId
                 };
 
-                _connectionManager.GetHubContext<EventChatroomMessageHub>().Clients.All.publishChatMessage(model);
+                this.Clients.Group(model.EventMember.EventId.ToString()).EditChatMessage(model);
             }
+
+            return NotFound(ModelState);
         }
+
+        // DELETE /eventchatroommessages/delete/3
 
     }
 }
