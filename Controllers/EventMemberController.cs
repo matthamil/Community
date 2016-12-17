@@ -7,13 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Logging;
 using Community.Models;
-using Community.Models.EventViewModels;
 using Community.Models.EventMemberViewModels;
-using Community.Models.AccountViewModels;
-using Community.Services;
 using Community.Data;
 
 namespace Community.Controllers
@@ -89,7 +84,7 @@ namespace Community.Controllers
 
         /**
          * GET /eventmember/3
-         * Purpose: Gets a single of the event member by id
+         * Purpose: Gets a single event member by id
          * Args:
          *      int id - event member id
          * Return:
