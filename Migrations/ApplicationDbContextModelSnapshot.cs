@@ -156,6 +156,8 @@ namespace Community.Migrations
 
                     b.Property<int>("EventMemberId");
 
+                    b.Property<DateTime?>("LastModified");
+
                     b.Property<string>("Message")
                         .IsRequired()
                         .HasAnnotation("MaxLength", 1000);

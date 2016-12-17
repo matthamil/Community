@@ -8,7 +8,7 @@ using Community.Data;
 namespace Community.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20161211193139_Initial")]
+    [Migration("20161213212558_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -156,6 +156,8 @@ namespace Community.Migrations
                         .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
 
                     b.Property<int>("EventMemberId");
+
+                    b.Property<DateTime?>("LastModified");
 
                     b.Property<string>("Message")
                         .IsRequired()

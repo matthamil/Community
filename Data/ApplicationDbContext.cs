@@ -27,10 +27,6 @@ namespace Community.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
 
-            //modelBuilder.Entity<Product>()
-            //   .Property(b => b.DateCreated)
-            //   .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
-
             builder.Entity<Achievement>()
                 .Property(a => a.DateCreated)
                 .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");

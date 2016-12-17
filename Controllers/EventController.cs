@@ -22,13 +22,12 @@ namespace Community.Controllers
      * Class: EventController
      * Purpose: Manages Event API endpoints
      * Methods:
-     *   All() - Gets all events that have yet to occur
-     *   Id(int id) - Gets a single event by ID
-     *   OrgId(int id, bool includePastEvents) - Get all events hosted by an org (optional: include past events)
-     *   Location(string city, string state) - Get all events by city and/or state
-     *   Create(CreateEventViewModel orgEvent) - Create a new event
-     *   Edit(EditViewModel orgEvent) - Edit an existing event
-     *   Delete(int id) - Delete an event by ID
+     *   Get([FromQuery]string city, [FromQuery]string state) - Gets events that have yet to occur
+     *   GetById([FromRoute]int id) - Gets a single event by ID
+     *   GetByOrgId([FromRoute]int id, [FromQuery]bool includePastEvents) - Get all events hosted by an org (optional: include past events)
+     *   Post([FromBody]CreateEventViewModel orgEvent) - Create a new event
+     *   Patch([FromRoute]int id, [FromBody]EditEventViewModel orgEvent) - Edit an existing event
+     *   Delete([FromRoute]int id) - Delete an event by ID
      */
     [Produces("application/json")]
     public class EventController : Controller
@@ -45,31 +44,51 @@ namespace Community.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         /**
-         * GET /event/all
-         * Purpose: Gets all events that have yet to occur
+         * GET /event/?city=Nashville&state=TN
+         * Purpose: Gets all events that have yet to occur. Optional, can search by location
+         * Args:
+         *      string city - (Optional) search by city
+         *      string state - (Optional) search by state
          * Return:
          *      List<EventViewModel>
          */
         [HttpGet]
-        public async Task<IActionResult> All()
+        [Route("[controller]")]
+        public async Task<IActionResult> Get([FromQuery]string city, [FromQuery]string state)
         {
-            Event[] allEvents = await (
-                from e in context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers)
-                where e.Organization.IsActive == true && e.Date > DateTime.Now
-                select e
-            ).ToArrayAsync();
+            List<Event> allEvents = null;
+            if (city != null && state == null)
+            {
+                allEvents = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers).Where(e => e.City == city && e.Date > DateTime.Now).ToListAsync();
+            }
+            else if (city == null && state != null)
+            {
+                allEvents = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers).Where(e => e.State == state && e.Date > DateTime.Now).ToListAsync();
+            }
+            else if (city == null && state == null)
+            {
+                allEvents = await (
+                    from e in context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers)
+                    where e.Organization.IsActive == true && e.Date > DateTime.Now
+                    select e
+                ).ToListAsync();
+            }
+            else
+            {
+                allEvents = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers).Where(e => e.City == city && e.State == state && e.Date > DateTime.Now).ToListAsync();
+            }
+            if (allEvents == null || allEvents.Count == 0) return NotFound();
 
             List<EventViewModel> model = new List<EventViewModel>();
-            foreach(Event singleEvent in allEvents)
+            foreach (Event singleEvent in allEvents)
             {
                 model.Add(new EventViewModel(singleEvent, await context.EventMember.Include(e => e.ApplicationUser).Where(e => e.EventId == singleEvent.EventId).ToArrayAsync()));
             }
-
             return Json(model);
         }
 
         /**
-         * GET event/id?=3
+         * GET /event/3
          * Purpose: Gets a single event by ID
          * Args:
          *      id - Event ID
@@ -77,7 +96,8 @@ namespace Community.Controllers
          *      EventViewModel
          */
         [HttpGet]
-        public async Task<IActionResult> Id([FromQuery]int id)
+        [Route("[controller]/{id}")]
+        public async Task<IActionResult> GetById([FromRoute]int id)
         {
             Event singleEvent = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Where(e => e.EventId == id).SingleOrDefaultAsync();
             if (singleEvent == null) return NotFound();
@@ -88,7 +108,7 @@ namespace Community.Controllers
         }
 
         /**
-         * GET event/orgId?=3&includePastEvents=true
+         * GET /event/org/1?includePastEvents=true
          * Purpose: Get a list of events hosted by a specific organization
          * Args:
          *      int id - Organization ID
@@ -97,7 +117,8 @@ namespace Community.Controllers
          *      List<EventViewModel>
          */
         [HttpGet]
-        public async Task<IActionResult> OrgId(int id, bool includePastEvents)
+        [Route("[controller]/org/{id}")]
+        public async Task<IActionResult> GetByOrgId([FromRoute]int id, [FromQuery]bool includePastEvents)
         {
             List<Event> allEvents = null;
             if (includePastEvents)
@@ -118,55 +139,17 @@ namespace Community.Controllers
         }
 
         /**
-         * GET /event/location?city=Nashville&state=TN
-         * Purpose: Search for events by location
+         * POST /event/
+         * Purpose: Creates a new event
          * Args:
-         *      string city - (Optional) search by city
-         *      string state - (Optional) search by state
-         * Return:
-         *      List<EventViewModel>
-         */
-        [HttpGet]
-        public async Task<IActionResult> Location(string city, string state)
-        {
-            List<Event> allEvents = null;
-            if (city != null && state == null)
-            {
-                allEvents = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers).Where(e => e.City == city && e.Date > DateTime.Now).ToListAsync();
-            }
-            else if (city == null && state != null)
-            {
-                allEvents = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers).Where(e => e.State == state && e.Date > DateTime.Now).ToListAsync();
-            }
-            else if (city == null && state == null)
-            {
-                return BadRequest();
-            }
-            else
-            {
-                allEvents = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers).Where(e => e.City == city && e.State == state && e.Date > DateTime.Now).ToListAsync();
-            }
-            if (allEvents == null || allEvents.Count == 0) return NotFound();
-
-            List<EventViewModel> model = new List<EventViewModel>();
-            foreach (Event singleEvent in allEvents)
-            {
-                model.Add(new EventViewModel(singleEvent, await context.EventMember.Include(e => e.ApplicationUser).Where(e => e.EventId == singleEvent.EventId).ToArrayAsync()));
-            }
-            return Json(model);
-        }
-
-        /**
-         * POST /event/create
-         * Purpose: Adds a product to a user's open order
-         * Args:
-         *      CreateViewModel orgEvent - New event
+         *      CreateEventViewModel orgEvent - New event
          * Return:
          *      EventViewModel
          */
         [HttpPost]
         // [Authorize]
-        public async Task<IActionResult> Create([FromBody]CreateEventViewModel orgEvent)
+        [Route("[controller]")]
+        public async Task<IActionResult> Post([FromBody]CreateEventViewModel orgEvent)
         {
             if (ModelState.IsValid)
             {
@@ -206,16 +189,17 @@ namespace Community.Controllers
         }
 
         /**
-         * POST /event/edit
-         * Purpose: Adds a product to a user's open order
+         * PATCH /event/3
+         * Purpose: Edit an existing event
          * Args:
          *      EditEventViewModel orgEvent - Existing event
          * Return:
          *      EventViewModel
          */
-        [HttpPost]
+        [HttpPatch]
+        [Route("[controller]/{id}")]
         // [Authorize]
-        public async Task<IActionResult> Edit([FromBody]EditEventViewModel orgEvent)
+        public async Task<IActionResult> Patch([FromRoute]int id, [FromBody]EditEventViewModel orgEvent)
         {
             if (ModelState.IsValid)
             {
@@ -232,7 +216,7 @@ namespace Community.Controllers
                     });
                 }
 
-                Event originalEvent = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Where(e => e.EventId == orgEvent.EventId).SingleOrDefaultAsync();
+                Event originalEvent = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Where(e => e.EventId == id).SingleOrDefaultAsync();
                 if (originalEvent == null) return NotFound();
 
                 originalEvent.Name = orgEvent.Name;
@@ -256,7 +240,7 @@ namespace Community.Controllers
         }
 
         /**
-         * DELETE /event/delete/3
+         * DELETE /event/3
          * Purpose: Deletes an event
          * Args:
          *      int id - Event id
@@ -264,6 +248,7 @@ namespace Community.Controllers
          *      NoContentResult
          */
         [HttpDelete]
+        [Route("[controller]/{id}")]
         // [Authorize]
         public async Task<IActionResult> Delete([FromRoute]int id)
         {

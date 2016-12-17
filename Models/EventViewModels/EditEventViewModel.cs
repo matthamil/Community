@@ -13,9 +13,6 @@ namespace Community.Models.EventViewModels
         public int OrganizationId { get; set; }
 
         [Required]
-        public int EventId { get; set; }
-
-        [Required]
         public string Name { get; set; }
 
         [Required]

@@ -1,0 +1,72 @@
+@{
+    ViewData["Title"] = "SignalR Testing";
+}
+<h2>@ViewData["Title"].</h2>
+<h3>@ViewData["Message"]</h3>
+
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/signalr/jquery.signalr-2.2.0.min.js"></script>
+<script src="/signalr/hubs"></script>
+
+<input id="textInput" type="text" placeholder="Enter your status..." />
+
+<button id="publishPostButton">Publish post!</button>
+
+<ul id="postsList"></ul>
+
+<script type="text/javascript">
+    $.ajax({
+        url: '/eventchatroommessage/getmessages/2',
+        method: 'GET',
+        dataType: 'JSON',
+        success: addPostsList
+    });
+
+    function addPostsList(posts) {
+        console.log('INITIAL LOAD', posts);
+        $.each(posts, function (index) {
+            var post = posts[index];
+            addPost(post);
+        });
+    }
+
+    function addPost(post) {
+        console.log(post);
+        $("#postsList").append(
+                '<li>' + post.eventMember.volunteer.firstName + ' ' + post.eventMember.volunteer.lastName + ': ' + post.message + '</li>'
+                );
+    }
+
+    var hub = $.connection.broadcaster;
+
+    $.connection.broadcaster.client.addChatMessage = addPost;
+    console.log('Hub: ', hub);
+
+    $("#publishPostButton").click(function () {
+
+        var post = {
+            eventMemberId: 3,
+            message: $("#textInput").val()
+        };
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            type: 'POST',
+            url: '/eventchatroommessage/AddMessage/',
+            data: JSON.stringify(post),
+            dataType: 'json'
+        }).fail(e => {console.log(e);});
+    });
+
+    $.connection.hub.logging = true;
+    $.connection.hub.start(2).done(function(e) {
+        console.log('Connected!');
+        console.log('hub.server: ', hub.server);
+        console.log(e);
+        hub.server.subscribe(2);
+    }).fail(function(error) {
+        console.log('Invocation of start failed! Error: ', error);
+    });
+</script>

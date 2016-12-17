@@ -290,6 +290,7 @@ namespace Community.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     DateCreated = table.Column<DateTime>(nullable: false, defaultValueSql: "strftime('%Y-%m-%d %H:%M:%S')"),
                     EventMemberId = table.Column<int>(nullable: false),
+                    LastModified = table.Column<DateTime>(nullable: true),
                     Message = table.Column<string>(maxLength: 1000, nullable: false)
                 },
                 constraints: table =>

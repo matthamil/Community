@@ -9,9 +9,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System.Reflection;
+using Microsoft.AspNetCore.SignalR.Infrastructure;
 using Community.Data;
 using Community.Models;
 using Community.Services;
+using Community.ContractResolvers;
 
 namespace Community
 {
@@ -46,6 +53,17 @@ namespace Community
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            var settings = new JsonSerializerSettings();
+            settings.ContractResolver = new SignalRContractResolver();
+
+            var serializer = JsonSerializer.Create(settings);
+
+            services.Add(new ServiceDescriptor(typeof(JsonSerializer),
+                                            provider => serializer,
+                                            ServiceLifetime.Transient));
+
+            services.AddSignalR(options => options.Hubs.EnableDetailedErrors = true);
 
             services.AddMvc();
 
@@ -85,6 +103,9 @@ namespace Community
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            app.UseWebSockets();
+            app.UseSignalR();
         }
     }
 }
