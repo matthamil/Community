@@ -7,20 +7,24 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Logging;
 using Community.Models;
-using Community.Models.EventViewModels;
 using Community.Models.EventMemberViewModels;
-using Community.Models.AccountViewModels;
 using Community.Models.EventChatroomMessageViewModels;
-using Community.Services;
 using Community.Data;
 using Community.Hubs;
 using Microsoft.AspNetCore.SignalR.Infrastructure;
 
 namespace Community.Controllers
 {
+    /**
+     * Class: EventChatroomMessageController
+     * Purpose: Manages Event Chatroom Message API endpoints
+     * Methods:
+     *   Get([FromRoute]int id) - Get all messages by event id
+     *   Post([FromBody]CreateEventChatroomMessageViewModel message) - Post a new message in a chat
+     *   Patch([FromBody]EditEventChatroomMessageViewModel message) - Edit an existing message
+     *   Delete([FromRoute]int id) - Delete a chatroom message
+     */
     [Produces("application/json")]
     public class EventChatroomMessageController : ApiHubController<Broadcaster>
     {
@@ -36,6 +40,13 @@ namespace Community.Controllers
 
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
+        /**
+         * Purpose: Checks if the current user is a member of an event
+         * Args:
+         *      eventId - an event id
+         * Return:
+         *      bool
+         */
         private async Task<bool> _validateUserInEvent(int eventId)
         {
             ApplicationUser user = await GetCurrentUserAsync();
@@ -46,15 +57,21 @@ namespace Community.Controllers
             return eMember != null ? true : false;
         }
 
-        // Validate if logged in user is part of event
-        // If not, return Forbidden
-        // If validated, return all chatroom messages for event
-        // GET /eventchatroommessage/{eventId}
+        /**
+         * GET /eventchatroommessage/3
+         * Purpose: Get all messages by event id
+         * Args:
+         *      id - Event id
+         * Return:
+         *      List<EventChatroomMessageViewModel>
+         */
         [HttpGet]
-        public async Task<IActionResult> GetMessages([FromRoute]int id)
+        [Route("[controller]/{id}")]
+        // [Authorize]
+        public async Task<IActionResult> Get([FromRoute]int id)
         {
-            //if (await _validateUserInEvent(id))
-            if (true)
+            if (await _validateUserInEvent(id))
+            // if (true) <-- uncomment for testing purposes
             {
                 List<EventChatroomMessage> messages = await _context.EventChatroomMessage.Include(e=> e.EventMember).ThenInclude(m => m.ApplicationUser).Where(e => e.EventMember.EventId == id).ToListAsync();
                 List<EventChatroomMessageViewModel> model = new List<EventChatroomMessageViewModel>();
@@ -62,24 +79,32 @@ namespace Community.Controllers
                 {
                     model.Add(new EventChatroomMessageViewModel(m));
                 }
-                if (model.Count == 0) {
-                    return Json(new EventChatroomMessageViewModel {
-                        EventMember = new EventMemberViewModel(_context.EventMember.Where(e => e.EventMemberId == 2).SingleOrDefault()),
-                        Message = "Hello from the server!",
-                        Timestamp = DateTime.Now
-                    });
-                }
+                // Uncomment the code below for testing purposes when an event has 0 messages
+                // if (model.Count == 0) {
+                //     return Json(new EventChatroomMessageViewModel {
+                //         EventMember = new EventMemberViewModel(_context.EventMember.Where(e => e.EventMemberId == 2).SingleOrDefault()),
+                //         Message = "Hello from the server!",
+                //         Timestamp = DateTime.Now
+                //     });
+                // }
                 return Json(model);
             }
-            return NotFound();
+            return new ForbidResult();
         }
 
-        // POST /eventchatroommessage/addmessage/
+        /**
+         * POST /eventchatroommessage/
+         * Purpose: Posts a new message to an event chatroom
+         * Args:
+         *      CreateEventChatroomMessageViewModel message - new message from the client
+         * Return:
+         *      EventChatroomMessageViewModel
+         */
         [HttpPost]
+        [Route("[controller]")]
         // [Authorize]
-        public async Task<IActionResult> AddMessage([FromBody]CreateEventChatroomMessageViewModel message)
+        public async Task<IActionResult> Post([FromBody]CreateEventChatroomMessageViewModel message)
         {
-            Console.WriteLine(message.Message);
             if (ModelState.IsValid)
             {
                 EventMember eventMember = await _context.EventMember.Include(m => m.ApplicationUser).Where(e => e.EventMemberId == message.EventMemberId).SingleOrDefaultAsync();
@@ -102,20 +127,29 @@ namespace Community.Controllers
                     Timestamp = newMessage.DateCreated,
                     EventChatroomMessageId = newMessage.EventChatroomMessageId
                 };
-                // return Json(this.Clients);
                 this.Clients.Group("Event" + eventMember.EventId.ToString()).AddChatMessage(model);
+                return Json(model);
             }
             return NotFound();
         }
 
-        // PATCH /eventchatroommessage/editmessage/
+        /**
+         * PATCH /eventchatroommessage/
+         * Purpose: Edits an existing chatroom message
+         * Args:
+         *      EditEventChatroomMessageViewModel message - edited message from the client
+         * Return:
+         *      NoContentResult
+         */
         [HttpPatch]
+        [Route("[controller]")]
         // [Authorize]
-        public async Task<IActionResult> EditMessage([FromBody]EditEventChatroomMessageViewModel message)
+        public async Task<IActionResult> Patch([FromBody]EditEventChatroomMessageViewModel message)
         {
+            //if (await _validateUserInEvent(id))
             if (ModelState.IsValid)
             {
-                EventMember eventMember = await _context.EventMember.Where(e => e.EventMemberId == message.EventMemberId).SingleOrDefaultAsync();
+                EventMember eventMember = await _context.EventMember.Include(e => e.ApplicationUser).Where(e => e.EventMemberId == message.EventMemberId).SingleOrDefaultAsync();
                 EventChatroomMessage originalMessage = await _context.EventChatroomMessage.Where(m => m.EventChatroomMessageId == message.EventChatroomMessageId).SingleOrDefaultAsync();
 
                 if (originalMessage == null) return NotFound();
@@ -136,13 +170,39 @@ namespace Community.Controllers
                     EventChatroomMessageId = originalMessage.EventChatroomMessageId
                 };
 
-                this.Clients.Group(model.EventMember.EventId.ToString()).EditChatMessage(model);
+                this.Clients.Group("Event" + eventMember.EventId.ToString()).EditChatMessage(model);
+                return new NoContentResult();
             }
-
             return NotFound(ModelState);
         }
 
-        // DELETE /eventchatroommessages/delete/3
-
+        /**
+         * DELETE /eventchatroommessages/3
+         * Purpose: Deletes an event chatroom message
+         * Args:
+         *      id - Event chatroom message id
+         * Return:
+         *      NoContentResult
+         */
+        [HttpDelete]
+        // [Authorize]
+        [Route("[controller]/{id}")]
+        public async Task<IActionResult> Delete([FromRoute]int id)
+        {
+            if (await _validateUserInEvent(id))
+            // if (true) <-- uncomment for testing purposes
+            {
+                ApplicationUser user = await GetCurrentUserAsync();
+                EventChatroomMessage messageToDelete = await _context.EventChatroomMessage.Where(m => m.EventChatroomMessageId == id && m.EventMember.ApplicationUser == user).SingleOrDefaultAsync();
+                if (messageToDelete == null)
+                {
+                    return NotFound();
+                }
+                _context.Remove(messageToDelete);
+                await _context.SaveChangesAsync();
+                return new NoContentResult();
+            }
+            return new ForbidResult();
+        }
     }
 }

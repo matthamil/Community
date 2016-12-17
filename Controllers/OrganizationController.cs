@@ -16,13 +16,12 @@ namespace Community.Controllers
      * Class: OrganizationController
      * Purpose: Manages Organization API endpoints
      * Methods:
-     *   All() - Get all Organizations
-     *   Id(int id) - Get single organization
-     *   OrganizerId(int id) - Get organizations organized by user
-     *   Location(string city, string state) - Search for organizations by location
-     *   Create(OrganizationCreateViewModel organization) - Create a new organization
-     *   Edit(OrganizationViewModel organization) - Edit an existing organization
-     *   Delete(int id) - Disable an existing organization
+     *   Get([FromQuery]string city, [FromQuery]string state) - Get organizations, all by default or search by city and/or state
+     *   GetById([FromRoute]int id) - Get single organization
+     *   OrganizerId([FromRoute]string id) - Get organizations organized by user
+     *   Post([FromBody]OrganizationCreateViewModel organization) - Create a new organization
+     *   Patch([FromBody]OrganizationViewModel organization) - Edit an existing organization
+     *   Delete([FromRoute]int id) - Disable an existing organization
      */
     [Produces("application/json")]
     public class OrganizationController : Controller
@@ -44,62 +43,6 @@ namespace Community.Controllers
          * Return:
          *      List<OrganizationViewModel>
          */
-        [HttpGet]
-        public async Task<IActionResult> All()
-        {
-            Organization[] organizations = await (
-                from organization in context.Organization.Include(o => o.Organizer)
-                where organization.IsActive == true
-                select organization).ToArrayAsync();
-
-            if (organizations == null) return NotFound();
-
-            List<OrganizationViewModel> model = new List<OrganizationViewModel>();
-            foreach (Organization org in organizations)
-            {
-                model.Add(new OrganizationViewModel(org));
-            }
-
-            return Json(model);
-        }
-
-        /**
-         * GET /organization/id?=3
-         * Purpose: Get a specific organization by ID
-         * Args:
-         *      int id - Organization ID
-         * Return:
-         *      OrganizationViewModel
-         */
-        [HttpGet]
-        public async Task<IActionResult> Id([FromQuery]int id)
-        {
-            Organization organization = await context.Organization.Include(o => o.Organizer).Where(o => o.OrganizationId == id).SingleOrDefaultAsync();
-            if (organization == null) return NotFound();
-            return Json(new OrganizationViewModel(organization));
-        }
-
-        /**
-         * GET /organization/organizerId?=cd377dd3-f75e-4ad9-b35c-9aba57a76878
-         * Purpose: Get a list of organizations organized by a specific user
-         * Args:
-         *      string id - User id
-         * Return:
-         *      List<OrganizationViewModel>
-         */
-        [HttpGet]
-        public async Task<IActionResult> OrganizerId([FromQuery]string id)
-        {
-            Organization[] organizations = await context.Organization.Include(o => o.Organizer).Where(o => o.Organizer.Id == id).ToArrayAsync();
-            if (organizations == null) return NotFound();
-            List<OrganizationViewModel> model = new List<OrganizationViewModel>();
-            foreach (Organization org in organizations)
-            {
-                model.Add(new OrganizationViewModel(org));
-            }
-            return Json(model);
-        }
-
         /**
          * GET /organization/location?city=Nashville&state=TN
          * Purpose: Search for organizations by city and/or state
@@ -110,27 +53,64 @@ namespace Community.Controllers
          *      List<OrganizationViewModel>
          */
         [HttpGet]
-        public async Task<IActionResult> Location(string city, string state)
+        [Route("[controller]")]
+        public async Task<IActionResult> Get([FromQuery]string city, [FromQuery]string state)
         {
-            List<Organization> organizations = null;
+            List<Organization> organizations = new List<Organization>();
             if (city != null && state == null)
             {
-                organizations = await context.Organization.Include(o => o.Organizer).Where(o => o.City == city).ToListAsync();
+                organizations = await context.Organization.Include(o => o.Organizer).Where(o => o.City == city && o.IsActive == true).ToListAsync();
             }
             else if (city == null && state != null)
             {
-                organizations = await context.Organization.Include(o => o.Organizer).Where(o => o.State == state).ToListAsync();
+                organizations = await context.Organization.Include(o => o.Organizer).Where(o => o.State == state && o.IsActive == true).ToListAsync();
             }
             else if (city == null && state == null)
             {
-                return BadRequest();
+                organizations = await context.Organization.Include(o => o.Organizer).Where(o => o.IsActive == true).ToListAsync();
             }
             else
             {
-                organizations = await context.Organization.Include(o => o.Organizer).Where(o => o.City == city && o.State == state).ToListAsync();
+                organizations = await context.Organization.Include(o => o.Organizer).Where(o => o.City == city && o.State == state && o.IsActive == true).ToListAsync();
             }
             if (organizations == null) return NotFound();
+            List<OrganizationViewModel> model = new List<OrganizationViewModel>();
+            foreach (Organization org in organizations)
+                model.Add(new OrganizationViewModel(org));
+            return Json(model);
+        }
 
+        /**
+         * GET /organization/3
+         * Purpose: Get a specific organization by ID
+         * Args:
+         *      int id - Organization ID
+         * Return:
+         *      OrganizationViewModel
+         */
+        [HttpGet]
+        [Route("[controller]/{id}")]
+        public async Task<IActionResult> GetById([FromRoute]int id)
+        {
+            Organization organization = await context.Organization.Include(o => o.Organizer).Where(o => o.OrganizationId == id).SingleOrDefaultAsync();
+            if (organization == null) return NotFound();
+            return Json(new OrganizationViewModel(organization));
+        }
+
+        /**
+         * GET /organization/organizerId/cd377dd3-f75e-4ad9-b35c-9aba57a76878
+         * Purpose: Get a list of organizations organized by a specific user
+         * Args:
+         *      string id - User id
+         * Return:
+         *      List<OrganizationViewModel>
+         */
+        [HttpGet]
+        [Route("[controller]/organizerId/{id}")]
+        public async Task<IActionResult> OrganizerId([FromRoute]string id)
+        {
+            Organization[] organizations = await context.Organization.Include(o => o.Organizer).Where(o => o.Organizer.Id == id).ToArrayAsync();
+            if (organizations == null) return NotFound();
             List<OrganizationViewModel> model = new List<OrganizationViewModel>();
             foreach (Organization org in organizations)
             {
@@ -148,8 +128,9 @@ namespace Community.Controllers
          *      OrganizationViewModel
          */
         [HttpPost]
+        [Route("[controller]")]
         // [Authorize]
-        public async Task<IActionResult> Create([FromBody]OrganizationCreateViewModel organization)
+        public async Task<IActionResult> Post([FromBody]OrganizationCreateViewModel organization)
         {
             if (ModelState.IsValid)
             {
@@ -186,8 +167,9 @@ namespace Community.Controllers
          *      OrganizationViewModel
          */
         [HttpPost]
+        [Route("[controller]")]
         // [Authorize]
-        public async Task<IActionResult> Edit([FromBody]OrganizationViewModel organization)
+        public async Task<IActionResult> Patch([FromBody]OrganizationViewModel organization)
         {
             // Confirm that the logged in user is the organizer
             var user = await GetCurrentUserAsync();
@@ -234,6 +216,7 @@ namespace Community.Controllers
          *      NoContentResult
          */
         [HttpDelete]
+        [Route("[controller]/{id}")]
         // [Authorize]
         public async Task<IActionResult> Delete([FromRoute]int id)
         {
@@ -243,12 +226,12 @@ namespace Community.Controllers
             // For testing purposes, uncomment the line below and comment the GetCurrentUserAsync() line.
             // ApplicationUser user = await context.ApplicationUser.SingleOrDefaultAsync(u => u.FirstName == "Matt");
 
-            Organization originalOrg = await context.Organization.Include(o => o.Organizer).SingleOrDefaultAsync(o => o.OrganizationId == id);
+            Organization originalOrg = await context.Organization.Include(o => o.Organizer).Where(o => o.OrganizationId == id && o.IsActive == true).SingleOrDefaultAsync();
 
             if (originalOrg == null || originalOrg.Organizer != user) {
                 return BadRequest(new
                 {
-                    Error = $"Can't find organization with id {id} organized by user {user.FirstName} {user.LastName} with user id {user.Id}.",
+                    Error = $"Can't find active organization with id {id} organized by user {user.FirstName} {user.LastName} with user id {user.Id}.",
                     StatusCode = "400"
                 });
             }

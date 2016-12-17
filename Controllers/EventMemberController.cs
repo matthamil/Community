@@ -22,15 +22,13 @@ namespace Community.Controllers
      * Class: EventMemberController
      * Purpose: Manages EventMember API endpoints
      * Methods:
-     *   All() - Gets all of the event members assigned to the user
-     *   Id(int id) - Gets single event member by id
-     *   Upcoming() - Gets all upcoming event members assigned to the user
-     *   Past() - Gets all past event members assigned to the user
-     *   Create(CreateEventMemberViewModel eMember) - Creates a new event member
-     *   Update(UpdateEventMemberViewModel eMember) - Updates an existing event member
-     *   Claim(int id) - Claims an available event member
-     *   Unclaim(int id) - Unclaims an event member
-     *   Delete(int id) - Deletes an event member and associated chat messages
+     *   Get([FromQuery]string by) - Gets a list of event members assigned to the user, optional params "upcoming" and "past" to filter responses
+     *   GetById([FromRoute]int id) - Gets single event member by id
+     *   Post([FromBody]CreateEventMemberViewModel eMember) - Creates a new event member
+     *   Patch([FromRoute]int id, [FromBody]EditEventMemberViewModel eMember) - Updates an existing event member
+     *   Claim([FromRoute]int id) - Claims an available event member
+     *   Unclaim([FromRoute]int id) - Unclaims an event member
+     *   Delete([FromRoute]int id) - Deletes an event member and associated chat messages
      */
     [Produces("application/json")]
     public class EventMemberController : Controller
@@ -47,20 +45,40 @@ namespace Community.Controllers
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         /**
-         * GET /eventmember/all
+         * GET /eventmember/
          * Purpose: Gets all of the event members assigned to the logged in user
+         * Args:
+         *      string by - Optional param to query by "upcoming" or "past"
          * Return:
          *      List<EventMemberViewModel>
          */
         [HttpGet]
+        [Route("[controller]")]
         // [Authorize]
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> Get([FromQuery]string by)
         {
             // Confirm that the logged in user is the organizer
             var user = await GetCurrentUserAsync();
             // For testing purposes
             // ApplicationUser user = await context.ApplicationUser.SingleOrDefaultAsync(u => u.FirstName == "Steve");
-            EventMember[] eMemberList = await context.EventMember.Include(e => e.ApplicationUser).Where(e => e.ApplicationUser == user).ToArrayAsync();
+            EventMember[] eMemberList = null;
+            if (by == null)
+            {
+                eMemberList = await context.EventMember.Include(e => e.ApplicationUser).Where(e => e.ApplicationUser == user).ToArrayAsync();
+            }
+            else if (by == "upcoming")
+            {
+                eMemberList = await context.EventMember.Include(e => e.ApplicationUser).Where(e => e.ApplicationUser == user && e.StartTime > DateTime.Now).ToArrayAsync();
+            }
+            else if (by == "past")
+            {
+                eMemberList = await context.EventMember.Include(e => e.ApplicationUser).Where(e => e.ApplicationUser == user && e.StartTime < DateTime.Now).ToArrayAsync();
+            }
+            else
+            {
+                return NotFound();
+            }
+            if (eMemberList == null) return NotFound();
             List<EventMemberViewModel> model = new List<EventMemberViewModel>();
             foreach(EventMember eMember in eMemberList)
             {
@@ -70,7 +88,7 @@ namespace Community.Controllers
         }
 
         /**
-         * GET /eventmember/id?=3
+         * GET /eventmember/3
          * Purpose: Gets a single of the event member by id
          * Args:
          *      int id - event member id
@@ -78,7 +96,8 @@ namespace Community.Controllers
          *      EventMemberViewModel
          */
         [HttpGet]
-        public async Task<IActionResult> Id([FromQuery]int id)
+        [Route("[controller]/{id}")]
+        public async Task<IActionResult> GetById([FromRoute]int id)
         {
             EventMember eMember = await context.EventMember.Include(e => e.ApplicationUser).Where(e => e.EventMemberId == id).SingleOrDefaultAsync();
             EventMemberViewModel model = new EventMemberViewModel(eMember);
@@ -86,53 +105,7 @@ namespace Community.Controllers
         }
 
         /**
-         * GET /eventmember/upcoming
-         * Purpose: Gets all of the upcoming event members assigned to the logged in user
-         * Return:
-         *      List<EventMemberViewModel>
-         */
-        [HttpGet]
-        // [Authorize]
-        public async Task<IActionResult> Upcoming()
-        {
-            // Confirm that the logged in user is the organizer
-            var user = await GetCurrentUserAsync();
-            // For testing purposes
-            // ApplicationUser user = await context.ApplicationUser.SingleOrDefaultAsync(u => u.FirstName == "Steve");
-            EventMember[] eMemberList = await context.EventMember.Include(e => e.ApplicationUser).Where(e => e.ApplicationUser == user && e.StartTime > DateTime.Now).ToArrayAsync();
-            List<EventMemberViewModel> model = new List<EventMemberViewModel>();
-            foreach(EventMember eMember in eMemberList)
-            {
-                model.Add(new EventMemberViewModel(eMember));
-            }
-            return Json(model);
-        }
-
-        /**
-         * GET /eventmember/past
-         * Purpose: Gets all of the past event members assigned to the logged in user
-         * Return:
-         *      List<EventMemberViewModel>
-         */
-        [HttpGet]
-        // [Authorize]
-        public async Task<IActionResult> Past()
-        {
-            // Confirm that the logged in user is the organizer
-            var user = await GetCurrentUserAsync();
-            // For testing purposes
-            // ApplicationUser user = await context.ApplicationUser.SingleOrDefaultAsync(u => u.FirstName == "Steve");
-            EventMember[] eMemberList = await context.EventMember.Include(e => e.ApplicationUser).Where(e => e.ApplicationUser == user && e.StartTime < DateTime.Now).ToArrayAsync();
-            List<EventMemberViewModel> model = new List<EventMemberViewModel>();
-            foreach(EventMember eMember in eMemberList)
-            {
-                model.Add(new EventMemberViewModel(eMember));
-            }
-            return Json(model);
-        }
-
-        /**
-         * POST /eventmember/create
+         * POST /eventmember/
          * Purpose: Adds a new event member to an existing event
          * Args:
          *      CreateEventMemberViewModel eMember - New event member
@@ -140,8 +113,9 @@ namespace Community.Controllers
          *      EventMemberViewModel
          */
         [HttpPost]
+        [Route("[controller]")]
         // [Authorize]
-        public async Task<IActionResult> Create([FromBody]CreateEventMemberViewModel eMember)
+        public async Task<IActionResult> Post([FromBody]CreateEventMemberViewModel eMember)
         {
             if (ModelState.IsValid)
             {
@@ -182,7 +156,7 @@ namespace Community.Controllers
         }
 
         /**
-         * PATCH /eventmember/update/3
+         * PATCH /eventmember/3
          * Purpose: Adds a product to a user's open order
          * Args:
          *      EditEventMemberViewModel - Updated event member
@@ -191,8 +165,9 @@ namespace Community.Controllers
          *      EventMemberViewModel
          */
         [HttpPatch]
+        [Route("[controller]/{id}")]
         // [Authorize]
-        public async Task<IActionResult> Update([FromBody]EditEventMemberViewModel eMember, [FromRoute]int id)
+        public async Task<IActionResult> Patch([FromRoute]int id, [FromBody]EditEventMemberViewModel eMember)
         {
             if (ModelState.IsValid)
             {
@@ -237,14 +212,15 @@ namespace Community.Controllers
         }
 
         /**
-         * POST /eventmember/claim/3
+         * GET /eventmember/claim/3
          * Purpose: Assigns the logged in user as the event member volunteer
          * Args:
          *      id - event member id
          * Return:
          *      EventMemberViewModel
          */
-        [HttpPost]
+        [HttpGet]
+        [Route("[controller]/claim/{id}")]
         // [Authorize]
         public async Task<IActionResult> Claim([FromRoute]int id)
         {
@@ -289,20 +265,21 @@ namespace Community.Controllers
         }
 
         /**
-         * POST /eventmember/unclaim/3
+         * DELETE /eventmember/claim/3
          * Purpose: Removes user's claim from event member
          * Args:
          *      id - event member id
          * Return:
          *      NoContentResult
          */
-        [HttpPost]
+        [HttpDelete]
+        [Route("[controller]/claim/{id}")]
         // [Authorize]
         public async Task<IActionResult> Unclaim([FromRoute]int id)
         {
-            // var user = await GetCurrentUserAsync();
+            var user = await GetCurrentUserAsync();
             // Uncomment for testing
-            ApplicationUser user = await context.ApplicationUser.SingleAsync(u => u.FirstName == "Matt");
+            // ApplicationUser user = await context.ApplicationUser.SingleAsync(u => u.FirstName == "Matt");
 
             EventMember eMember = await context.EventMember.Include(e => e.ApplicationUser).Where(e => e.EventMemberId == id && e.ApplicationUser == user).SingleOrDefaultAsync();
 
@@ -323,7 +300,7 @@ namespace Community.Controllers
         }
 
         /**
-         * DELETE /eventmember/delete/3
+         * DELETE /eventmember/3
          * Purpose: Deletes an event member and chat messages
          * Args:
          *      id - event member id
@@ -331,6 +308,7 @@ namespace Community.Controllers
          *      NoContentResult
          */
         [HttpDelete]
+        [Route("[controller]/{id}")]
         // [Authorize]
         public async Task<IActionResult> Delete([FromRoute]int id)
         {

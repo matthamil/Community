@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.SignalR.Infrastructure;
 using Community.Data;
 using Community.Models;
 using Community.Services;
+using Community.ContractResolvers;
 
 namespace Community
 {
