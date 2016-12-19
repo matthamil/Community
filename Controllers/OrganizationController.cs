@@ -20,7 +20,7 @@ namespace Community.Controllers
      *   GetById([FromRoute]int id) - Get single organization
      *   OrganizerId([FromRoute]string id) - Get organizations organized by user
      *   Post([FromBody]OrganizationCreateViewModel organization) - Create a new organization
-     *   Patch([FromBody]OrganizationViewModel organization) - Edit an existing organization
+     *   Patch([FromRoute]int id, [FromBody]OrganizationViewModel organization) - Edit an existing organization
      *   Delete([FromRoute]int id) - Disable an existing organization
      */
     [Produces("application/json")]
@@ -120,7 +120,7 @@ namespace Community.Controllers
         }
 
         /**
-         * POST /organization/create
+         * POST /organization/
          * Purpose: Create a new organization
          * Args:
          *      OrganizationCreateViewModel organization - New organization
@@ -159,17 +159,18 @@ namespace Community.Controllers
         }
 
         /**
-         * POST /organization/edit
+         * PATCH /organization/3
          * Purpose: Edit an existing organization
          * Args:
+         *      int id - Organization id
          *      OrganizationViewModel - Existing organization with updated fields
          * Return:
          *      OrganizationViewModel
          */
         [HttpPost]
-        [Route("[controller]")]
+        [Route("[controller]/{id}")]
         // [Authorize]
-        public async Task<IActionResult> Patch([FromBody]OrganizationViewModel organization)
+        public async Task<IActionResult> Patch([FromRoute]int id, [FromBody]OrganizationViewModel organization)
         {
             // Confirm that the logged in user is the organizer
             var user = await GetCurrentUserAsync();
@@ -177,7 +178,7 @@ namespace Community.Controllers
             // For testing purposes
             // ApplicationUser user = await context.ApplicationUser.SingleOrDefaultAsync(u => u.FirstName == "Matt");
 
-            Organization originalOrg = await context.Organization.Include(o => o.Organizer).SingleOrDefaultAsync(o => o.OrganizationId == organization.OrganizationId);
+            Organization originalOrg = await context.Organization.Include(o => o.Organizer).SingleOrDefaultAsync(o => o.OrganizationId == id);
 
             // Organization must be organized by the current user
             if (originalOrg == null || originalOrg.Organizer != user) {
@@ -190,7 +191,6 @@ namespace Community.Controllers
 
             if (ModelState.IsValid)
             {
-                originalOrg.OrganizationId = organization.OrganizationId;
                 originalOrg.Name = organization.Name;
                 originalOrg.Description = organization.Description;
                 originalOrg.IsActive = organization.IsActive;
@@ -208,7 +208,7 @@ namespace Community.Controllers
         }
 
         /**
-         * DELETE /organization/delete/3
+         * DELETE /organization/3
          * Purpose: Deletes an organization, all of their future events, and any event members & chat messages for those events
          * Args:
          *      int id - Organization ID
