@@ -81,8 +81,8 @@ export function* watchPatchEvent() {
 
 function* deleteEvent({ id }) {
   try {
-    const success = yield call(axios.delete, `http://localhost:5000/event/${id}`);
-    yield put(actions.deleteEventSuccess(success));
+    yield call(axios.delete, `http://localhost:5000/event/${id}`);
+    yield put(actions.deleteEventSuccess());
   } catch (error) {
     yield put(actions.deleteEventFailure(error));
   }

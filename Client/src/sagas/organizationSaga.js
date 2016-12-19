@@ -81,8 +81,8 @@ export function* watchPatchOrganization() {
 
 function* deleteOrganization({ id }) {
   try {
-    const success = yield call(axios.delete, `http://localhost:5000/organization/${id}`);
-    yield put(actions.deleteOrganizationSuccess(success));
+    yield call(axios.delete, `http://localhost:5000/organization/${id}`);
+    yield put(actions.deleteOrganizationSuccess());
   } catch (error) {
     yield put(actions.deleteOrganizationFailure(error));
   }
