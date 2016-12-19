@@ -171,15 +171,15 @@ export const getEventMemberByIdFailure = (error) => ({
   payload: { error }
 });
 
-export const postEventMemberById = (eventMember) => ({
+export const postEventMember = (eventMember) => ({
   type: actions.POST_EVENT_MEMBER,
   payload: { eventMember }
 });
-export const postEventMemberByIdSuccess = (eventMember) => ({
+export const postEventMemberSuccess = (eventMember) => ({
   type: actions.POST_EVENT_MEMBER_SUCCESS,
   payload: { eventMember }
 });
-export const postEventMemberByIdFailure = (error) => ({
+export const postEventMemberFailure = (error) => ({
   type: actions.POST_EVENT_MEMBER_FAILURE,
   payload: { error }
 });
