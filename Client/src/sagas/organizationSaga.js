@@ -1,4 +1,3 @@
-import { takeEvery } from 'redux-saga';
 import { take, call, put, fork } from 'redux-saga/effects';
 import axios from 'axios';
 import * as actions from '../actions/actionCreators';
@@ -45,7 +44,7 @@ function* loadOrganizationsByOrganizerId({ id }) {
 export function* watchGetOrganizationsByOrganizerId() {
   while (true) {
     const { payload } = yield take(a.GET_ORGANIZATIONS_BY_ORGANIZER_ID);
-    yield fork(loadOrganizationById, payload);
+    yield fork(loadOrganizationsByOrganizerId, payload);
   }
 }
 

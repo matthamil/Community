@@ -199,7 +199,7 @@ export const patchEventMemberByIdFailure = (error) => ({
 
 export const claimEventMember = (id) => ({
   type: actions.CLAIM_EVENT_MEMBER,
-  payload: { eventMember }
+  payload: { id }
 });
 export const claimEventMemberSuccess = (eventMember) => ({
   type: actions.CLAIM_EVENT_MEMBER_SUCCESS,
@@ -212,7 +212,7 @@ export const claimEventMemberFailure = (error) => ({
 
 export const unclaimEventMember = (id) => ({
   type: actions.UNCLAIM_EVENT_MEMBER,
-  payload: { eventMember }
+  payload: { id }
 });
 export const unclaimEventMemberSuccess = (eventMember) => ({
   type: actions.UNCLAIM_EVENT_MEMBER_SUCCESS,
@@ -225,7 +225,7 @@ export const unclaimEventMemberFailure = (error) => ({
 
 export const deleteEventMember = (id) => ({
   type: actions.DELETE_EVENT_MEMBER,
-  payload: { eventMember }
+  payload: { id }
 });
 export const deleteEventMemberSuccess = () => ({
   type: actions.DELETE_EVENT_MEMBER_SUCCESS

@@ -1,4 +1,3 @@
-import { takeEvery } from 'redux-saga';
 import { take, call, put, fork } from 'redux-saga/effects';
 import axios from 'axios';
 import * as actions from '../actions/actionCreators';
@@ -7,7 +6,7 @@ import * as a from '../actions/actionTypes';
 function* loadEventMembers() {
   try {
     const eventMembers = yield call(axios, `http://localhost:5000/event/`);
-    yield put(actions.getEventMembersSuccess(events));
+    yield put(actions.getEventMembersSuccess(eventMembers));
   } catch (error) {
     yield put(actions.getEventMembersFailure(error));
   }
@@ -21,8 +20,8 @@ export function* watchGetEventMembers() {
 
 function* loadEventMemberById({ id }) {
   try {
-    const event = yield call(axios, `http://localhost:5000/eventmember/${id}`);
-    yield put(actions.getEventMemberByIdSuccess(event));
+    const eventMember = yield call(axios, `http://localhost:5000/eventmember/${id}`);
+    yield put(actions.getEventMemberByIdSuccess(eventMember));
   } catch (error) {
     yield put(actions.getEventMemberByIdFailure(error));
   }

@@ -1,6 +1,8 @@
-export default const initialState = {
+const initialState = {
   org: {},
   eventChatroom: {},
   eventMember: {},
   user: {}
 };
+
+export default initialState;

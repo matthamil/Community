@@ -1,4 +1,3 @@
-import { takeEvery } from 'redux-saga';
 import { take, call, put, fork } from 'redux-saga/effects';
 import axios from 'axios';
 import * as actions from '../actions/actionCreators';

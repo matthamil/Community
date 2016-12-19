@@ -1,30 +1,8 @@
 import { fork } from 'redux-saga/effects';
 // import other sagas
-import {
-  watchGetOrganizationList,
-  watchGetOrganizationById,
-  watchGetOrganizationsByOrganizerId,
-  watchPostOrganization,
-  watchPatchOrganization,
-  watchDeleteOrganization
-} from './organizationSaga';
-import {
-  watchGetEventList,
-  watchGetEventById,
-  watchGetEventsByOrganizationId,
-  watchPostEvent,
-  watchPatchEvent,
-  watchDeleteEvent
-} from './eventSaga';
-import {
-  watchGetEventMembers,
-  watchGetEventMemberById,
-  watchPostEventMember,
-  watchPatchEventMember,
-  watchClaimEventMember,
-  watchUnclaimEventMember,
-  watchDeleteEventMember
-} from './eventMemberSaga';
+import * as organization from './organizationSaga';
+import * as event from './eventSaga';
+import * as eventMember from './eventMemberSaga';
 
 function startSagas(...sagas) {
   return function* rootSaga() {
@@ -34,25 +12,27 @@ function startSagas(...sagas) {
 
 const rootSaga = startSagas(
   // list all sagas
-  watchGetOrganizationList,
-  watchGetOrganizationById,
-  watchGetOrganizationsByOrganizerId,
-  watchPostOrganization,
-  watchPatchOrganization,
-  watchDeleteOrganization,
-  watchGetEventList,
-  watchGetEventById,
-  watchGetEventsByOrganizationId,
-  watchPostEvent,
-  watchPatchEvent,
-  watchDeleteEvent,
-  watchGetEventMembers,
-  watchGetEventMemberById,
-  watchPostEventMember,
-  watchPatchEventMember,
-  watchClaimEventMember,
-  watchUnclaimEventMember,
-  watchDeleteEventMember
+  organization.watchGetOrganizationList,
+  organization.watchGetOrganizationById,
+  organization.watchGetOrganizationsByOrganizerId,
+  organization.watchPostOrganization,
+  organization.watchPatchOrganization,
+  organization.watchDeleteOrganization,
+
+  event.watchGetEventList,
+  event.watchGetEventById,
+  event.watchGetEventsByOrganizationId,
+  event.watchPostEvent,
+  event.watchPatchEvent,
+  event.watchDeleteEvent,
+
+  eventMember.watchGetEventMembers,
+  eventMember.watchGetEventMemberById,
+  eventMember.watchPostEventMember,
+  eventMember.watchPatchEventMember,
+  eventMember.watchClaimEventMember,
+  eventMember.watchUnclaimEventMember,
+  eventMember.watchDeleteEventMember
 );
 
 export default rootSaga;
