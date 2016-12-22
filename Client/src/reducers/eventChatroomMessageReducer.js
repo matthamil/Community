@@ -1,5 +1,6 @@
 import * as a from '../actions/actionTypes';
-import { eventChatroom } from './initialState';
+import initialState from './initialState';
+const { eventChatroom } = initialState;
 
 export default function eventChatroomMessageReducer(state = eventChatroom, action) {
   switch (action.type) {

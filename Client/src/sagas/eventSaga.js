@@ -4,9 +4,10 @@ import * as actions from '../actions/actionCreators';
 import * as a from '../actions/actionTypes';
 
 function* loadEventList({ city, state }) {
+  const url = `/event/${city ? '?city=' + city : ''}${state ? '&state=' + state : ''}`;
   try {
-    const events = yield call(axios, `http://localhost:5000/event/`);
-    yield put(actions.getEventListSuccess(events));
+    const { data } = yield call(axios, url);
+    yield put(actions.getEventListSuccess(data));
   } catch (error) {
     yield put(actions.getEventListFailure(error));
   }
@@ -20,7 +21,7 @@ export function* watchGetEventList() {
 
 function* loadEventById({ id }) {
   try {
-    const event = yield call(axios, `http://localhost:5000/event/${id}`);
+    const event = yield call(axios, `/event/${id}`);
     yield put(actions.getEventByIdSuccess(event));
   } catch (error) {
     yield put(actions.getEventByIdFailure(error));
@@ -35,7 +36,7 @@ export function* watchGetEventById() {
 
 function* loadEventsByOrganizationId({ id }) {
   try {
-    const events = yield call(axios, `http://localhost:5000/event/org/${id}`);
+    const events = yield call(axios, `/event/org/${id}`);
     yield put(actions.getEventsByOrganizationIdSuccess(events));
   } catch (error) {
     yield put(actions.getEventsByOrganizationIdFailure(error));
@@ -48,9 +49,24 @@ export function* watchGetEventsByOrganizationId() {
   }
 }
 
+function* loadUserNextEvent() {
+  try {
+    const { data } = yield call(axios, `/event/next`);
+    yield put(actions.getNextEventSuccess(data));
+  } catch (error) {
+    yield put(actions.getNextEventFailure(error));
+  }
+}
+export function* watchGetNextEvent() {
+  while (true) {
+    yield take(a.GET_NEXT_EVENT);
+    yield fork(loadUserNextEvent);
+  }
+}
+
 function* createNewEvent({ event }) {
   try {
-    const success = yield call(axios.post, `http://localhost:5000/event/`, event);
+    const success = yield call(axios.post, `/event/`, event);
     yield put(actions.postEventSuccess(success));
   } catch (error) {
     yield put(actions.postEventFailure(error));
@@ -65,7 +81,7 @@ export function* watchPostEvent() {
 
 function* modifyEvent({ id, event }) {
   try {
-    const success = yield call(axios.patch, `http://localhost:5000/event/${id}`, event);
+    const success = yield call(axios.patch, `/event/${id}`, event);
     yield put(actions.patchEventSuccess(success));
   } catch (error) {
     yield put(actions.patchEventFailure(error));
@@ -80,7 +96,7 @@ export function* watchPatchEvent() {
 
 function* deleteEvent({ id }) {
   try {
-    yield call(axios.delete, `http://localhost:5000/event/${id}`);
+    yield call(axios.delete, `/event/${id}`);
     yield put(actions.deleteEventSuccess());
   } catch (error) {
     yield put(actions.deleteEventFailure(error));

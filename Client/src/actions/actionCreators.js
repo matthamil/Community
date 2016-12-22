@@ -106,6 +106,18 @@ export const getEventsByOrganizationIdFailure = (error) => ({
   payload: { error }
 });
 
+export const getNextEvent = () => ({
+  type: actions.GET_NEXT_EVENT
+});
+export const getNextEventSuccess = (event) => ({
+  type: actions.GET_NEXT_EVENT_SUCCESS,
+  payload: event
+});
+export const getNextEventFailure = (error) => ({
+  type: actions.GET_NEXT_EVENT_FAILURE,
+  payload: { error }
+});
+
 export const postEvent = (event) => ({
   type: actions.POST_EVENT,
   payload: { event }
@@ -288,3 +300,17 @@ export const deleteEventChatroomMessageFailure = (error) => ({
   payload: { error }
 });
 // * END Event Chatroom Message Action Creators *
+
+// * User Action Creators *
+export const getUser = () => ({
+  type: actions.GET_USER
+});
+export const getUserSuccess = (user) => ({
+  type: actions.GET_USER_SUCCESS,
+  payload: user
+});
+export const getUserFailure = (error) => ({
+  type: actions.GET_USER_FAILURE,
+  payload: { error }
+});
+// * END User Action Creators *

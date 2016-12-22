@@ -1,5 +1,6 @@
 import * as a from '../actions/actionTypes';
-import { eventMember } from './initialState';
+import initialState from './initialState';
+const { eventMember } = initialState;
 
 export default function eventMemberReducer(state = eventMember, action) {
   switch (action.type) {

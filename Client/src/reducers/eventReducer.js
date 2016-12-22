@@ -1,4 +1,5 @@
-import { event } from './initialState';
+import initialState from './initialState';
+const { event } = initialState;
 import * as a from '../actions/actionTypes';
 
 export default function eventReducer(state = event, action) {
@@ -6,109 +7,124 @@ export default function eventReducer(state = event, action) {
     case a.GET_EVENT_LIST:
       return {
         ...state,
-        loading: true,
-        city: action.payload.city,
-        state: action.payload.state
+        loadingEventList: true
       };
     case a.GET_EVENT_LIST_SUCCESS:
       return {
         ...state,
-        loading: false,
+        loadingEventList: false,
         events: action.payload.events
       };
     case a.GET_EVENT_LIST_FAILURE:
       return {
         ...state,
-        loading: false,
+        loadingEventList: false,
         error: action.payload.error
       };
     case a.GET_EVENT_BY_ID:
       return {
         ...state,
-        loading: true,
+        loadingEventById: true,
         id: action.payload.id
       };
     case a.GET_EVENT_BY_ID_SUCCESS:
       return {
         ...state,
-        loading: false,
+        loadingEventById: false,
         event: action.payload.event
       };
     case a.GET_EVENT_BY_ID_FAILURE:
       return {
         ...state,
-        loading: false,
+        loadingEventById: false,
         error: action.payload.error
       };
     case a.GET_EVENTS_BY_ORGANIZATION_ID:
       return {
         ...state,
-        loading: true,
+        loadingEventsByOrgId: true,
         id: action.payload.id
       };
     case a.GET_EVENTS_BY_ORGANIZATION_ID_SUCCESS:
       return {
         ...state,
-        loading: false,
+        loadingEventsByOrgId: false,
         organization: action.payload.organization
       };
     case a.GET_EVENTS_BY_ORGANIZATION_ID_FAILURE:
       return {
         ...state,
-        loading: false,
+        loadingEventsByOrgId: false,
         error: action.payload.error
+      };
+    case a.GET_NEXT_EVENT:
+      return {
+        ...state,
+        loadingNextEvent: true
+      };
+    case a.GET_NEXT_EVENT_SUCCESS:
+      return {
+        ...state,
+        loadingNextEvent: false,
+        nextEvent: action.payload
+      };
+    case a.GET_NEXT_EVENT_FAILURE:
+      return {
+        ...state,
+        loadingNextEvent: false,
+        error: action.payload
       };
     case a.POST_EVENT:
       return {
         ...state,
-        loading: true,
+        loadingPostEvent: true,
         event: action.payload.event
       };
     case a.POST_EVENT_SUCCESS:
       return {
         ...state,
-        loading: false,
+        loadingPostEvent: false,
         event: action.payload.event
       };
     case a.POST_EVENT_FAILURE:
       return {
         ...state,
-        loading: false,
+        loadingPostEvent: false,
         error: action.payload.error
       };
     case a.PATCH_EVENT:
       return {
         ...state,
-        loading: true,
+        loadingPatchEvent: true,
         event: action.payload.event
       };
     case a.PATCH_EVENT_SUCCESS:
       return {
         ...state,
-        loading: false,
+        loadingPatchEvent: false,
         event: action.payload.event
       };
     case a.PATCH_EVENT_FAILURE:
       return {
         ...state,
-        loading: false,
+        loadingPatchEvent: false,
         error: action.payload.error
       };
     case a.DELETE_EVENT:
       return {
         ...state,
-        loading: false,
+        loadingDeleteEvent: false,
         id: action.payload.id
       };
     case a.DELETE_EVENT_SUCCESS:
       return {
         ...state,
-        loading: false
+        loadingDeleteEvent: false
       };
     case a.DELETE_EVENT_FAILURE:
       return {
         ...state,
-        loading: false,
+        loadingDeleteEvent: false,
         error: action.payload.error
       };
     default:

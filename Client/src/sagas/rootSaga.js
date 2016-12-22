@@ -3,6 +3,7 @@ import { fork } from 'redux-saga/effects';
 import * as organization from './organizationSaga';
 import * as event from './eventSaga';
 import * as eventMember from './eventMemberSaga';
+import * as user from './userSaga';
 
 function startSagas(...sagas) {
   return function* rootSaga() {
@@ -22,17 +23,20 @@ const rootSaga = startSagas(
   event.watchGetEventList,
   event.watchGetEventById,
   event.watchGetEventsByOrganizationId,
+  event.watchGetNextEvent,
   event.watchPostEvent,
   event.watchPatchEvent,
   event.watchDeleteEvent,
 
   eventMember.watchGetEventMembers,
-  eventMember.watchGetEventMemberById,
+  eventMember.watchGetEventMembersById,
   eventMember.watchPostEventMember,
   eventMember.watchPatchEventMember,
   eventMember.watchClaimEventMember,
   eventMember.watchUnclaimEventMember,
-  eventMember.watchDeleteEventMember
+  eventMember.watchDeleteEventMember,
+
+  user.watchGetUser
 );
 
 export default rootSaga;

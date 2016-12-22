@@ -5,7 +5,7 @@ import * as a from '../actions/actionTypes';
 
 function* loadOrganizationList({ city, state }) {
   try {
-    const organizations = yield call(axios, `http://localhost:5000/organization/`);
+    const organizations = yield call(axios, `/organization/`);
     yield put(actions.getOrganizationListSuccess(organizations));
   } catch (error) {
     yield put(actions.getOrganizationListFailure(error));
@@ -20,7 +20,7 @@ export function* watchGetOrganizationList() {
 
 function* loadOrganizationById({ id }) {
   try {
-    const organization = yield call(axios, `http://localhost:5000/organization/${id}`);
+    const organization = yield call(axios, `/organization/${id}`);
     yield put(actions.getOrganizationByIdSuccess(organization));
   } catch (error) {
     yield put(actions.getOrganizationByIdFailure(error));
@@ -35,7 +35,7 @@ export function* watchGetOrganizationById() {
 
 function* loadOrganizationsByOrganizerId({ id }) {
   try {
-    const organizations = yield call(axios, `http://localhost:5000/organization/organizerId?=${id}`);
+    const organizations = yield call(axios, `/organization/organizerId?=${id}`);
     yield put(actions.getOrganizationsByOrganizerIdSuccess(organizations));
   } catch (error) {
     yield put(actions.getOrganizationsByOrganizerIdFailure(error));
@@ -50,7 +50,7 @@ export function* watchGetOrganizationsByOrganizerId() {
 
 function* createNewOrganization({ organization }) {
   try {
-    const success = yield call(axios.post, `http://localhost:5000/organization/`, organization);
+    const success = yield call(axios.post, `/organization/`, organization);
     yield put(actions.postOrganizationSuccess(success));
   } catch (error) {
     yield put(actions.postOrganizationFailure(error));
@@ -65,7 +65,7 @@ export function* watchPostOrganization() {
 
 function* modifyOrganization({ id, organization }) {
   try {
-    const success = yield call(axios.patch, `http://localhost:5000/organization/${id}`, organization);
+    const success = yield call(axios.patch, `/organization/${id}`, organization);
     yield put(actions.patchOrganizationSuccess(success));
   } catch (error) {
     yield put(actions.patchOrganizationFailure(error));
@@ -80,7 +80,7 @@ export function* watchPatchOrganization() {
 
 function* deleteOrganization({ id }) {
   try {
-    yield call(axios.delete, `http://localhost:5000/organization/${id}`);
+    yield call(axios.delete, `/organization/${id}`);
     yield put(actions.deleteOrganizationSuccess());
   } catch (error) {
     yield put(actions.deleteOrganizationFailure(error));

@@ -42,6 +42,8 @@ namespace Community.Controllers
         }
 
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+        // For testing
+        // private Task<ApplicationUser> GetCurrentUserAsync() => context.ApplicationUser.SingleOrDefaultAsync(u => u.FirstName == "Matt" && u.LastName == "Hamil");
 
         /**
          * GET /event/?city=Nashville&state=TN
@@ -59,16 +61,16 @@ namespace Community.Controllers
             List<Event> allEvents = null;
             if (city != null && state == null)
             {
-                allEvents = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers).Where(e => e.City == city && e.Date > DateTime.Now).ToListAsync();
+                allEvents = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers).Where(e => e.City == city && e.Date > DateTime.Now).OrderBy(e => e.StartTime).ToListAsync();
             }
             else if (city == null && state != null)
             {
-                allEvents = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers).Where(e => e.State == state && e.Date > DateTime.Now).ToListAsync();
+                allEvents = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers).Where(e => e.State == state && e.Date > DateTime.Now).OrderBy(e => e.StartTime).ToListAsync();
             }
             else if (city == null && state == null)
             {
                 allEvents = await (
-                    from e in context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers)
+                    from e in context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers).OrderBy(e => e.StartTime)
                     where e.Organization.IsActive == true && e.Date > DateTime.Now
                     select e
                 ).ToListAsync();
@@ -123,11 +125,11 @@ namespace Community.Controllers
             List<Event> allEvents = null;
             if (includePastEvents)
             {
-                allEvents = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers).Where(e => e.Organization.OrganizationId == id).ToListAsync();
+                allEvents = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers).Where(e => e.Organization.OrganizationId == id).OrderBy(e => e.StartTime).ToListAsync();
             }
             else
             {
-                allEvents = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers).Where(e => e.Organization.OrganizationId == id && e.Date > DateTime.Now).ToListAsync();
+                allEvents = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers).Where(e => e.Organization.OrganizationId == id && e.Date > DateTime.Now).OrderBy(e => e.StartTime).ToListAsync();
             }
             if (allEvents == null) return NotFound();
             List<EventViewModel> model = new List<EventViewModel>();
@@ -136,6 +138,32 @@ namespace Community.Controllers
                 model.Add(new EventViewModel(singleEvent, await context.EventMember.Include(e => e.ApplicationUser).Where(e => e.EventId == singleEvent.EventId).ToArrayAsync()));
             }
             return Json(model);
+        }
+
+        [HttpGet]
+        [Route("[controller]/next")]
+        // [Authorize]
+        public async Task<IActionResult> GetNextEvent()
+        {
+            var user = await GetCurrentUserAsync();
+            // For testing purposes, uncomment the line below
+            // var user = context.ApplicationUser.Where(u => u.FirstName == "Matt" && u.LastName == "Hamil").SingleOrDefault();
+
+            Event nextEvent = await (
+                from orgEvent in context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Take(1)
+                join eventMember in context.EventMember on orgEvent.EventId equals eventMember.EventId
+                where eventMember.VolunteerId == user.Id
+                select orgEvent
+            ).SingleOrDefaultAsync();
+
+            List<EventMember> eMembers = await context.EventMember.Where(m => m.EventId == nextEvent.EventId).ToListAsync();
+
+            if (nextEvent == null)
+            {
+                return NotFound();
+            }
+
+            return Json(new EventViewModel(nextEvent, eMembers));
         }
 
         /**

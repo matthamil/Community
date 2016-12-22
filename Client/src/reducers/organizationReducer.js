@@ -1,5 +1,6 @@
 import * as a from '../actions/actionTypes';
-import { org } from './initialState';
+import initialState from './initialState';
+const { org } = initialState;
 
 export default function organizationReducer(state = org, action) {
   switch (action.type) {
