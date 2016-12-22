@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/actionCreators';
-import NextEventContainer from './NextEventContainer';
+import NextEvent from '../components/NextEvent';
 import EventListSearchBarContainer from './EventListSearchBarContainer';
 import EventItem from '../components/EventItem';
 import styled from 'styled-components';
@@ -17,17 +17,16 @@ class EventListContainer extends Component {
   //   super(props);
   // }
 
-  componentWillMount() {
-    // find job title in this.props.nextEvent for current user
-  }
-
   render() {
     const { events, nextEvent, user } = this.props;
     return (
       <div>
-        <NextEventContainer
+        {Object.getOwnPropertyNames(nextEvent).length > 0 ?
+        <NextEvent
           nextEvent={nextEvent}
-          title={user}/>
+          user={user}
+          userEventMember={nextEvent.eventMembers.find((member) => member.volunteer.id === user.id)}/>
+        : undefined }
         <EventListSearchBarContainer/>
         <EventItemListWrapper>
           {events.map((event, index) => <EventItem event={event} key={index} firstItem={true ? index === 0 : false} lastItem={true ? index === events.length - 1 : false}/>)}
@@ -37,7 +36,14 @@ class EventListContainer extends Component {
   }
 }
 
-const mapStateToProps = ({ event, account }) => ({ events: event.events, nextEvent: event.nextEvent, loading: event.loading, user: { account } });
+const mapStateToProps = ({ event, account }) => (
+  {
+    events: event.events,
+    nextEvent: event.nextEvent,
+    loading: event.loading,
+    user: account.user
+  }
+);
 const mapDispatchToProps = (dispatch) => bindActionCreators(actionCreators, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventListContainer);

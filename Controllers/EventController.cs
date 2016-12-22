@@ -140,6 +140,32 @@ namespace Community.Controllers
             return Json(model);
         }
 
+        [HttpGet]
+        [Route("[controller]/next")]
+        // [Authorize]
+        public async Task<IActionResult> GetNextEvent()
+        {
+            var user = await GetCurrentUserAsync();
+            // For testing purposes, uncomment the line below
+            // var user = context.ApplicationUser.Where(u => u.FirstName == "Matt" && u.LastName == "Hamil").SingleOrDefault();
+
+            Event nextEvent = await (
+                from orgEvent in context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Take(1)
+                join eventMember in context.EventMember on orgEvent.EventId equals eventMember.EventId
+                where eventMember.VolunteerId == user.Id
+                select orgEvent
+            ).SingleOrDefaultAsync();
+
+            List<EventMember> eMembers = await context.EventMember.Where(m => m.EventId == nextEvent.EventId).ToListAsync();
+
+            if (nextEvent == null)
+            {
+                return NotFound();
+            }
+
+            return Json(new EventViewModel(nextEvent, eMembers));
+        }
+
         /**
          * POST /event/
          * Purpose: Creates a new event
