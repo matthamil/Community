@@ -59,16 +59,16 @@ namespace Community.Controllers
             List<Event> allEvents = null;
             if (city != null && state == null)
             {
-                allEvents = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers).Where(e => e.City == city && e.Date > DateTime.Now).ToListAsync();
+                allEvents = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers).Where(e => e.City == city && e.Date > DateTime.Now).OrderBy(e => e.StartTime).ToListAsync();
             }
             else if (city == null && state != null)
             {
-                allEvents = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers).Where(e => e.State == state && e.Date > DateTime.Now).ToListAsync();
+                allEvents = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers).Where(e => e.State == state && e.Date > DateTime.Now).OrderBy(e => e.StartTime).ToListAsync();
             }
             else if (city == null && state == null)
             {
                 allEvents = await (
-                    from e in context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers)
+                    from e in context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers).OrderBy(e => e.StartTime)
                     where e.Organization.IsActive == true && e.Date > DateTime.Now
                     select e
                 ).ToListAsync();
@@ -123,11 +123,11 @@ namespace Community.Controllers
             List<Event> allEvents = null;
             if (includePastEvents)
             {
-                allEvents = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers).Where(e => e.Organization.OrganizationId == id).ToListAsync();
+                allEvents = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers).Where(e => e.Organization.OrganizationId == id).OrderBy(e => e.StartTime).ToListAsync();
             }
             else
             {
-                allEvents = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers).Where(e => e.Organization.OrganizationId == id && e.Date > DateTime.Now).ToListAsync();
+                allEvents = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Include(e => e.EventMembers).Where(e => e.Organization.OrganizationId == id && e.Date > DateTime.Now).OrderBy(e => e.StartTime).ToListAsync();
             }
             if (allEvents == null) return NotFound();
             List<EventViewModel> model = new List<EventViewModel>();

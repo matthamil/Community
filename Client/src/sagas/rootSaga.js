@@ -27,7 +27,7 @@ const rootSaga = startSagas(
   event.watchDeleteEvent,
 
   eventMember.watchGetEventMembers,
-  eventMember.watchGetEventMemberById,
+  eventMember.watchGetEventMembersById,
   eventMember.watchPostEventMember,
   eventMember.watchPatchEventMember,
   eventMember.watchClaimEventMember,

@@ -5,7 +5,7 @@ import * as a from '../actions/actionTypes';
 
 function* loadEventMembers() {
   try {
-    const eventMembers = yield call(axios, `http://localhost:5000/event/`);
+    const eventMembers = yield call(axios, `/eventmember/`);
     yield put(actions.getEventMembersSuccess(eventMembers));
   } catch (error) {
     yield put(actions.getEventMembersFailure(error));
@@ -18,24 +18,24 @@ export function* watchGetEventMembers() {
   }
 }
 
-function* loadEventMemberById({ id }) {
+function* loadEventMembersById({ id }) {
   try {
-    const eventMember = yield call(axios, `http://localhost:5000/eventmember/${id}`);
-    yield put(actions.getEventMemberByIdSuccess(eventMember));
+    const eventMembers = yield call(axios, `/eventmember/${id}`);
+    yield put(actions.getEventMembersByIdSuccess(eventMembers));
   } catch (error) {
-    yield put(actions.getEventMemberByIdFailure(error));
+    yield put(actions.getEventMembersByIdFailure(error));
   }
 }
-export function* watchGetEventMemberById() {
+export function* watchGetEventMembersById() {
   while (true) {
-    const { payload } = yield take(a.GET_EVENT_MEMBER_BY_ID);
-    yield fork(loadEventMemberById, payload);
+    const { payload } = yield take(a.GET_EVENT_MEMBERS_BY_ID);
+    yield fork(loadEventMembersById, payload);
   }
 }
 
 function* createNewEventMember({ eventMember }) {
   try {
-    const success = yield call(axios.post, `http://localhost:5000/eventmember/`, eventMember);
+    const success = yield call(axios.post, `/eventmember/`, eventMember);
     yield put(actions.postEventMemberSuccess(success));
   } catch (error) {
     yield put(actions.postEventMemberFailure(error));
@@ -50,7 +50,7 @@ export function* watchPostEventMember() {
 
 function* modifyEventMember({ id, eventMember }) {
   try {
-    const success = yield call(axios.patch, `http://localhost:5000/eventmember/${id}`, eventMember);
+    const success = yield call(axios.patch, `/eventmember/${id}`, eventMember);
     yield put(actions.patchEventMemberSuccess(success));
   } catch (error) {
     yield put(actions.patchEventMemberFailure(error));
@@ -65,7 +65,7 @@ export function* watchPatchEventMember() {
 
 function* claimEventMember({ id }) {
   try {
-    const success = yield call(axios, `http://localhost:5000/eventmember/claim/${id}`);
+    const success = yield call(axios, `/eventmember/claim/${id}`);
     yield put(actions.claimEventMemberSuccess(success));
   } catch (error) {
     yield put(actions.claimEventMemberFailure(error));
@@ -80,7 +80,7 @@ export function* watchClaimEventMember() {
 
 function* unclaimEventMember({ id }) {
   try {
-    const success = yield call(axios.delete, `http://localhost:5000/eventmember/claim/${id}`);
+    const success = yield call(axios.delete, `/eventmember/claim/${id}`);
     yield put(actions.unclaimEventMemberSuccess(success));
   } catch (error) {
     yield put(actions.unclaimEventMemberFailure(error));
@@ -95,7 +95,7 @@ export function* watchUnclaimEventMember() {
 
 function* deleteEventMember({ id }) {
   try {
-    yield call(axios.delete, `http://localhost:5000/eventmember/${id}`);
+    yield call(axios.delete, `/eventmember/${id}`);
     yield put(actions.deleteEventMemberSuccess());
   } catch (error) {
     yield put(actions.deleteEventMemberFailure(error));

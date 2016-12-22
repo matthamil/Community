@@ -1,4 +1,5 @@
-import { event } from './initialState';
+import initialState from './initialState';
+const { event } = initialState;
 import * as a from '../actions/actionTypes';
 
 export default function eventReducer(state = event, action) {

@@ -6,7 +6,7 @@ import * as a from '../actions/actionTypes';
 
 function* loadEventChatroomMessages({ id }) {
   try {
-    const messages = yield call(axios, `http://localhost:5000/eventchatroommessage/${id}`);
+    const messages = yield call(axios, `/eventchatroommessage/${id}`);
     yield put(actions.getEventChatroomMessagesSuccess(messages));
   } catch (error) {
     yield put(actions.getEventChatroomMessagesFailure(error));
@@ -21,7 +21,7 @@ export function* watchGetEventChatroomMessages() {
 
 function* createNewChatroomMessage({ message }) {
   try {
-    const success = yield call(axios.post, `http://localhost:5000/eventchatroommessage/`, message);
+    const success = yield call(axios.post, `/eventchatroommessage/`, message);
     yield put(actions.postEventChatroomMessageSuccess(success));
   } catch (error) {
     yield put(actions.postEventChatroomMessageFailure(error));
@@ -36,7 +36,7 @@ export function* watchPostEventChatroomMessage() {
 
 function* modifyEventChatroomMessage({ id, message }) {
   try {
-    const success = yield call(axios.patch, `http://localhost:5000/eventchatroommessage/${id}`, message);
+    const success = yield call(axios.patch, `/eventchatroommessage/${id}`, message);
     yield put(actions.patchEventChatroomMessageSuccess(success));
   } catch (error) {
     yield put(actions.patchEventChatroomMessageFailure(error));
@@ -51,7 +51,7 @@ export function* watchPatchEventChatroomMessage() {
 
 function* deleteEventChatroomMessage({ id }) {
   try {
-    yield call(axios.delete, `http://localhost:5000/eventchatroommessage/${id}`);
+    yield call(axios.delete, `/eventchatroommessage/${id}`);
     yield put(actions.deleteEventChatroomMessageSuccess());
   } catch (error) {
     yield put(actions.deleteEventChatroomMessageFailure(error));
