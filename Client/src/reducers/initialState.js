@@ -6,6 +6,7 @@ const initialState = {
     loggedIn: false
   },
   event: {
+    nextEvent: {},
     events: []
   }
 };

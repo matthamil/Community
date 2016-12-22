@@ -106,6 +106,18 @@ export const getEventsByOrganizationIdFailure = (error) => ({
   payload: { error }
 });
 
+export const getNextEvent = () => ({
+  type: actions.GET_NEXT_EVENT
+});
+export const getNextEventSuccess = (event) => ({
+  type: actions.GET_NEXT_EVENT_SUCCESS,
+  payload: event
+});
+export const getNextEventFailure = (error) => ({
+  type: actions.GET_NEXT_EVENT_FAILURE,
+  payload: { error }
+});
+
 export const postEvent = (event) => ({
   type: actions.POST_EVENT,
   payload: { event }

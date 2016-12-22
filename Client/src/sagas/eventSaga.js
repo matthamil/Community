@@ -49,6 +49,21 @@ export function* watchGetEventsByOrganizationId() {
   }
 }
 
+function* loadUserNextEvent() {
+  try {
+    const { data } = yield call(axios, `/event/next`);
+    yield put(actions.getNextEventSuccess(data));
+  } catch (error) {
+    yield put(actions.getNextEventFailure(error));
+  }
+}
+export function* watchGetNextEvent() {
+  while (true) {
+    yield take(a.GET_NEXT_EVENT);
+    yield fork(loadUserNextEvent);
+  }
+}
+
 function* createNewEvent({ event }) {
   try {
     const success = yield call(axios.post, `/event/`, event);

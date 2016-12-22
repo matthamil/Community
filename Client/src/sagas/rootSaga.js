@@ -23,6 +23,7 @@ const rootSaga = startSagas(
   event.watchGetEventList,
   event.watchGetEventById,
   event.watchGetEventsByOrganizationId,
+  event.watchGetNextEvent,
   event.watchPostEvent,
   event.watchPatchEvent,
   event.watchDeleteEvent,

@@ -9,12 +9,24 @@ class NextEventContainer extends Component {
   // }
 
   render() {
+    const { nextEvent, user } = this.props;
+    console.log(this.props.nextEvent);
     return (
       <div>
-        Next event goes here.
+        {/*<h3>Your Next Event</h3>
+        <hr/>
+        <div>
+          <h1>{nextEvent.name}</h1>
+          <h3>{nextEvent.organization.name}</h3>
+          <h3>{nextEvent.eventMembers.filter((member) => member.volunteer.id === user.id)[0].jobTitle}</h3>
+        </div>
+        <div>
+        </div>*/}
       </div>
     );
   }
 }
+
+//const mapStateToProps = ({ event, account }) => ({ nextEvent: event.nextEvent, user: { account } });
 
 export default NextEventContainer;
