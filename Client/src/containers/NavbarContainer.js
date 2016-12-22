@@ -10,16 +10,21 @@ class NavbarContainer extends Component {
   // }
 
   componentDidMount() {
+    this.props.getUser();
     this.props.getEventList();
   }
 
   render() {
+    const { user, loggedIn } = this.props;
     return (
-      <Navbar/>
+      <Navbar
+        loggedIn={loggedIn}
+        user={user}/>
     );
   }
 }
 
 const mapDispatchToProps = (dispatch) => bindActionCreators(actionCreators, dispatch);
+const mapStateToProps = ({ account }) => ({ user: { account }, loggedIn: { account } });
 
-export default connect(null, mapDispatchToProps)(NavbarContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(NavbarContainer);

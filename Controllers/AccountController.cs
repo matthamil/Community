@@ -38,6 +38,16 @@ namespace Community.Controllers
         }
 
         //
+        // GET: /Account/
+        [HttpGet]
+        [Route("[controller]")]
+        public async Task<IActionResult> Get()
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            return Json(new ApplicationUserViewModel(user));
+        }
+
+        //
         // GET: /Account/Login
         [HttpGet]
         [AllowAnonymous]
@@ -141,6 +151,7 @@ namespace Community.Controllers
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation(4, "User logged out.");
+
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 

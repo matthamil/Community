@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import styled from 'styled-components';
 
@@ -68,9 +68,49 @@ const LoginIcon = styled.div`
   margin-right: 10px;
 `;
 
-const Navbar = (props) => (
+const StartAnOrganizationLink = styled.div`
+  border: none;
+  background-color: #fff;
+  font-weight: 600;
+  color: #2C3E50;
+  height: 40px;
+  min-width: 80px;
+  padding: 5px 15px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 5px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const Navbar = ({ user, loggedIn }) => (
   <NavWrapper>
     <Link to="/" style={{ textDecoration: 'none' }}><NavHeader>Community</NavHeader></Link>
+    {/* If the user is logged in, hide the LogIn and Register buttons */
+    loggedIn ?
+    <LoginRegisterWrapper>
+      <Link to="/new-organization" style={{ textDecoration: 'none' }}>
+        <StartAnOrganizationLink>
+          <LoginIcon>
+            <i className="fa fa-plus" style={{ color: '#E74C3C' }} aria-hidden="true"></i>
+          </LoginIcon>
+          <span>Start an Organization</span>
+        </StartAnOrganizationLink>
+      </Link>
+      <Link to="/events" style={{ textDecoration: 'none' }}>
+        <LoginButton>
+          <LoginIcon>
+            <i className="fa fa-calendar" aria-hidden="true"></i>
+          </LoginIcon>
+          <span>Your Events</span>
+        </LoginButton>
+      </Link>
+    </LoginRegisterWrapper>
+    : /* If the user is not logged in, show LogIn and Register buttons */
     <LoginRegisterWrapper>
       <Link to="/login" style={{ textDecoration: 'none' }}>
         <LoginButton>
@@ -89,7 +129,12 @@ const Navbar = (props) => (
         </LoginButton>
       </Link>
     </LoginRegisterWrapper>
+    }
   </NavWrapper>
 );
+
+Navbar.propTypes = {
+  user: PropTypes.object.isRequired
+};
 
 export default Navbar;

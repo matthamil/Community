@@ -42,6 +42,8 @@ namespace Community.Controllers
         }
 
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+        // For testing
+        // private Task<ApplicationUser> GetCurrentUserAsync() => context.ApplicationUser.SingleOrDefaultAsync(u => u.FirstName == "Matt" && u.LastName == "Hamil");
 
         /**
          * GET /event/?city=Nashville&state=TN

@@ -2,7 +2,9 @@ const initialState = {
   org: {},
   eventChatroom: {},
   eventMember: {},
-  user: {},
+  user: {
+    loggedIn: false
+  },
   event: {
     events: []
   }

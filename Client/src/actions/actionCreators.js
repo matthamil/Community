@@ -288,3 +288,17 @@ export const deleteEventChatroomMessageFailure = (error) => ({
   payload: { error }
 });
 // * END Event Chatroom Message Action Creators *
+
+// * User Action Creators *
+export const getUser = () => ({
+  type: actions.GET_USER
+});
+export const getUserSuccess = (user) => ({
+  type: actions.GET_USER_SUCCESS,
+  payload: user
+});
+export const getUserFailure = (error) => ({
+  type: actions.GET_USER_FAILURE,
+  payload: { error }
+});
+// * END User Action Creators *

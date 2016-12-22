@@ -43,9 +43,21 @@ const EventItemWrapper = styled.div`
   display: flex;
   flex-direction: row;
   padding: 20px;
-  border-bottom: 1px solid rgb(238, 238, 238);
+  border: 1px solid rgb(238, 238, 238);
+  borderRadius: ${calculateBorderRadius};
+  border-bottom: ${props => props.lastItem ? '' : 'none'};
   background-color: #fff;
 `;
+
+function calculateBorderRadius(props) {
+  if (props.firstItem) {
+    return '5px 5px 0 0'
+  } else if (props.lastItem) {
+    return '0 0 5px 5px';
+  } else {
+    return 'none';
+  }
+}
 
 const VolunteerCount = styled.h4`
   color: rgb(131, 131, 131)
@@ -71,8 +83,8 @@ function _calculateNeededVolunteers(eventMembers) {
   return <VolunteerCount>{claimed}/{total} {total === 1 ? 'position' : 'positions'} filled.</VolunteerCount>;
 }
 
-const EventItem = ({ event }) => (
-  <EventItemWrapper>
+const EventItem = ({ event, firstItem, lastItem }) => (
+  <EventItemWrapper firstItem={firstItem} lastItem={lastItem}>
     <TimeBlock>
       <Time>{moment(event.startTime).format('MMM DD HH:mm A')}</Time>
     </TimeBlock>
@@ -85,6 +97,8 @@ const EventItem = ({ event }) => (
 );
 
 EventItem.propTypes = {
+  firstItem: PropTypes.bool.isRequired,
+  lastItem: PropTypes.bool.isRequired,
   event: PropTypes.shape({
     eventId: PropTypes.number.isRequired,
     organization: PropTypes.shape({
