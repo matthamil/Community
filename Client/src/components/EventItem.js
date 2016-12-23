@@ -56,7 +56,9 @@ const EventItemWrapper = styled.div`
 `;
 
 function calculateBorderRadius(props) {
-  if (props.firstItem) {
+  if (props.firstItem && props.lastItem) {
+    return '5px'
+  } else if (props.firstItem) {
     return '5px 5px 0 0'
   } else if (props.lastItem) {
     return '0 0 5px 5px';

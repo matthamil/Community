@@ -7,6 +7,10 @@ const Background = styled.div`
   width: 100vw;
   background-color: #2C3E50;
   padding: 10px 0 50px 0;
+
+  @media (max-width: 600px) {
+    padding: 10px 0;
+  }
 `;
 
 const NextEventWrapper = styled.div`
@@ -14,6 +18,10 @@ const NextEventWrapper = styled.div`
   margin: 0 auto;
   color: #FFF;
   padding: 20px;
+
+  @media (max-width: 600px) {
+    max-width: 90vw;
+  }
 `;
 
 //border-radius: 5px;
@@ -58,9 +66,9 @@ const NextEventLink = styled(Link)`
   flex-direction: row;
   justify-content: space-between;
 
-  @media (max-width: 600px) {
+  @media (max-width: 770px) {
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-between;
   }
 `;
 
@@ -100,7 +108,7 @@ const NextEventContainer = ({ nextEvent, user, userEventMember }) => (
             <RightItem>{moment(userEventMember.startTime).format('MMM DD HH:mm A')}</RightItem>
           </RighthandWrapper>
           <RighthandWrapper>
-            <Icon style={{marginLeft: '3px'}} className="fa fa-map-marker" aria-hidden="true"></Icon>
+            <Icon style={{marginLeft: '2.5px'}} className="fa fa-map-marker" aria-hidden="true"></Icon>
             <RightItem>{nextEvent.address}</RightItem>
           </RighthandWrapper>
         </div>
