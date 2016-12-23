@@ -11,8 +11,9 @@ class NavbarContainer extends Component {
 
   componentDidMount() {
     this.props.getUser();
-    this.props.getEventList();
+    this.props.getEventList('Nashville', 'TN');
     this.props.getNextEvent();
+    this.props.getOrganizationList('Nashville', 'TN');
   }
 
   render() {
