@@ -4,9 +4,10 @@ import * as actions from '../actions/actionCreators';
 import * as a from '../actions/actionTypes';
 
 function* loadOrganizationList({ city, state }) {
+  const url = `/organization/${city ? '?city=' + city : ''}${state ? '&state=' + state : ''}`;
   try {
-    const organizations = yield call(axios, `/organization/`);
-    yield put(actions.getOrganizationListSuccess(organizations));
+    const { data } = yield call(axios, url);
+    yield put(actions.getOrganizationListSuccess(data));
   } catch (error) {
     yield put(actions.getOrganizationListFailure(error));
   }
