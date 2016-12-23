@@ -6,7 +6,7 @@ import moment from 'moment';
 const Background = styled.div`
   width: 100vw;
   background-color: #2C3E50;
-  padding: 10px 0;
+  padding: 10px 0 50px 0;
 `;
 
 const NextEventWrapper = styled.div`
@@ -57,6 +57,11 @@ const NextEventLink = styled(Link)`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    justify-content: space-around;
+  }
 `;
 
 const Icon = styled.i`

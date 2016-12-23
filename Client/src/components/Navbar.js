@@ -16,6 +16,7 @@ const NavWrapper = styled.nav`
   justify-content: space-around;
 
   @media (max-width: 600px) {
+    max-height: 15vh;
     flex-direction: column;
     justify-content: space-around;
     height: 25vh;
@@ -30,6 +31,7 @@ const NavHeader = styled.h1`
   stroke: 2px
   color: #2C3E50;
   margin: 0;
+  letter-spacing: -2px;
 
   @media (max-width: 600px) {
     font-size: 1.25em;

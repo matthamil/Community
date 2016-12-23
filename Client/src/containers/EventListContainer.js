@@ -3,22 +3,85 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/actionCreators';
 import NextEvent from '../components/NextEvent';
-import EventListSearchBarContainer from './EventListSearchBarContainer';
-import EventItem from '../components/EventItem';
-import styled from 'styled-components';
-
-const EventItemListWrapper = styled.div`
-  max-width: 75vw;
-  margin: 0 auto;
-`;
+import EventListSearchBar from '../components/EventListSearchBar';
+import ListView from '../components/ListView';
 
 class EventListContainer extends Component {
-  // constructor(props) {
-  //   super(props);
-  // }
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      searchText: '',
+      searchType: 'event',
+      eventList: [],
+      organizationList: []
+    };
+
+    this.handleOnSubmit = this.handleOnSubmit.bind(this);
+    this.handleOnChangeSearch = this.handleOnChangeSearch.bind(this);
+    this.handleOnChangeLocation = this.handleOnChangeLocation.bind(this);
+    this.handleOnChangeSearchType = this.handleOnChangeSearchType.bind(this);
+    this.filterOrganizations = this.filterOrganizations.bind(this);
+    this.filterEvents = this.filterEvents.bind(this);
+  }
+
+  handleOnSubmit() {
+
+  }
+
+  handleOnChangeSearch(e) {
+    const text = e.target.value.trim();
+    if (text === '') {
+      this.setState({
+        eventList: this.props.events,
+        organizationList: this.props.organizations
+      });
+    } else {
+      this.setState({
+        searchText: text,
+        eventList: this.filterEvents(this.props.events),
+        organizationList: this.filterOrganizations(this.props.organizations)
+      });
+    }
+  }
+
+  handleOnChangeSearchType(type) {
+    this.setState({
+      searchType: type
+    });
+  }
+
+  handleOnChangeLocation(e) {
+
+  }
+
+  filterEvents(events) {
+    const searchText = this.state.searchText.toLowerCase();
+    if (searchText === '') return events;
+
+    return events.filter((event) => {
+      return event.name.toLowerCase().includes(searchText) || event.organization.name.toLowerCase().includes(searchText);
+    });
+  }
+
+  filterOrganizations(organizations) {
+    const searchText = this.state.searchText.toLowerCase();
+    if (searchText === '') return organizations;
+
+    return organizations.filter((organization) => {
+      return organization.name.toLowerCase().includes(searchText);
+    });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      eventList: nextProps.events,
+      organizationList: nextProps.organizations
+    });
+  }
 
   render() {
-    const { events, nextEvent, user } = this.props;
+    const { nextEvent, user } = this.props;
     return (
       <div>
         {Object.getOwnPropertyNames(nextEvent).length > 0 ?
@@ -27,21 +90,28 @@ class EventListContainer extends Component {
           user={user}
           userEventMember={nextEvent.eventMembers.find((member) => member.volunteer.id === user.id)}/>
         : undefined }
-        <EventListSearchBarContainer/>
-        <EventItemListWrapper>
-          {events.map((event, index) => <EventItem event={event} key={index} firstItem={true ? index === 0 : false} lastItem={true ? index === events.length - 1 : false}/>)}
-        </EventItemListWrapper>
+        <EventListSearchBar
+          onSubmit={this.handleOnSubmit}
+          onChangeSearch={this.handleOnChangeSearch}
+          onChangeSearchType={this.handleOnChangeSearchType}
+          onChangeLocation={this.handleOnChangeLocation}
+          searchType={this.state.searchType}/>
+        <ListView
+          searchType={this.state.searchType}
+          events={this.state.eventList}
+          organizations={this.state.organizationList}/>
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ event, account }) => (
+const mapStateToProps = ({ event, account, organization }) => (
   {
     events: event.events,
     nextEvent: event.nextEvent,
     loading: event.loading,
-    user: account.user
+    user: account.user,
+    organizations: organization.organizations
   }
 );
 const mapDispatchToProps = (dispatch) => bindActionCreators(actionCreators, dispatch);

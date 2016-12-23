@@ -47,6 +47,12 @@ const EventItemWrapper = styled.div`
   borderRadius: ${calculateBorderRadius};
   border-bottom: ${props => props.lastItem ? '' : 'none'};
   background-color: #fff;
+  width: 75vw;
+  margin: 0 auto;
+
+  @media (max-width: 600px) {
+    width: 100vw;
+  }
 `;
 
 function calculateBorderRadius(props) {
@@ -83,10 +89,18 @@ function _calculateNeededVolunteers(eventMembers) {
   return <VolunteerCount>{claimed}/{total} {total === 1 ? 'position' : 'positions'} filled.</VolunteerCount>;
 }
 
+// This is a rough way to format the time to make it more mobile responsive.
+const _formatTime = (event) => (
+  <Time>{window.screen.availWidth > 600 ?
+    <div>{moment(event.startTime).format('MMM DD HH:mm A')}</div> :
+    <div>{moment(event.startTime).format('MMM DD')}<br/>{moment(event.startTime).format('hh:mm A')}</div>}
+  </Time>
+);
+
 const EventItem = ({ event, firstItem, lastItem }) => (
   <EventItemWrapper firstItem={firstItem} lastItem={lastItem}>
     <TimeBlock>
-      <Time>{moment(event.startTime).format('MMM DD HH:mm A')}</Time>
+      {_formatTime(event)}
     </TimeBlock>
     <div>
       <OrganizationName>{event.organization.name}</OrganizationName>
