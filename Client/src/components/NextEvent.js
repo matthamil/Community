@@ -38,11 +38,18 @@ const Line = styled.hr`
   margin: 0;
 `;
 
-const EventName = styled.h3`
+const EventName = styled(Link)`
   font-weight: bold;
   font-size: 2.5em;
   margin: 15px 0;
   color: #fff;
+
+  &:hover,
+  &:visited,
+  &:focus {
+    text-decoration: none;
+    color: #fff;
+  }
 `;
 
 const Organization = styled.h3`
@@ -55,13 +62,8 @@ const JobTitle = styled.h3`
   margin: 5px 0 0 0;
 `;
 
-const NextEventLink = styled(Link)`
+const NextEventLink = styled.div`
   color: #fff;
-  &:hover,
-  &:visited {
-    text-decoration: none;
-    color: #fff;
-  }
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -91,14 +93,24 @@ const RightItem = styled.h3`
   font-size: 1.25em;
 `;
 
+const Address = styled.a`
+  color: #fff;
+  &:visited,
+  &:focus,
+  &:hover {
+    color: #fff;
+    text-decoration: none;
+  }
+`;
+
 const NextEventContainer = ({ nextEvent, user, userEventMember }) => (
   <Background>
     <NextEventWrapper>
       <Header>Your Next Event</Header>
       <Line/>
-      <NextEventLink to={`/events/${nextEvent.eventId}`}>
+      <NextEventLink>
         <div>
-          <EventName>{nextEvent.name}</EventName>
+          <EventName to={`/events/${nextEvent.eventId}`}>{nextEvent.name}</EventName>
           <Organization>{nextEvent.organization.name}</Organization>
           <JobTitle>{userEventMember.jobTitle}</JobTitle>
         </div>
@@ -109,7 +121,11 @@ const NextEventContainer = ({ nextEvent, user, userEventMember }) => (
           </RighthandWrapper>
           <RighthandWrapper>
             <Icon style={{marginLeft: '2.5px'}} className="fa fa-map-marker" aria-hidden="true"></Icon>
-            <RightItem>{nextEvent.address}</RightItem>
+            <RightItem>
+              <Address target="_blank" href={`https://www.google.com/maps/place/${nextEvent.address + ' ' + nextEvent.organization.city + ' ' + nextEvent.organization.state}`}>
+                {nextEvent.address}
+              </Address>
+            </RightItem>
           </RighthandWrapper>
         </div>
       </NextEventLink>

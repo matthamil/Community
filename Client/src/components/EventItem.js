@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { Link } from 'react-router';
 import styled from 'styled-components';
 import moment from 'moment';
 
@@ -30,12 +31,15 @@ const OrganizationName = styled.h3`
   }
 `;
 
-const EventName = styled.h3`
+const EventName = styled(Link)`
   font-weight: bold;
   margin: 5px 0 0 0;
+  font-size: 2em;
+  color: #000;
   &:hover {
     color: #3498DB;
     cursor: pointer;
+    text-decoration: none;
   }
 `;
 
@@ -106,7 +110,7 @@ const EventItem = ({ event, firstItem, lastItem }) => (
     </TimeBlock>
     <div>
       <OrganizationName>{event.organization.name}</OrganizationName>
-      <EventName>{event.name}</EventName>
+      <EventName to={`events/${event.eventId}`}>{event.name}</EventName>
       {_calculateNeededVolunteers(event.eventMembers)}
     </div>
   </EventItemWrapper>

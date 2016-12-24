@@ -7,7 +7,8 @@ const initialState = {
   },
   event: {
     nextEvent: {},
-    events: []
+    events: [],
+    eventById: {}
   }
 };
 
