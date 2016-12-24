@@ -80,6 +80,13 @@ class EventListContainer extends Component {
     });
   }
 
+  componentDidMount() {
+    this.setState({
+      eventList: this.props.events,
+      organizationList: this.props.organizations
+    });
+  }
+
   render() {
     const { nextEvent, user } = this.props;
     return (
@@ -105,15 +112,13 @@ class EventListContainer extends Component {
   }
 }
 
-const mapStateToProps = ({ event, account, organization }) => (
-  {
-    events: event.events,
-    nextEvent: event.nextEvent,
-    loading: event.loading,
-    user: account.user,
-    organizations: organization.organizations
-  }
-);
+const mapStateToProps = ({ event, account, organization }) => ({
+  events: event.events,
+  nextEvent: event.nextEvent,
+  loading: event.loading,
+  user: account.user,
+  organizations: organization.organizations
+});
 const mapDispatchToProps = (dispatch) => bindActionCreators(actionCreators, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventListContainer);

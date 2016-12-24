@@ -19,9 +19,12 @@ class NavbarContainer extends Component {
   render() {
     const { user, loggedIn } = this.props;
     return (
-      <Navbar
-        loggedIn={loggedIn}
-        user={user}/>
+      <div>
+        <Navbar
+          loggedIn={loggedIn}
+          user={user}/>
+        {this.props.children}
+      </div>
     );
   }
 }

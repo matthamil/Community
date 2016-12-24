@@ -21,8 +21,8 @@ export function* watchGetEventList() {
 
 function* loadEventById({ id }) {
   try {
-    const event = yield call(axios, `/event/${id}`);
-    yield put(actions.getEventByIdSuccess(event));
+    const { data } = yield call(axios, `/event/${id}`);
+    yield put(actions.getEventByIdSuccess(data));
   } catch (error) {
     yield put(actions.getEventByIdFailure(error));
   }
@@ -66,8 +66,8 @@ export function* watchGetNextEvent() {
 
 function* createNewEvent({ event }) {
   try {
-    const success = yield call(axios.post, `/event/`, event);
-    yield put(actions.postEventSuccess(success));
+    const { data } = yield call(axios.post, `/event/`, event);
+    yield put(actions.postEventSuccess(data));
   } catch (error) {
     yield put(actions.postEventFailure(error));
   }
@@ -81,8 +81,8 @@ export function* watchPostEvent() {
 
 function* modifyEvent({ id, event }) {
   try {
-    const success = yield call(axios.patch, `/event/${id}`, event);
-    yield put(actions.patchEventSuccess(success));
+    const { data } = yield call(axios.patch, `/event/${id}`, event);
+    yield put(actions.patchEventSuccess(data));
   } catch (error) {
     yield put(actions.patchEventFailure(error));
   }

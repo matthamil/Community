@@ -31,7 +31,7 @@ export default function eventReducer(state = event, action) {
       return {
         ...state,
         loadingEventById: false,
-        event: action.payload.event
+        eventById: action.payload.event
       };
     case a.GET_EVENT_BY_ID_FAILURE:
       return {
