@@ -14,6 +14,19 @@ export const getOrganizationListFailure = (error) => ({
   payload: { error }
 });
 
+export const getOrganizationById = (id) => ({
+  type: actions.GET_ORGANIZATION_BY_ID,
+  payload: { id }
+});
+export const getOrganizationByIdSuccess = (organizations) => ({
+  type: actions.GET_ORGANIZATION_BY_ID_SUCCESS,
+  payload: { organizations }
+});
+export const getOrganizationByIdFailure = (error) => ({
+  type: actions.GET_ORGANIZATION_BY_ID_FAILURE,
+  payload: { error }
+});
+
 export const getOrganizationsByOrganizerId = (id) => ({
   type: actions.GET_ORGANIZATION_BY_ORGANIZER_ID,
   payload: { id }

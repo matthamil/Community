@@ -21,8 +21,8 @@ export function* watchGetOrganizationList() {
 
 function* loadOrganizationById({ id }) {
   try {
-    const organization = yield call(axios, `/organization/${id}`);
-    yield put(actions.getOrganizationByIdSuccess(organization));
+    const { data } = yield call(axios, `/organization/${id}`);
+    yield put(actions.getOrganizationByIdSuccess(data));
   } catch (error) {
     yield put(actions.getOrganizationByIdFailure(error));
   }

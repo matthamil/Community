@@ -23,19 +23,19 @@ export default function organizationReducer(state = org, action) {
         loading: false,
         error: action.payload.error
       };
-    case a.GET_ORGANIZATIONS_BY_ID:
+    case a.GET_ORGANIZATION_BY_ID:
       return {
         ...state,
         loading: true,
         id: action.payload.id
       };
-    case a.GET_ORGANIZATIONS_BY_ID_SUCCESS:
+    case a.GET_ORGANIZATION_BY_ID_SUCCESS:
       return {
         ...state,
         loading: false,
-        organizations: action.payload.organizations
+        orgById: action.payload.organizations
       };
-    case a.GET_ORGANIZATIONS_BY_ID_FAILURE:
+    case a.GET_ORGANIZATION_BY_ID_FAILURE:
       return {
         ...state,
         loading: false,
