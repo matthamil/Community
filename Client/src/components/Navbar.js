@@ -36,6 +36,7 @@ const NavHeader = styled.h1`
   stroke: 2px
   color: #2C3E50;
   margin: 0;
+  margin-left: 10px;
   letter-spacing: -2px;
 
   @media (max-width: 600px) {

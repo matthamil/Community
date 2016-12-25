@@ -25,10 +25,7 @@ const OrganizationName = styled.h3`
   color: rgb(131, 131, 131);
   font-weight: bold;
   margin: 0;
-
-  &:hover {
-    cursor: pointer;
-  }
+  display: block;
 `;
 
 const EventName = styled(Link)`

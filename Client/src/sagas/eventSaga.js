@@ -36,8 +36,8 @@ export function* watchGetEventById() {
 
 function* loadEventsByOrganizationId({ id }) {
   try {
-    const events = yield call(axios, `/event/org/${id}`);
-    yield put(actions.getEventsByOrganizationIdSuccess(events));
+    const { data } = yield call(axios, `/event/org/${id}`);
+    yield put(actions.getEventsByOrganizationIdSuccess(data));
   } catch (error) {
     yield put(actions.getEventsByOrganizationIdFailure(error));
   }

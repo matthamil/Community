@@ -1,5 +1,8 @@
 const initialState = {
-  org: {},
+  org: {
+    orgById: {},
+    organizations: []
+  },
   eventChatroom: {},
   eventMember: {},
   user: {
@@ -8,7 +11,8 @@ const initialState = {
   event: {
     nextEvent: {},
     events: [],
-    eventById: {}
+    eventById: {},
+    orgEvents: []
   }
 };
 
