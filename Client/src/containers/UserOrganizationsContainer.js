@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/actionCreators';
 import { browserHistory } from 'react-router';
 
-class UserEventMemberListContainer extends Component {
+class UserOrganizationsContainer extends Component {
   // constructor(props) {
   //   super(props);
   // }
@@ -16,7 +16,7 @@ class UserEventMemberListContainer extends Component {
   }
 
   componentDidMount() {
-    this.props.getEventMembers();
+
   }
 
   componentDidUpdate() {
@@ -26,18 +26,19 @@ class UserEventMemberListContainer extends Component {
   render() {
     return (
       <div>
-        {this.props.userEventMembers.length > 0 ?
-          this.props.userEventMembers.map((eMember, index) => <pre key={index}>{JSON.stringify(eMember, null, ' ')}</pre>)
-        : <h1>You haven't signed up for any events yet.</h1>}
+        {this.props.userOrganizations.length > 0 ?
+          this.props.userOrganizations.map((org, index) => <pre key={index}>{JSON.stringify(org, null, ' ')}</pre>)
+        : <h1>You haven't started any organizations yet.</h1>}
       </div>
     );
   }
 }
 
 const mapDispatchToProps = (dispatch) => bindActionCreators(actionCreators, dispatch);
-const mapStateToProps = ({ eventMember, account }) => ({
-  userEventMembers: eventMember.userEventMembers,
+const mapStateToProps = ({ account, organization }) => ({
+  user: account.user,
+  userOrganizations: organization.userOrganizations,
   loggedIn: account.loggedIn
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserEventMemberListContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(UserOrganizationsContainer);

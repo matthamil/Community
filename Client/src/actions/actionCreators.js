@@ -28,15 +28,15 @@ export const getOrganizationByIdFailure = (error) => ({
 });
 
 export const getOrganizationsByOrganizerId = (id) => ({
-  type: actions.GET_ORGANIZATION_BY_ORGANIZER_ID,
+  type: actions.GET_ORGANIZATIONS_BY_ORGANIZER_ID,
   payload: { id }
 });
-export const getOrganizationByOrganizerIdSuccess = (organizations) => ({
-  type: actions.GET_ORGANIZATION_BY_ORGANIZER_ID_SUCCESS,
+export const getOrganizationsByOrganizerIdSuccess = (organizations) => ({
+  type: actions.GET_ORGANIZATIONS_BY_ORGANIZER_ID_SUCCESS,
   payload: { organizations }
 });
-export const getOrganizationByOrganizerIdFailure = (error) => ({
-  type: actions.GET_ORGANIZATION_BY_ORGANIZER_ID_SUCCESS,
+export const getOrganizationsByOrganizerIdFailure = (error) => ({
+  type: actions.GET_ORGANIZATIONS_BY_ORGANIZER_ID_SUCCESS,
   payload: { error }
 });
 

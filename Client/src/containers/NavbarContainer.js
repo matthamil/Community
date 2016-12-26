@@ -14,12 +14,13 @@ class NavbarContainer extends Component {
   }
 
   render() {
-    const { user, loggedIn } = this.props;
+    const { user, userOrganizations, loggedIn } = this.props;
     return (
       <div>
         <Navbar
           loggedIn={loggedIn}
-          user={user}/>
+          user={user}
+          userOrganizations={userOrganizations}/>
         {this.props.children}
       </div>
     );
@@ -27,6 +28,10 @@ class NavbarContainer extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => bindActionCreators(actionCreators, dispatch);
-const mapStateToProps = ({ account }) => ({ user: { account }, loggedIn: { account } });
+const mapStateToProps = ({ account, organization }) => ({
+  user: { account },
+  loggedIn: account.loggedIn,
+  userOrganizations: organization.userOrganizations
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(NavbarContainer);

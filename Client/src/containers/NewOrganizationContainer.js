@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/actionCreators';
 import NewOrganization from '../components/NewOrganization';
+import { browserHistory } from 'react-router';
 
 class NewOrganizationContainer extends Component {
   constructor(props) {
@@ -70,6 +71,12 @@ class NewOrganizationContainer extends Component {
     }
   }
 
+  componentWillMount() {
+    if (!this.props.loggedIn) {
+      browserHistory.push('/');
+    }
+  }
+
   render() {
     return (
       <NewOrganization
@@ -83,4 +90,5 @@ class NewOrganizationContainer extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => bindActionCreators(actionCreators, dispatch);
-export default connect(null, mapDispatchToProps)(NewOrganizationContainer);
+const mapStateToProps = ({ account }) => ({ loggedIn: account.loggedIn });
+export default connect(mapStateToProps, mapDispatchToProps)(NewOrganizationContainer);
