@@ -40,10 +40,15 @@ namespace Community.Controllers
         //
         // GET: /Account/
         [HttpGet]
+        [AllowAnonymous]
         [Route("[controller]")]
         public async Task<IActionResult> Get()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (user == null)
+            {
+                return NotFound();
+            }
             return Json(new ApplicationUserViewModel(user));
         }
 

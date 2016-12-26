@@ -5,8 +5,8 @@ import * as a from '../actions/actionTypes';
 
 function* loadEventMembers() {
   try {
-    const eventMembers = yield call(axios, `/eventmember/`);
-    yield put(actions.getEventMembersSuccess(eventMembers));
+    const { data } = yield call(axios, `/eventmember/?by=upcoming`);
+    yield put(actions.getEventMembersSuccess(data));
   } catch (error) {
     yield put(actions.getEventMembersFailure(error));
   }

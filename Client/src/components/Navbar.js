@@ -111,14 +111,14 @@ const StartAnOrganizationLink = styled.div`
   }
 `;
 
-const Navbar = ({ user, loggedIn }) => (
+const Navbar = ({ user, userOrganizations, loggedIn }) => (
   <NavWrapper>
     <InnerNav>
       <Link to="/" style={{ textDecoration: 'none' }}><NavHeader>Community</NavHeader></Link>
       {/* If the user is logged in, hide the LogIn and Register buttons */
       loggedIn ?
       <LoginRegisterWrapper>
-        <Link to="/new-organization" style={{ textDecoration: 'none' }}>
+        <Link to="/organizations/new" style={{ textDecoration: 'none' }}>
           <StartAnOrganizationLink>
             <LoginIcon>
               <i className="fa fa-plus" style={{ color: '#E74C3C' }} aria-hidden="true"></i>
@@ -126,6 +126,18 @@ const Navbar = ({ user, loggedIn }) => (
             <span>{window.screen.availWidth > 600 ? 'Start an Organization' : 'Organization'}</span>
           </StartAnOrganizationLink>
         </Link>
+
+        {userOrganizations.length > 0 ?
+        <Link to="/organizations" style={{ textDecoration: 'none', marginRight: '5px' }}>
+          <LoginButton>
+            <LoginIcon>
+              <i className="fa fa-users" aria-hidden="true"></i>
+            </LoginIcon>
+            <span>Your Organizations</span>
+          </LoginButton>
+        </Link>
+        : ''}
+
         <Link to="/events" style={{ textDecoration: 'none' }}>
           <LoginButton>
             <LoginIcon>
@@ -160,7 +172,8 @@ const Navbar = ({ user, loggedIn }) => (
 );
 
 Navbar.propTypes = {
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
+  loggedIn: PropTypes.bool.isRequired
 };
 
 export default Navbar;

@@ -1,10 +1,13 @@
 const initialState = {
   org: {
     orgById: {},
-    organizations: []
+    organizations: [],
+    userOrganizations: []
   },
   eventChatroom: {},
-  eventMember: {},
+  eventMember: {
+    userEventMembers: []
+  },
   user: {
     loggedIn: false
   },

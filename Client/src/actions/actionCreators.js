@@ -28,15 +28,15 @@ export const getOrganizationByIdFailure = (error) => ({
 });
 
 export const getOrganizationsByOrganizerId = (id) => ({
-  type: actions.GET_ORGANIZATION_BY_ORGANIZER_ID,
+  type: actions.GET_ORGANIZATIONS_BY_ORGANIZER_ID,
   payload: { id }
 });
-export const getOrganizationByOrganizerIdSuccess = (organizations) => ({
-  type: actions.GET_ORGANIZATION_BY_ORGANIZER_ID_SUCCESS,
+export const getOrganizationsByOrganizerIdSuccess = (organizations) => ({
+  type: actions.GET_ORGANIZATIONS_BY_ORGANIZER_ID_SUCCESS,
   payload: { organizations }
 });
-export const getOrganizationByOrganizerIdFailure = (error) => ({
-  type: actions.GET_ORGANIZATION_BY_ORGANIZER_ID_SUCCESS,
+export const getOrganizationsByOrganizerIdFailure = (error) => ({
+  type: actions.GET_ORGANIZATIONS_BY_ORGANIZER_ID_SUCCESS,
   payload: { error }
 });
 
@@ -174,9 +174,9 @@ export const deleteEventFailure = (error) => ({
 export const getEventMembers = () => ({
   type: actions.GET_EVENT_MEMBERS
 });
-export const getEventMembersSuccess = (eventMembers) => ({
+export const getEventMembersSuccess = (userEventMembers) => ({
   type: actions.GET_EVENT_MEMBERS_SUCCESS,
-  payload: { eventMembers }
+  payload: { userEventMembers }
 });
 export const getEventMembersFailure = (error) => ({
   type: actions.GET_EVENT_MEMBERS_FAILURE,

@@ -142,12 +142,15 @@ namespace Community.Controllers
 
         [HttpGet]
         [Route("[controller]/next")]
-        // [Authorize]
         public async Task<IActionResult> GetNextEvent()
         {
             var user = await GetCurrentUserAsync();
             // For testing purposes, uncomment the line below
             // var user = context.ApplicationUser.Where(u => u.FirstName == "Matt" && u.LastName == "Hamil").SingleOrDefault();
+            if (user == null)
+            {
+                return new ForbidResult();
+            }
 
             Event nextEvent = await (
                 from orgEvent in context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Take(1)
