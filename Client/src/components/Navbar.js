@@ -118,7 +118,7 @@ const Navbar = ({ user, loggedIn }) => (
       {/* If the user is logged in, hide the LogIn and Register buttons */
       loggedIn ?
       <LoginRegisterWrapper>
-        <Link to="/new-organization" style={{ textDecoration: 'none' }}>
+        <Link to="/organizations/new" style={{ textDecoration: 'none' }}>
           <StartAnOrganizationLink>
             <LoginIcon>
               <i className="fa fa-plus" style={{ color: '#E74C3C' }} aria-hidden="true"></i>
