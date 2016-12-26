@@ -81,6 +81,9 @@ class EventListContainer extends Component {
   }
 
   componentDidMount() {
+    this.props.getEventList('Nashville', 'TN');
+    this.props.getNextEvent();
+    this.props.getOrganizationList('Nashville', 'TN');
     this.setState({
       eventList: this.props.events,
       organizationList: this.props.organizations

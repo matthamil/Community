@@ -4,7 +4,9 @@ const initialState = {
     organizations: []
   },
   eventChatroom: {},
-  eventMember: {},
+  eventMember: {
+    userEventMembers: []
+  },
   user: {
     loggedIn: false
   },

@@ -13,7 +13,7 @@ export default function eventMemberReducer(state = eventMember, action) {
       return {
         ...state,
         loading: false,
-        eventMembers: action.payload.eventMembers
+        userEventMembers: action.payload.userEventMembers
       };
     case a.GET_EVENT_MEMBERS_FAILURE:
       return {

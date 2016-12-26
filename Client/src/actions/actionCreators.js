@@ -174,9 +174,9 @@ export const deleteEventFailure = (error) => ({
 export const getEventMembers = () => ({
   type: actions.GET_EVENT_MEMBERS
 });
-export const getEventMembersSuccess = (eventMembers) => ({
+export const getEventMembersSuccess = (userEventMembers) => ({
   type: actions.GET_EVENT_MEMBERS_SUCCESS,
-  payload: { eventMembers }
+  payload: { userEventMembers }
 });
 export const getEventMembersFailure = (error) => ({
   type: actions.GET_EVENT_MEMBERS_FAILURE,

@@ -59,25 +59,25 @@ namespace Community.Controllers
             EventMember[] eMemberList = null;
             if (by == null)
             {
-                eMemberList = await context.EventMember.Include(e => e.ApplicationUser).Where(e => e.ApplicationUser == user).ToArrayAsync();
+                eMemberList = await context.EventMember.Include(e => e.Event).ThenInclude(m => m.Organization).ThenInclude(o => o.Organizer).Include(e => e.ApplicationUser).Where(e => e.ApplicationUser == user).ToArrayAsync();
             }
             else if (by == "upcoming")
             {
-                eMemberList = await context.EventMember.Include(e => e.ApplicationUser).Where(e => e.ApplicationUser == user && e.StartTime > DateTime.Now).ToArrayAsync();
+                eMemberList = await context.EventMember.Include(e => e.Event).ThenInclude(m => m.Organization).ThenInclude(o => o.Organizer).Include(e => e.ApplicationUser).Where(e => e.ApplicationUser == user && e.StartTime > DateTime.Now).ToArrayAsync();
             }
             else if (by == "past")
             {
-                eMemberList = await context.EventMember.Include(e => e.ApplicationUser).Where(e => e.ApplicationUser == user && e.StartTime < DateTime.Now).ToArrayAsync();
+                eMemberList = await context.EventMember.Include(e => e.Event).ThenInclude(m => m.Organization).ThenInclude(o => o.Organizer).Include(e => e.ApplicationUser).Where(e => e.ApplicationUser == user && e.StartTime < DateTime.Now).ToArrayAsync();
             }
             else
             {
                 return NotFound();
             }
             if (eMemberList == null) return NotFound();
-            List<EventMemberViewModel> model = new List<EventMemberViewModel>();
+            List<UserEventMemberViewModel> model = new List<UserEventMemberViewModel>();
             foreach(EventMember eMember in eMemberList)
             {
-                model.Add(new EventMemberViewModel(eMember));
+                model.Add(new UserEventMemberViewModel(eMember));
             }
             return Json(model);
         }
