@@ -19,11 +19,19 @@ class NewOrganizationContainer extends Component {
     this.handleValidateForm = this.handleValidateForm.bind(this);
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
     this.handleOnChangeFormInput = this.handleOnChangeFormInput.bind(this);
+    this.handleOnChangeState = this.handleOnChangeState.bind(this);
   }
 
   handleOnChangeFormInput(field, e) {
     this.setState({
       [field]: e.target.value
+    });
+  }
+
+  handleOnChangeState(state) {
+    console.log('NEW STATE SELECTED: ', state);
+    this.setState({
+      state: state.value
     });
   }
 
@@ -39,7 +47,7 @@ class NewOrganizationContainer extends Component {
     if (city === '') {
       validationErrors.set('city', 'City is required.');
     }
-    if (state === '') {
+    if (state === '' || state === null) {
       validationErrors.set('state', 'State is required.');
     }
     this.setState({
@@ -62,13 +70,14 @@ class NewOrganizationContainer extends Component {
     }
   }
 
-
   render() {
     return (
       <NewOrganization
         validationErrors={this.state.validationErrors}
         onChange={this.handleOnChangeFormInput}
-        onSubmit={this.handleOnSubmit}/>
+        onSubmit={this.handleOnSubmit}
+        selectedState={this.state.state}
+        onChangeState={this.handleOnChangeState}/>
     );
   }
 }

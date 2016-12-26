@@ -1,3 +1,4 @@
+import { browserHistory } from 'react-router'
 import { take, call, put, fork } from 'redux-saga/effects';
 import axios from 'axios';
 import * as actions from '../actions/actionCreators';
@@ -51,8 +52,9 @@ export function* watchGetOrganizationsByOrganizerId() {
 
 function* createNewOrganization({ organization }) {
   try {
-    const success = yield call(axios.post, `/organization/`, organization);
-    yield put(actions.postOrganizationSuccess(success));
+    const { data } = yield call(axios.post, `/organization/`, organization);
+    browserHistory.push(`/organizations/${data.organizationId}`);
+    yield put(actions.postOrganizationSuccess(data));
   } catch (error) {
     yield put(actions.postOrganizationFailure(error));
   }

@@ -1,6 +1,8 @@
 import React from 'react';
+import Select from 'react-select';
+import unitedStatesList from '../helpers/unitedStatesList';
 
-const NewOrganization = ({ validationErrors, onChange, onSubmit }) => (
+const NewOrganization = ({ validationErrors, onChange, onSubmit, onChangeState, selectedState }) => (
   <div>
     <h1>New Organization</h1>
 
@@ -9,16 +11,20 @@ const NewOrganization = ({ validationErrors, onChange, onSubmit }) => (
     <input type="text" onChange={onChange.bind(null, 'name')}/>
 
     <label>Description</label>
-    {validationErrors.get('description') ? <div>{validationErrors.get('name')}</div> : ''}
+    <div>{validationErrors.get('description')}</div>
     <input type="text" onChange={onChange.bind(null, 'description')}/>
 
     <label>City</label>
-    {validationErrors.get('city') ? <div>{validationErrors.get('city')}</div> : ''}
+    <div>{validationErrors.get('city')}</div>
     <input type="text" onChange={onChange.bind(null, 'city')}/>
 
     <label>State</label>
-    {validationErrors.get('state') ? <div>{validationErrors.get('state')}</div> : ''}
-    <input type="text" onChange={onChange.bind(null, 'state')}/>
+    <div>{validationErrors.get('state')}</div>
+    <Select
+      name="organization-state"
+      value={selectedState}
+      options={unitedStatesList}
+      onChange={onChangeState}/>
 
     <button type="button" onClick={onSubmit}>Submit</button>
   </div>

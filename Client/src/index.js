@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import 'font-awesome/css/font-awesome.css';
-import 'hover.css/css/hover.css';
+import 'react-select/dist/react-select.css';
 import './styles/main.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
