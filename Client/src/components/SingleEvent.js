@@ -172,7 +172,7 @@ const JobDescription = styled.p`
   max-width: 90%;
 `;
 
-const SingleEvent = ({ event, user, userIsMember, claimEventMember, unclaimEventMember }) => (
+const SingleEvent = ({ event, user, userIsMember, claimEventMember, unclaimEventMember, userEventMembers, claimedEventMembers, unclaimedEventMembers}) => (
   <Wrapper>
     <EventName>{event.name}</EventName>
     <OrganizationName href={`/organizations/${event.organization.organizationId}`}>{event.organization.name}</OrganizationName>
@@ -206,7 +206,7 @@ const SingleEvent = ({ event, user, userIsMember, claimEventMember, unclaimEvent
     </NotAMember>
     }
 
-    {event.eventMembers.filter((eMember) => eMember.volunteer !== null && eMember.volunteer.volunteerId === user.id).length > 0 ?
+    {userEventMembers.length > 0 ?
     <div>
       <AvailablePositions>Your Positions</AvailablePositions>
       <Break/>
@@ -217,11 +217,11 @@ const SingleEvent = ({ event, user, userIsMember, claimEventMember, unclaimEvent
 
     {/* Your Positions */}
     <div>
-      {event.eventMembers.filter((eMember) => eMember.volunteer !== null && eMember.volunteer.volunteerId === user.id).map((eMember, index) => {
+      {userEventMembers.map((eMember, index) => {
         return (
           <EventMember key={index}>{/* Loop this div for each open event member */}
             <ClaimBtnWrapper>
-              <UnclaimBtn>UNCLAIM</UnclaimBtn>
+              <UnclaimBtn onClick={unclaimEventMember.bind(null, eMember.eventMemberId)}>UNCLAIM</UnclaimBtn>
             </ClaimBtnWrapper>
             <Job>
               {/* Event Member Title */}
@@ -237,7 +237,7 @@ const SingleEvent = ({ event, user, userIsMember, claimEventMember, unclaimEvent
         );
       })}
     </div>
-    {event.eventMembers.filter((eMember) => eMember.volunteer === null).length > 0 ?
+    {unclaimedEventMembers.length > 0 ?
     <div>
       <AvailablePositions>Available Positions</AvailablePositions>
       <Break/>
@@ -246,11 +246,11 @@ const SingleEvent = ({ event, user, userIsMember, claimEventMember, unclaimEvent
     ''}
     {/* Available Positions */}
     <div>
-      {event.eventMembers.filter((eMember) => eMember.volunteer === null).map((eMember, index) => {
+      {unclaimedEventMembers.map((eMember, index) => {
         return (
           <EventMember key={index}>{/* Loop this div for each open event member */}
             <ClaimBtnWrapper>
-              <ClaimBtn>CLAIM</ClaimBtn>
+              <ClaimBtn onClick={claimEventMember.bind(null, eMember.eventMemberId)}>CLAIM</ClaimBtn>
             </ClaimBtnWrapper>
             <Job>
               {/* Event Member Title */}
@@ -267,7 +267,7 @@ const SingleEvent = ({ event, user, userIsMember, claimEventMember, unclaimEvent
       })}
     </div>
 
-    {event.eventMembers.filter((eMember) => eMember.volunteer !== null && eMember.volunteer.volunteerId !== user.id).length > 0 ?
+    {claimedEventMembers.length > 0 ?
     <div>
       <AvailablePositions>Claimed Positions</AvailablePositions>
       <Break/>
@@ -276,7 +276,7 @@ const SingleEvent = ({ event, user, userIsMember, claimEventMember, unclaimEvent
     ''}
     {/* Available Positions */}
     <div>
-      {event.eventMembers.filter((eMember) => eMember.volunteer !== null && eMember.volunteer.volunteerId !== user.id).map((eMember, index) => {
+      {claimedEventMembers.map((eMember, index) => {
         return (
           <EventMember key={index}>{/* Loop this div for each open event member */}
             <ClaimBtnWrapper>

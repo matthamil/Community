@@ -8,6 +8,12 @@ class SingleEventContainer extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      userEventMembers: [],
+      unclaimedEventMembers: [],
+      claimedEventMembers: []
+    };
+
     this.handleOnClaimEventMember = this.handleOnClaimEventMember.bind(this);
     this.handleOnUnclaimEventMember = this.handleOnUnclaimEventMember.bind(this);
     this._checkIfUserIsMemberOfEvent = this._checkIfUserIsMemberOfEvent.bind(this);
@@ -27,7 +33,16 @@ class SingleEventContainer extends Component {
   }
 
   componentDidUpdate() {
-    window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.eventById.eventMembers === undefined) return;
+    this.setState({
+      userEventMembers: nextProps.eventById.eventMembers.filter((eMember) => eMember.volunteer !== null && eMember.volunteer.id === nextProps.user.id),
+      unclaimedEventMembers: nextProps.eventById.eventMembers.filter((eMember) => eMember.volunteer === null),
+      claimedEventMembers: nextProps.eventById.eventMembers.filter((eMember) => eMember.volunteer !== null && eMember.volunteer.id !== nextProps.user.id)
+    });
   }
 
   _checkIfUserIsMemberOfEvent() {
@@ -35,7 +50,7 @@ class SingleEventContainer extends Component {
     if (eventById.eventMembers === undefined) return false;
     if (eventById.eventMembers.length > 0) {
       return eventById.eventMembers.find((eventMember) => {
-        return eventMember.volunteer ? eventMember.volunteer.volunteerId = user.id : false;
+        return eventMember.volunteer ? eventMember.volunteer.id === user.id : false;
       }) ? true : false;
     }
   }
@@ -50,8 +65,11 @@ class SingleEventContainer extends Component {
           event={eventById}
           userIsMember={this._checkIfUserIsMemberOfEvent()}
           user={user}
+          userEventMembers={this.state.userEventMembers}
           claimEventMember={this.handleOnClaimEventMember}
-          unclaimEventMember={this.handleOnUnclaimEventMember}/>
+          claimedEventMembers={this.state.claimedEventMembers}
+          unclaimEventMember={this.handleOnUnclaimEventMember}
+          unclaimedEventMembers={this.state.unclaimedEventMembers}/>
         :
         <div>
           <i className="fa fa-spinner fa-pulse fa-3x fa-fw"></i>

@@ -85,7 +85,7 @@ export default function eventMemberReducer(state = eventMember, action) {
       return {
         ...state,
         loading: false,
-        eventMember: action.payload.eventMember
+        claimedEventMember: action.payload.eventMember
       };
     case a.CLAIM_EVENT_MEMBER_FAILURE:
       return {
@@ -103,7 +103,7 @@ export default function eventMemberReducer(state = eventMember, action) {
       return {
         ...state,
         loading: false,
-        eventMember: action.payload.eventMember
+        unclaimedEventMember: action.payload.eventMember
       };
     case a.UNCLAIM_EVENT_MEMBER_FAILURE:
       return {
