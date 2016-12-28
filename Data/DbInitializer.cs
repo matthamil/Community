@@ -223,7 +223,7 @@ namespace Community.Data
                         Date = DateTime.Today.AddDays(2),
                         StartTime = DateTime.Today.AddDays(2).AddHours(3),
                         EndTime = DateTime.Today.AddDays(2).AddHours(4),
-                        Description = "Teaching kids the fundamentals of programming in an hour."
+                        Description = "Teaching kids the fundamentals of programming in an hour. We are an organization passionate about inspiring the youth to get excited about technology. We are looking for volunteers with or without a technical background to facilitate this event. It's great to watch the kids' faces as they start to code a simple app."
                     },
                     new Event {
                         Organization = context.Organization.Where(o => o.Name == "Nashville Software School").SingleOrDefault(),
@@ -235,7 +235,7 @@ namespace Community.Data
                         Date = DateTime.Today.AddDays(4),
                         StartTime = DateTime.Today.AddDays(4).AddHours(5),
                         EndTime = DateTime.Today.AddDays(4).AddHours(8),
-                        Description = "Cleaning up the community"
+                        Description = "We are dedicated to creating the tech talent that Nashville needs as it grows. We are also dedicated to keeping our city clean. Nobody wants to live in a dirty city. Help us take care of our neighborhood for a few hours. We will be picking up trash on the side of the road."
                     },
                     new Event {
                         Organization = context.Organization.Where(o => o.Name == "Southern Pines Animal Shelter").SingleOrDefault(),
@@ -247,7 +247,7 @@ namespace Community.Data
                         Date = DateTime.Today.AddDays(12),
                         StartTime = DateTime.Today.AddDays(12).AddHours(2),
                         EndTime = DateTime.Today.AddDays(12).AddHours(6),
-                        Description = "Come adopt a puppy!"
+                        Description = "We are hosting our monthly Puppy Therapy event at the University of Southern Mississippi. This event aims to attract people who are considering adopting a puppy. We need people who love animals to help us play with the puppies and watch them as we give these puppies away to a good home."
                     },
                     new Event {
                         Organization = context.Organization.Where(o => o.Name == "Mercy Multiplied").SingleOrDefault(),
@@ -259,7 +259,7 @@ namespace Community.Data
                         Date = DateTime.Today.AddDays(20),
                         StartTime = DateTime.Today.AddDays(20).AddHours(3),
                         EndTime = DateTime.Today.AddDays(20).AddHours(4),
-                        Description = "Raising money for Mercy Multiplied with a show by Moon Taxi."
+                        Description = "Raising money for Mercy Multiplied with a show by Moon Taxi. We host benefit concerts quarterly in Nashville. We are wanting to attract at least 125 people to this event. Ticket information can be found on Eventbrite. Volunteers get in for free!"
                     },
                     new Event {
                         Organization = context.Organization.Where(o => o.Name == "Mercy Multiplied").SingleOrDefault(),
@@ -271,7 +271,7 @@ namespace Community.Data
                         Date = DateTime.Today.AddDays(4),
                         StartTime = DateTime.Today.AddDays(4).AddHours(3),
                         EndTime = DateTime.Today.AddDays(4).AddHours(7),
-                        Description = "A delicious dinner celebrating the 2016 accomplishments for Mercy Multiplied."
+                        Description = "A delicious dinner celebrating the 2016 accomplishments for Mercy Multiplied. Volunteers get a free meal ticket! Come help us raise money for our next year's budget and network with other great individuals in town who are passionate about giving back to the community."
                     },
                     new Event {
                         Organization = context.Organization.Where(o => o.Name == "Tennessee Big Fluffy Dog Rescue").SingleOrDefault(),
@@ -295,7 +295,7 @@ namespace Community.Data
                         Date = DateTime.Today.AddDays(8),
                         StartTime = DateTime.Today.AddDays(8).AddHours(1),
                         EndTime = DateTime.Today.AddDays(8).AddHours(9),
-                        Description = "Help us collect dog food for our dogs!"
+                        Description = "Help us collect dog food for our dogs! We will have a food drop off booth at 3021 Lealand Lane. We are in desparate need of volunteers to make sure this event is a success!"
                     },
                     new Event {
                         Organization = context.Organization.Where(o => o.Name == "Tennessee Women's Theater Project").SingleOrDefault(),
@@ -331,7 +331,7 @@ namespace Community.Data
                         Date = DateTime.Today.AddDays(12),
                         StartTime = DateTime.Today.AddDays(12).AddHours(2),
                         EndTime = DateTime.Today.AddDays(12).AddHours(10),
-                        Description = "We need math tutors to help students in the community."
+                        Description = "We need math tutors to help students in the community. The students are in grades 7-12. Subject areas include algebra, linear algebra, pre-calculus, and calculus."
                     },
                     new Event {
                         Organization = context.Organization.Where(o => o.Name == "Homework Hotline").SingleOrDefault(),
@@ -343,7 +343,7 @@ namespace Community.Data
                         Date = DateTime.Today.AddDays(13),
                         StartTime = DateTime.Today.AddDays(13).AddHours(2),
                         EndTime = DateTime.Today.AddDays(13).AddHours(10),
-                        Description = "We need history tutors to help students in the community."
+                        Description = "We need history tutors to help students in the community. The students are in grades 7-12. Subject areas include Tennessee history, Civil War history, and the Vietnam War."
                     },
                 };
 
@@ -362,7 +362,7 @@ namespace Community.Data
                         StartTime = context.Event.Where(e => e.Name == "Hour of Code").SingleOrDefault().StartTime,
                         EndTime = context.Event.Where(e => e.Name == "Hour of Code").SingleOrDefault().EndTime,
                         JobTitle = "Mentor",
-                        Description = "Duties include inspiring kids to learn about tech.",
+                        Description = "You should be passionate about technology! No knowledge of coding is required. Duties include inspiring kids to learn about tech.",
                         ChatMuted = false,
                         AttendeePoints = 500
                     },
@@ -372,7 +372,7 @@ namespace Community.Data
                         StartTime = context.Event.Where(e => e.Name == "Hour of Code").SingleOrDefault().StartTime,
                         EndTime = context.Event.Where(e => e.Name == "Hour of Code").SingleOrDefault().EndTime,
                         JobTitle = "Mentor",
-                        Description = "Duties include inspiring kids to learn about tech.",
+                        Description = "You should be passionate about technology! No knowledge of coding is required. Duties include inspiring kids to learn about tech.",
                         ChatMuted = false,
                         AttendeePoints = 500
                     },
@@ -419,7 +419,7 @@ namespace Community.Data
                         StartTime = context.Event.Where(e => e.Name == "Puppy Therapy").SingleOrDefault().StartTime,
                         EndTime = context.Event.Where(e => e.Name == "Puppy Therapy").SingleOrDefault().EndTime,
                         JobTitle = "Dog Pin Supervisor",
-                        Description = "We need someone who is willing to watch over the puppies while they are being adopted.",
+                        Description = "We need someone who is willing to watch over the puppies while they are being adopted. You should love animals and enjoy playing with them.",
                         ChatMuted = false,
                         AttendeePoints = 250
                     },
@@ -428,7 +428,7 @@ namespace Community.Data
                         StartTime = context.Event.Where(e => e.Name == "Benefit Concert").SingleOrDefault().StartTime,
                         EndTime = context.Event.Where(e => e.Name == "Benefit Concert").SingleOrDefault().EndTime,
                         JobTitle = "Checkin Table Worker",
-                        Description = "You will be checking tickets and selling tickets to those attending.",
+                        Description = "You will be checking and selling tickets for those attending. All volunteers will receive a free ticket to the event.",
                         ChatMuted = false,
                         AttendeePoints = 250
                     },
@@ -437,7 +437,7 @@ namespace Community.Data
                         StartTime = context.Event.Where(e => e.Name == "Benefit Concert").SingleOrDefault().StartTime,
                         EndTime = context.Event.Where(e => e.Name == "Benefit Concert").SingleOrDefault().EndTime,
                         JobTitle = "Cleanup Crew",
-                        Description = "Responsible for cleaning and sweeping after the event.",
+                        Description = "Responsible for cleaning and sweeping after the event. You will be working with our Event Coordinator to make sure the venue is just as clean as we found it.",
                         ChatMuted = false,
                         AttendeePoints = 250
                     },
@@ -446,7 +446,7 @@ namespace Community.Data
                         StartTime = context.Event.Where(e => e.Name == "Holiday Dinner").SingleOrDefault().StartTime,
                         EndTime = context.Event.Where(e => e.Name == "Holiday Dinner").SingleOrDefault().EndTime,
                         JobTitle = "Greeter",
-                        Description = "Responsible for welcoming all of our guests and sponsors.",
+                        Description = "Responsible for welcoming all of our guests and sponsors. All volunteers will receive a free ticket to the event.",
                         ChatMuted = false,
                         AttendeePoints = 250
                     },
@@ -482,7 +482,7 @@ namespace Community.Data
                         StartTime = context.Event.Where(e => e.Name == "Dog Food Drive").SingleOrDefault().StartTime,
                         EndTime = context.Event.Where(e => e.Name == "Dog Food Drive").SingleOrDefault().EndTime,
                         JobTitle = "Marketing Representative",
-                        Description = "Help us spread the word to local businesses about the dog food drive.",
+                        Description = "Help us spread the word to local businesses about the dog food drive. You should love meeting and talking with people.",
                         ChatMuted = false,
                         AttendeePoints = 250
                     },
@@ -491,7 +491,7 @@ namespace Community.Data
                         StartTime = context.Event.Where(e => e.Name == "Dog Food Drive").SingleOrDefault().StartTime,
                         EndTime = context.Event.Where(e => e.Name == "Dog Food Drive").SingleOrDefault().EndTime,
                         JobTitle = "Marketing Representative",
-                        Description = "Help us spread the word to local businesses about the dog food drive.",
+                        Description = "Help us spread the word to local businesses about the dog food drive. You should love meeting and talking with people.",
                         ChatMuted = false,
                         AttendeePoints = 250
                     },
@@ -500,7 +500,7 @@ namespace Community.Data
                         StartTime = context.Event.Where(e => e.Name == "Hamlet Performance").SingleOrDefault().StartTime,
                         EndTime = context.Event.Where(e => e.Name == "Hamlet Performance").SingleOrDefault().EndTime,
                         JobTitle = "Ticketbooth Volunteer",
-                        Description = "Responsibilities include selling tickets to attendees.",
+                        Description = "Responsibilities include selling tickets to attendees. All volunteers will receive a ticket to the event.",
                         ChatMuted = false,
                         AttendeePoints = 250
                     },
@@ -509,7 +509,7 @@ namespace Community.Data
                         StartTime = context.Event.Where(e => e.Name == "Hamlet Performance").SingleOrDefault().StartTime,
                         EndTime = context.Event.Where(e => e.Name == "Hamlet Performance").SingleOrDefault().EndTime,
                         JobTitle = "Ticketbooth Volunteer",
-                        Description = "Responsibilities include selling tickets to attendees.",
+                        Description = "Responsibilities include selling tickets to attendees. All volunteers will receive a ticket to the event.",
                         ChatMuted = false,
                         AttendeePoints = 250
                     },
@@ -518,7 +518,7 @@ namespace Community.Data
                         StartTime = context.Event.Where(e => e.Name == "Romeo and Juliet Performance").SingleOrDefault().StartTime,
                         EndTime = context.Event.Where(e => e.Name == "Romeo and Juliet Performance").SingleOrDefault().EndTime,
                         JobTitle = "Ticketbooth Volunteer",
-                        Description = "Responsibilities include selling tickets to attendees.",
+                        Description = "Responsibilities include selling tickets to attendees. All volunteers will receive a ticket to the event.",
                         ChatMuted = false,
                         AttendeePoints = 250
                     },
@@ -527,7 +527,7 @@ namespace Community.Data
                         StartTime = context.Event.Where(e => e.Name == "Romeo and Juliet Performance").SingleOrDefault().StartTime,
                         EndTime = context.Event.Where(e => e.Name == "Romeo and Juliet Performance").SingleOrDefault().EndTime,
                         JobTitle = "Ticketbooth Volunteer",
-                        Description = "Responsibilities include selling tickets to attendees.",
+                        Description = "Responsibilities include selling tickets to attendees. All volunteers will receive a ticket to the event.",
                         ChatMuted = false,
                         AttendeePoints = 250
                     },
@@ -536,7 +536,7 @@ namespace Community.Data
                         StartTime = context.Event.Where(e => e.Name == "Math Tutoring").SingleOrDefault().StartTime,
                         EndTime = context.Event.Where(e => e.Name == "Math Tutoring").SingleOrDefault().EndTime,
                         JobTitle = "Math Tutor",
-                        Description = "Help out high school students enrolled in Algebra 1.",
+                        Description = "Help out high school students enrolled in Algebra 1. You should have a general knowledge of algebra concepts.",
                         ChatMuted = false,
                         AttendeePoints = 250
                     },
@@ -545,7 +545,7 @@ namespace Community.Data
                         StartTime = context.Event.Where(e => e.Name == "Math Tutoring").SingleOrDefault().StartTime,
                         EndTime = context.Event.Where(e => e.Name == "Math Tutoring").SingleOrDefault().EndTime,
                         JobTitle = "Math Tutor",
-                        Description = "Help out high school students enrolled in Algebra 1.",
+                        Description = "Help out high school students enrolled in Pre-calculus. You should have a general knowledge of pre-calculus and trigonometry concepts.",
                         ChatMuted = false,
                         AttendeePoints = 250
                     },
@@ -554,7 +554,7 @@ namespace Community.Data
                         StartTime = context.Event.Where(e => e.Name == "Math Tutoring").SingleOrDefault().StartTime,
                         EndTime = context.Event.Where(e => e.Name == "Math Tutoring").SingleOrDefault().EndTime,
                         JobTitle = "Math Tutor",
-                        Description = "Help out high school students enrolled in Algebra 1.",
+                        Description = "Help out high school students enrolled in Algebra 1. You should have a general knowledge of algebra concepts.",
                         ChatMuted = false,
                         AttendeePoints = 250
                     },
@@ -563,7 +563,7 @@ namespace Community.Data
                         StartTime = context.Event.Where(e => e.Name == "History Tutoring").SingleOrDefault().StartTime,
                         EndTime = context.Event.Where(e => e.Name == "History Tutoring").SingleOrDefault().EndTime,
                         JobTitle = "History Tutor",
-                        Description = "Help out high school students enrolled in World History 1.",
+                        Description = "Help out high school students enrolled in World History 1. You should have a general knowledge of world history events.",
                         ChatMuted = false,
                         AttendeePoints = 250
                     },
@@ -572,7 +572,7 @@ namespace Community.Data
                         StartTime = context.Event.Where(e => e.Name == "History Tutoring").SingleOrDefault().StartTime,
                         EndTime = context.Event.Where(e => e.Name == "History Tutoring").SingleOrDefault().EndTime,
                         JobTitle = "History Tutor",
-                        Description = "Help out high school students enrolled in World History 1.",
+                        Description = "Help out high school students enrolled in World History 1. You should have a general knowledge of world history events.",
                         ChatMuted = false,
                         AttendeePoints = 250
                     }

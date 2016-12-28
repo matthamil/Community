@@ -10,6 +10,7 @@ const NavWrapper = styled.nav`
   background-color: #fff;
   color: #d2d2d2;
   font-family: 'Open Sans', sans-serif;
+  border-bottom: 1px solid #ededed;
 `;
 
 const InnerNav = styled.div`
