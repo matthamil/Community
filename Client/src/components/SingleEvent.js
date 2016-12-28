@@ -17,7 +17,7 @@ const EventName = styled.h1`
   font-weight: bold;
 `;
 
-const OrganizationName = styled.h2`
+const OrganizationName = styled.a`
   margin: 5px 0;
   font-size: 1.75em;
   font-weight: 300;
@@ -175,7 +175,7 @@ const JobDescription = styled.p`
 const SingleEvent = ({ event, user, userIsMember, claimEventMember, unclaimEventMember }) => (
   <Wrapper>
     <EventName>{event.name}</EventName>
-    <OrganizationName>{event.organization.name}</OrganizationName>
+    <OrganizationName href={`/organizations/${event.organization.organizationId}`}>{event.organization.name}</OrganizationName>
     <Description>{event.description}</Description>
     <TimeAndAddress>
       <IconContent>
