@@ -127,6 +127,30 @@ export default function eventReducer(state = event, action) {
         loadingDeleteEvent: false,
         error: action.payload.error
       };
+    case a.CLAIM_EVENT_MEMBER_SUCCESS:
+      return {
+        ...state,
+        eventById: {
+          ...state.eventById,
+          eventMembers: [
+            ...state.eventById.eventMembers.slice(0, state.eventById.eventMembers.indexOf(state.eventById.eventMembers.find(x => x.eventMemberId === action.payload.eventMember.eventMemberId))),
+            action.payload.eventMember,
+            ...state.eventById.eventMembers.slice(state.eventById.eventMembers.indexOf(state.eventById.eventMembers.find(x => x.eventMemberId === action.payload.eventMember.eventMemberId)) + 1),
+          ]
+        }
+      };
+    case a.UNCLAIM_EVENT_MEMBER_SUCCESS:
+      return {
+        ...state,
+        eventById: {
+          ...state.eventById,
+          eventMembers: [
+            ...state.eventById.eventMembers.slice(0, state.eventById.eventMembers.indexOf(state.eventById.eventMembers.find(x => x.eventMemberId === action.payload.eventMember.eventMemberId))),
+            action.payload.eventMember,
+            ...state.eventById.eventMembers.slice(state.eventById.eventMembers.indexOf(state.eventById.eventMembers.find(x => x.eventMemberId === action.payload.eventMember.eventMemberId)) + 1),
+          ]
+        }
+      };
     default:
       return state;
   }

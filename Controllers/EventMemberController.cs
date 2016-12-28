@@ -219,9 +219,9 @@ namespace Community.Controllers
         // [Authorize]
         public async Task<IActionResult> Claim([FromRoute]int id)
         {
-            // var user = await GetCurrentUserAsync();
+            var user = await GetCurrentUserAsync();
             // Uncomment for testing
-            ApplicationUser user = await context.ApplicationUser.SingleAsync(u => u.FirstName == "Matt");
+            // ApplicationUser user = await context.ApplicationUser.SingleAsync(u => u.FirstName == "Matt");
 
             EventMember eMember = await context.EventMember.Where(e => e.EventMemberId == id && e.ApplicationUser == null).SingleOrDefaultAsync();
 
@@ -237,16 +237,17 @@ namespace Community.Controllers
 
             // Find any events where the user has claimed an event member
             // where the time conflicts with this event
-            EventMember userClaimed = await context.EventMember.Where(e =>
-                (e.StartTime > eMember.StartTime && e.EndTime < eMember.EndTime) ||
-                (e.StartTime < eMember.StartTime && e.EndTime > eMember.StartTime && e.EndTime < eMember.EndTime)).SingleOrDefaultAsync();
+            EventMember userClaimed = await context.EventMember.Include(e => e.ApplicationUser).Where(e =>
+            e.StartTime.Ticks > eMember.StartTime.Ticks && e.EndTime.Ticks < eMember.EndTime.Ticks && e.ApplicationUser == user ||
+            e.EndTime.Ticks > eMember.StartTime.Ticks && e.EndTime.Ticks < eMember.EndTime.Ticks && e.ApplicationUser == user ||
+            e.StartTime.Ticks == eMember.StartTime.Ticks && e.EndTime.Ticks == eMember.EndTime.Ticks && e.ApplicationUser == user).SingleOrDefaultAsync();
 
             if (userClaimed != null)
             {
                 return BadRequest(new
                 {
                     Error = $"You are already signed up for an event during this time.",
-                    Event = userClaimed,
+                    Event = new EventMemberViewModel(userClaimed),
                     StatusCode = "400"
                 });
             }
@@ -291,7 +292,7 @@ namespace Community.Controllers
             context.Entry(eMember).State = EntityState.Modified;
             context.Update(eMember);
             await context.SaveChangesAsync();
-            return new NoContentResult();
+            return Json(new EventMemberViewModel(eMember));
         }
 
         /**

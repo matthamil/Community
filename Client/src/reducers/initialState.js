@@ -14,7 +14,8 @@ const initialState = {
   event: {
     nextEvent: {},
     events: [],
-    eventById: {},
+    eventById: {
+    },
     orgEvents: []
   }
 };
