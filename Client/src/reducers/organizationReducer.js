@@ -69,7 +69,10 @@ export default function organizationReducer(state = org, action) {
       return {
         ...state,
         loading: false,
-        organization: action.payload.organization
+        userOrganizations: [
+          ...state.userOrganizations,
+          action.payload.organization
+        ]
       };
     case a.POST_ORGANIZATION_FAILURE:
       return {
