@@ -23,7 +23,9 @@ class SingleOrganizationContainer extends Component {
       <div>
         <pre>{JSON.stringify(this.props.orgById, null, ' ')}</pre>
         <div>
-          {this.props.events.map((event, index) => <pre key={index}>{JSON.stringify(event, null, ' ')}</pre>)}
+          {this.props.events.map((event, index) => {
+            return <pre key={index}>{JSON.stringify(event, null, ' ')}</pre>;
+          })}
         </div>
       </div>
     );

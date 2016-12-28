@@ -1,32 +1,25 @@
 import React, { Component } from 'react';
-// import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/actionCreators';
-
-// Single Event Container
-// should contain:
-// Event Title
-//   Organization
-// Time
-// Location (Google Maps link if possible)
-// Available Positions
-//   Each position:
-//     Job Title [CLAIM]
-//     StartTime - EndTime
-//     Description
-// Filled Positions
-//   Each position:
-//     Job Title
-//     Volunteer: FirstName LastName
-//     StartTime - EndTime
-//     Description
-
+import SingleEvent from '../components/SingleEvent';
 
 class SingleEventContainer extends Component {
-  // constructor(props) {
-  //   super(props);
-  // }
+  constructor(props) {
+    super(props);
+
+    this.handleOnClaimEventMember = this.handleOnClaimEventMember.bind(this);
+    this.handleOnUnclaimEventMember = this.handleOnUnclaimEventMember.bind(this);
+    this._checkIfUserIsMemberOfEvent = this._checkIfUserIsMemberOfEvent.bind(this);
+  }
+
+  handleOnClaimEventMember(eventMemberId) {
+    this.props.claimEventMember(eventMemberId);
+  }
+
+  handleOnUnclaimEventMember(eventMemberId) {
+    this.props.unclaimEventMember(eventMemberId);
+  }
 
   componentDidMount() {
     const id = this.props.params.id;
@@ -37,18 +30,42 @@ class SingleEventContainer extends Component {
     window.scrollTo(0, 0);
   }
 
+  _checkIfUserIsMemberOfEvent() {
+    const { eventById, user } = this.props;
+    if (eventById.eventMembers === undefined) return false;
+    if (eventById.eventMembers.length > 0) {
+      return eventById.eventMembers.find((eventMember) => {
+        return eventMember.volunteer ? eventMember.volunteer.volunteerId = user.id : false;
+      }) ? true : false;
+    }
+  }
+
   render() {
+    const { eventById, user } = this.props;
+    console.log(eventById);
     return (
       <div>
-        <pre>{JSON.stringify(this.props.eventById, null, ' ')}</pre>
+        {Object.keys(eventById).length > 0 ?
+        <SingleEvent
+          event={eventById}
+          userIsMember={this._checkIfUserIsMemberOfEvent()}
+          user={user}
+          claimEventMember={this.handleOnClaimEventMember}
+          unclaimEventMember={this.handleOnUnclaimEventMember}/>
+        :
+        <div>
+          <i className="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+          <span className="sr-only">Loading...</span>
+        </div>}
       </div>
     );
   }
 }
 
 const mapDispatchToProps = (dispatch) => bindActionCreators(actionCreators, dispatch);
-const mapStateToProps = ({ event }) => ({
-  eventById: event.eventById
+const mapStateToProps = ({ event, account }) => ({
+  eventById: event.eventById,
+  user: account.user
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleEventContainer);

@@ -20,8 +20,8 @@ export function* watchGetEventMembers() {
 
 function* loadEventMembersById({ id }) {
   try {
-    const eventMembers = yield call(axios, `/eventmember/${id}`);
-    yield put(actions.getEventMembersByIdSuccess(eventMembers));
+    const { data } = yield call(axios, `/eventmember/${id}`);
+    yield put(actions.getEventMembersByIdSuccess(data));
   } catch (error) {
     yield put(actions.getEventMembersByIdFailure(error));
   }
@@ -65,8 +65,8 @@ export function* watchPatchEventMember() {
 
 function* claimEventMember({ id }) {
   try {
-    const success = yield call(axios, `/eventmember/claim/${id}`);
-    yield put(actions.claimEventMemberSuccess(success));
+    const { data } = yield call(axios, `/eventmember/claim/${id}`);
+    yield put(actions.claimEventMemberSuccess(data));
   } catch (error) {
     yield put(actions.claimEventMemberFailure(error));
   }
@@ -80,8 +80,8 @@ export function* watchClaimEventMember() {
 
 function* unclaimEventMember({ id }) {
   try {
-    const success = yield call(axios.delete, `/eventmember/claim/${id}`);
-    yield put(actions.unclaimEventMemberSuccess(success));
+    const { data } = yield call(axios.delete, `/eventmember/claim/${id}`);
+    yield put(actions.unclaimEventMemberSuccess(data));
   } catch (error) {
     yield put(actions.unclaimEventMemberFailure(error));
   }
