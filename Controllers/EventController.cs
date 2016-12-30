@@ -216,7 +216,7 @@ namespace Community.Controllers
                 EventViewModel model = new EventViewModel(newEvent);
                 return Json(model);
             }
-            return BadRequest();
+            return BadRequest(ModelState);
         }
 
         /**
