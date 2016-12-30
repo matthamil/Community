@@ -11,7 +11,8 @@ class SingleEventContainer extends Component {
     this.state = {
       userEventMembers: [],
       unclaimedEventMembers: [],
-      claimedEventMembers: []
+      claimedEventMembers: [],
+      userIsMember: false
     };
 
     this.handleOnClaimEventMember = this.handleOnClaimEventMember.bind(this);
@@ -41,7 +42,8 @@ class SingleEventContainer extends Component {
     this.setState({
       userEventMembers: nextProps.eventById.eventMembers.filter((eMember) => eMember.volunteer !== null && eMember.volunteer.id === nextProps.user.id),
       unclaimedEventMembers: nextProps.eventById.eventMembers.filter((eMember) => eMember.volunteer === null),
-      claimedEventMembers: nextProps.eventById.eventMembers.filter((eMember) => eMember.volunteer !== null && eMember.volunteer.id !== nextProps.user.id)
+      claimedEventMembers: nextProps.eventById.eventMembers.filter((eMember) => eMember.volunteer !== null && eMember.volunteer.id !== nextProps.user.id),
+      userIsMember: this._checkIfUserIsMemberOfEvent()
     });
   }
 
@@ -63,7 +65,7 @@ class SingleEventContainer extends Component {
         {Object.keys(eventById).length > 0 ?
         <SingleEvent
           event={eventById}
-          userIsMember={this._checkIfUserIsMemberOfEvent()}
+          userIsMember={this.state.userIsMember}
           user={user}
           userEventMembers={this.state.userEventMembers}
           claimEventMember={this.handleOnClaimEventMember}

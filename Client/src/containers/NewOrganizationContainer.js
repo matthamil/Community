@@ -30,9 +30,8 @@ class NewOrganizationContainer extends Component {
   }
 
   handleOnChangeState(state) {
-    console.log('NEW STATE SELECTED: ', state);
     this.setState({
-      state: state.value
+      state: state ? state.value : null
     });
   }
 

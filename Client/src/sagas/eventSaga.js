@@ -2,6 +2,7 @@ import { take, call, put, fork } from 'redux-saga/effects';
 import axios from 'axios';
 import * as actions from '../actions/actionCreators';
 import * as a from '../actions/actionTypes';
+import { browserHistory } from 'react-router';
 
 function* loadEventList({ city, state }) {
   const url = `/event/${city ? '?city=' + city : ''}${state ? '&state=' + state : ''}`;
@@ -67,6 +68,7 @@ export function* watchGetNextEvent() {
 function* createNewEvent({ event }) {
   try {
     const { data } = yield call(axios.post, `/event/`, event);
+    browserHistory.push(`/events/${data.eventId}`);
     yield put(actions.postEventSuccess(data));
   } catch (error) {
     yield put(actions.postEventFailure(error));
