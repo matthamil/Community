@@ -15,12 +15,14 @@ const Wrapper = styled.div`
 const EventName = styled.h1`
   margin: 0;
   font-weight: bold;
+  display: inline-block;
 `;
 
 const OrganizationName = styled.a`
   margin: 5px 0;
   font-size: 1.75em;
   font-weight: 300;
+  display: block;
 `;
 
 const Description = styled.p`
@@ -172,10 +174,106 @@ const JobDescription = styled.p`
   max-width: 90%;
 `;
 
-const SingleEvent = ({ event, user, userIsMember, claimEventMember, unclaimEventMember, userEventMembers, claimedEventMembers, unclaimedEventMembers}) => (
+const AdminOptions = styled.div`
+  float: right;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+`;
+const YourEvent = styled.span`
+  background-color: #b9b9b9;
+  letter-spacing: 1px;
+  text-align: center;
+  border-radius: 2px;
+  color: #fff;
+  padding: 3px 8px;
+  text-transform: uppercase;
+  display: block;
+`;
+const EditEvent = styled.span`
+  display: block;
+  background-color: #fff;
+  color: #b9b9b9;
+  letter-spacing: 1px;
+  text-align: center;
+  border-radius: 2px;
+  padding: 3px 8px;
+  margin-right: 5px;
+  text-transform: uppercase;
+  &:hover {
+    cursor: pointer;
+    color: rgb(35, 218, 91);
+  }
+`;
+const DeleteEvent = styled.span`
+  display: block;
+  background-color: #fff;
+  color: #b9b9b9;
+  letter-spacing: 1px;
+  text-align: center;
+  border-radius: 2px;
+  padding: 3px 8px;
+  text-transform: uppercase;
+  &:hover {
+    cursor: pointer;
+    color: #E74C3C;
+  }
+`;
+
+const AddMember = styled.span`
+  display: block;
+  background-color: #fff;
+  color: #b9b9b9;
+  letter-spacing: 1px;
+  text-align: center;
+  border-radius: 2px;
+  padding: 3px 8px;
+  margin-right: 5px;
+  text-transform: uppercase;
+  &:hover {
+    cursor: pointer;
+    color: rgb(255, 181, 10);
+  }
+`;
+
+const OptionsWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const AdminIcon = styled.i`
+  margin-right: 4px;
+  font-size: 1em;
+`;
+
+const SingleEvent = ({ event, user, userIsOrganizer, userIsMember, claimEventMember, unclaimEventMember, userEventMembers, claimedEventMembers, unclaimedEventMembers, ...props }) => (
   <Wrapper>
     <EventName>{event.name}</EventName>
+    {userIsOrganizer ?
+      <AdminOptions>
+        <YourEvent>
+          <AdminIcon className="fa fa-star" aria-hidden="true"></AdminIcon>
+          Your Event
+        </YourEvent>
+      </AdminOptions> : ''}
     <OrganizationName href={`/organizations/${event.organization.organizationId}`}>{event.organization.name}</OrganizationName>
+    {userIsOrganizer ?
+      <OptionsWrapper>
+        <EditEvent>
+          <AdminIcon className="fa fa-pencil" aria-hidden="true"></AdminIcon>
+          Edit
+        </EditEvent>
+        <DeleteEvent onClick={props.onClickDeleteEvent}>
+          <AdminIcon className="fa fa-times" aria-hidden="true"></AdminIcon>
+          Delete
+        </DeleteEvent>
+        <AddMember onClick={props.onClickAddPosition}>
+          <AdminIcon className="fa fa-plus" aria-hidden="true"></AdminIcon>
+          Add Position
+        </AddMember>
+      </OptionsWrapper>
+    : ''}
     <Description>{event.description}</Description>
     <TimeAndAddress>
       <IconContent>
@@ -189,6 +287,8 @@ const SingleEvent = ({ event, user, userIsMember, claimEventMember, unclaimEvent
         </Address>
       </IconContent>
     </TimeAndAddress>
+
+    {props.children}
 
     {event.eventMembers.filter((eMember) => eMember.volunteer === null).length === 0 ?
     <NoAvailablePositions>There are no available positions for this event.</NoAvailablePositions>

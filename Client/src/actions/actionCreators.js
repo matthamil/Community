@@ -159,7 +159,7 @@ export const patchEventFailure = (error) => ({
 
 export const deleteEvent = (id) => ({
   type: actions.DELETE_EVENT,
-  payload: { event }
+  payload: { id }
 });
 export const deleteEventSuccess = () => ({
   type: actions.DELETE_EVENT_SUCCESS

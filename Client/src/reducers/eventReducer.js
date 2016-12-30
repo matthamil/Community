@@ -151,6 +151,17 @@ export default function eventReducer(state = event, action) {
           ]
         }
       };
+    case a.POST_EVENT_MEMBER_SUCCESS:
+      return {
+        ...state,
+        eventById: {
+          ...state.eventById,
+          eventMembers: [
+            ...state.eventById.eventMembers,
+            action.payload.eventMember
+          ]
+        }
+      };
     default:
       return state;
   }

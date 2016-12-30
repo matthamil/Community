@@ -35,8 +35,8 @@ export function* watchGetEventMembersById() {
 
 function* createNewEventMember({ eventMember }) {
   try {
-    const success = yield call(axios.post, `/eventmember/`, eventMember);
-    yield put(actions.postEventMemberSuccess(success));
+    const { data } = yield call(axios.post, `/eventmember/`, eventMember);
+    yield put(actions.postEventMemberSuccess(data));
   } catch (error) {
     yield put(actions.postEventMemberFailure(error));
   }
@@ -50,8 +50,8 @@ export function* watchPostEventMember() {
 
 function* modifyEventMember({ id, eventMember }) {
   try {
-    const success = yield call(axios.patch, `/eventmember/${id}`, eventMember);
-    yield put(actions.patchEventMemberSuccess(success));
+    const { data } = yield call(axios.patch, `/eventmember/${id}`, eventMember);
+    yield put(actions.patchEventMemberSuccess(data));
   } catch (error) {
     yield put(actions.patchEventMemberFailure(error));
   }

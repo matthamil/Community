@@ -289,12 +289,12 @@ namespace Community.Controllers
             // For testing purposes
             // ApplicationUser user = await context.ApplicationUser.SingleOrDefaultAsync(u => u.FirstName == "Steve");
 
-            Organization org = await context.Organization.Include(o => o.Organizer).Where(o => o.OrganizationId == id && o.Organizer.Id == user.Id).SingleOrDefaultAsync();
+            Event evt = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Where(e => e.EventId == id && e.Organization.Organizer.Id == user.Id).SingleOrDefaultAsync();
 
-            if (org == null || org.Organizer != user) {
+            if (evt == null || evt.Organization.Organizer.Id != user.Id) {
                 return BadRequest(new
                 {
-                    Error = $"Can't find event with id {id} hosted by {org.Name} and organized by user {user.FirstName} {user.LastName} with user id {user.Id}.",
+                    Error = $"Can't find event with id {id} organized by user {user.FirstName} {user.LastName} with user id {user.Id}.",
                     StatusCode = "400"
                 });
             }
