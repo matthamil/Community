@@ -56,15 +56,17 @@ class NewEventMemberContainer extends Component {
   handleOnSubmit() {
     const formValidated = this.handleValidateForm();
     if (formValidated) {
-      this.props.postEventMember({
-        eventId: this.props.event.eventId,
-        jobTitle: this.state.jobTitle,
-        description: this.state.description,
-        startTime: `${this.props.event.date}`,
-        endTime: `${this.props.event.date.split('T')[0]}${'T'.concat(this.state.endTime)}:00`,
-        chatMuted: false,
-        attendeePoints: 250 // Feature planned to be implemented in version 2
-      });
+      setTimeout(() => {
+        this.props.postEventMember({
+          eventId: this.props.event.eventId,
+          jobTitle: this.state.jobTitle,
+          description: this.state.description,
+          startTime: `${this.props.event.date}`,
+          endTime: `${this.props.event.date.split('T')[0]}${'T'.concat(this.state.endTime)}:00`,
+          chatMuted: false,
+          attendeePoints: 250 // Feature planned to be implemented in version 2
+        });
+      }, 500);
       this.props.onClickCancel();
     }
   }

@@ -6,10 +6,33 @@ const Wrapper = styled.div`
   width: 75vw;
   margin: 0 auto;
   margin-top: 25px;
-  padding: 40px;
+  padding: 40px 40px 0 40px;
   border-radius: 3px;
   background-color: #fff;
   border: 1px solid #ededed;
+`;
+
+const TopWrapper = styled.div`
+  width: 75vw;
+  max-width: 960px;
+  margin: 0 auto;
+  margin-top: 25px;
+  padding: 40px 40px 0 40px;
+  border-radius: 3px 3px 0 0;
+  background-color: #fff;
+  border: 1px solid #ededed;
+  border-bottom: none;
+`;
+
+const BottomWrapper = styled.div`
+  width: 75vw;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 40px 40px 40px;
+  border-radius: 0 0 3px 3px;
+  background-color: #fff;
+  border: 1px solid #ededed;
+  border-top: none;
 `;
 
 const EventName = styled.h1`
@@ -97,7 +120,7 @@ const AvailablePositions = styled.h3`
 const NoAvailablePositions = styled.h3`
   margin: 0;
   font-size: 1em;
-  margin: 40px 0;
+  padding: 40px 0;
   font-weight: bold;
   color: #3a3a3a;
   text-transform: uppercase;
@@ -247,8 +270,20 @@ const AdminIcon = styled.i`
   font-size: 1em;
 `;
 
+const formatTime = (timeString) => {
+  const hour = timeString.split(':')[0];
+  const remainder = timeString.split(':')[1];
+
+  if (hour > 12) {
+    return hour - 12 + ':' + remainder;
+  } else {
+    return hour + ':' + remainder;
+  }
+};
+
 const SingleEvent = ({ event, user, userIsOrganizer, userIsMember, claimEventMember, unclaimEventMember, userEventMembers, claimedEventMembers, unclaimedEventMembers, ...props }) => (
-  <Wrapper>
+  <div style={{display: 'flex', flexDirection: 'column'}}>
+  <TopWrapper>
     <EventName>{event.name}</EventName>
     {userIsOrganizer ?
       <AdminOptions>
@@ -287,8 +322,14 @@ const SingleEvent = ({ event, user, userIsOrganizer, userIsMember, claimEventMem
         </Address>
       </IconContent>
     </TimeAndAddress>
+    </TopWrapper>
 
-    {props.children}
+    <div style={{width: '75vw', maxWidth: '960px', margin: '0 auto'}}>
+      {props.children}
+    </div>
+
+
+    <BottomWrapper>
 
     {event.eventMembers.filter((eMember) => eMember.volunteer === null).length === 0 ?
     <NoAvailablePositions>There are no available positions for this event.</NoAvailablePositions>
@@ -328,7 +369,7 @@ const SingleEvent = ({ event, user, userIsOrganizer, userIsMember, claimEventMem
               <JobTitle>{eMember.jobTitle}</JobTitle>
 
               {/* Start Time - End Time */}
-              <JobTime>{`${moment(eMember.startTime).format('HH:mm A')} - ${moment(eMember.endTime).format('HH:mm A')}`}</JobTime>
+              <JobTime>{`${moment(eMember.startTime).format('HH:mm A')} - ${formatTime(moment(eMember.endTime).format('HH:mm A'))}`}</JobTime>
 
               {/* Event Member Description */}
               <JobDescription>{eMember.description}</JobDescription>
@@ -357,7 +398,7 @@ const SingleEvent = ({ event, user, userIsOrganizer, userIsMember, claimEventMem
               <JobTitle>{eMember.jobTitle}</JobTitle>
 
               {/* Start Time - End Time */}
-              <JobTime>{`${moment(eMember.startTime).format('HH:mm A')} - ${moment(eMember.endTime).format('HH:mm A')}`}</JobTime>
+              <JobTime>{`${moment(eMember.startTime).format('HH:mm A')} - ${formatTime(moment(eMember.endTime).format('HH:mm A'))}`}</JobTime>
 
               {/* Event Member Description */}
               <JobDescription>{eMember.description}</JobDescription>
@@ -387,7 +428,7 @@ const SingleEvent = ({ event, user, userIsOrganizer, userIsMember, claimEventMem
               <JobTitle>{eMember.jobTitle}</JobTitle>
 
               {/* Start Time - End Time */}
-              <JobTime>{`${moment(eMember.startTime).format('HH:mm A')} - ${moment(eMember.endTime).format('HH:mm A')}`}</JobTime>
+              <JobTime>{`${moment(eMember.startTime).format('HH:mm A')} - ${formatTime(moment(eMember.endTime).format('HH:mm A'))}`}</JobTime>
 
               {/* Event Member Description */}
               <JobDescription>{eMember.description}</JobDescription>
@@ -396,7 +437,8 @@ const SingleEvent = ({ event, user, userIsOrganizer, userIsMember, claimEventMem
         );
       })}
     </div>
-  </Wrapper>
+  </BottomWrapper>
+  </div>
 );
 
 SingleEvent.propTypes = {
