@@ -4,6 +4,8 @@ import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/actionCreators';
 import SingleEvent from '../components/SingleEvent';
 import NewEventMemberContainer from './NewEventMemberContainer';
+import Collapse from 'react-collapse';
+console.log(Collapse);
 
 class SingleEventContainer extends Component {
   constructor(props) {
@@ -104,10 +106,13 @@ class SingleEventContainer extends Component {
           unclaimedEventMembers={this.state.unclaimedEventMembers}
           onClickAddPosition={this.handleOnClickAddPosition}
           onClickDeleteEvent={this.handleOnClickDeleteEvent}>
-          {this.state.addPosition && this.state.userIsOrganizer ?
+          <Collapse
+            isOpened={this.state.addPosition && this.state.userIsOrganizer}
+            springConfig={{stiffness: 200, damping: 20}}>
             <NewEventMemberContainer
               event={eventById}
-              onClickCancel={this.handleOnClickCancel}/> : ''}
+              onClickCancel={this.handleOnClickCancel}/>
+          </Collapse>
         </SingleEvent>
         :
         <div>
