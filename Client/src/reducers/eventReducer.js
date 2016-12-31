@@ -162,6 +162,17 @@ export default function eventReducer(state = event, action) {
           ]
         }
       };
+    case a.DELETE_EVENT_MEMBER_SUCCESS:
+      return {
+        ...state,
+        eventById: {
+          ...state.eventById,
+          eventMembers: [
+            ...state.eventById.eventMembers.slice(0, state.eventById.eventMembers.indexOf(state.eventById.eventMembers.find(x => x.eventMemberId === action.payload.id)) - 1),
+            ...state.eventById.eventMembers.slice(state.eventById.eventMembers.indexOf(state.eventById.eventMembers.find(x => x.eventMemberId === action.payload.id)) + 1)
+          ]
+        }
+      };
     default:
       return state;
   }

@@ -314,18 +314,20 @@ namespace Community.Controllers
             // For testing purposes
             // ApplicationUser user = await context.ApplicationUser.SingleOrDefaultAsync(u => u.FirstName == "Steve");
 
-            Organization org = await context.Organization.Include(o => o.Organizer).Where(o => o.OrganizationId == id && o.Organizer.Id == user.Id).SingleOrDefaultAsync();
+            EventMember eMember = await context.EventMember.Include(e => e.Event).ThenInclude(ev => ev.Organization).ThenInclude(o => o.Organizer).Where(e => e.EventMemberId == id && e.Event.Organization.Organizer.Id == user.Id).SingleOrDefaultAsync();
 
-            if (org == null || org.Organizer != user) {
+            if (eMember == null) {
                 return new ForbidResult($"Can't delete event member with ID {id}");
             }
 
             // Delete event member and chatroom messages associated
-            EventMember eventMember = await context.EventMember.Where(e => e.EventMemberId == id).SingleOrDefaultAsync();
-            EventChatroomMessage[] chatMessages = await context.EventChatroomMessage.Include(e => e.EventMember).Where(e => e.EventMember.ApplicationUser == user).ToArrayAsync();
+            EventChatroomMessage[] chatMessages = await context.EventChatroomMessage.Include(e => e.EventMember).Where(e => e.EventMember.ApplicationUser == user && e.EventMember.EventMemberId == eMember.EventMemberId).ToArrayAsync();
 
-            context.RemoveRange(chatMessages);
-            context.Remove(eventMember);
+            if (chatMessages != null)
+            {
+                context.RemoveRange(chatMessages);
+            }
+            context.Remove(eMember);
             await context.SaveChangesAsync();
 
             return new NoContentResult();

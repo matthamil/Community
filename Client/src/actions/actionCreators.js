@@ -252,8 +252,9 @@ export const deleteEventMember = (id) => ({
   type: actions.DELETE_EVENT_MEMBER,
   payload: { id }
 });
-export const deleteEventMemberSuccess = () => ({
-  type: actions.DELETE_EVENT_MEMBER_SUCCESS
+export const deleteEventMemberSuccess = (id) => ({
+  type: actions.DELETE_EVENT_MEMBER_SUCCESS,
+  payload: { id }
 });
 export const deleteEventMemberFailure = (error) => ({
   type: actions.DELETE_EVENT_MEMBER_FAILURE,

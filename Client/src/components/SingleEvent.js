@@ -2,15 +2,15 @@ import React, { PropTypes } from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
 
-const Wrapper = styled.div`
-  width: 75vw;
-  margin: 0 auto;
-  margin-top: 25px;
-  padding: 40px 40px 0 40px;
-  border-radius: 3px;
-  background-color: #fff;
-  border: 1px solid #ededed;
-`;
+// const Wrapper = styled.div`
+//   width: 75vw;
+//   margin: 0 auto;
+//   margin-top: 25px;
+//   padding: 40px 40px 0 40px;
+//   border-radius: 3px;
+//   background-color: #fff;
+//   border: 1px solid #ededed;
+// `;
 
 const TopWrapper = styled.div`
   width: 75vw;
@@ -141,6 +141,33 @@ const ClaimBtn = styled.button`
   border: none;
   display: block;
 `;
+
+const DeleteEventMember = styled.span`
+  margin-top: 2px;
+  color: #b9b9b9;
+  border-radius: 3px;
+  letter-spacing: 1px;
+  display: inline-block;
+  text-transform: uppercase;
+  &:hover {
+    cursor: pointer;
+    color: #E74C3C;
+  }
+`;
+const EditEventMember = styled.span`
+  margin-top: 2px;
+  color: #b9b9b9;
+  border-radius: 3px;
+  letter-spacing: 1px;
+  display: inline-block;
+  text-transform: uppercase;
+  margin-right: 5px;
+  &:hover {
+    cursor: pointer;
+    color: rgb(35, 218, 91);
+  }
+`;
+
 
 const UnclaimBtn = styled.button`
   margin-top: 3px;
@@ -313,7 +340,7 @@ const SingleEvent = ({ event, user, userIsOrganizer, userIsMember, claimEventMem
     <TimeAndAddress>
       <IconContent>
         <Icon className="fa fa-clock-o" aria-hidden="true"></Icon>
-        <Time>{moment(event.startTime).format('MMM DD HH:mm A')}</Time>
+        <Time>{moment(event.startTime).format('MMM DD HH:mm A')} - {formatTime(moment(event.endTime).format('HH:mm A'))}</Time>
       </IconContent>
       <IconContent>
         <Icon style={{marginLeft: '3px'}} className="fa fa-map-marker" aria-hidden="true"></Icon>
@@ -331,7 +358,7 @@ const SingleEvent = ({ event, user, userIsOrganizer, userIsMember, claimEventMem
 
     <BottomWrapper>
 
-    {event.eventMembers.filter((eMember) => eMember.volunteer === null).length === 0 ?
+    {unclaimedEventMembers.length === 0 ?
     <NoAvailablePositions>There are no available positions for this event.</NoAvailablePositions>
     : ''}
 
@@ -367,9 +394,15 @@ const SingleEvent = ({ event, user, userIsOrganizer, userIsMember, claimEventMem
             <Job>
               {/* Event Member Title */}
               <JobTitle>{eMember.jobTitle}</JobTitle>
+              {userIsOrganizer ?
+              <div>
+                <EditEventMember><i className="fa fa-pencil" aria-hidden="true"></i> Edit</EditEventMember>
+                <DeleteEventMember onClick={props.onClickDeleteEventMember.bind(null, eMember.eventMemberId)}><i className="fa fa-times" aria-hidden="true"></i> Remove</DeleteEventMember>
+              </div>
+              : ''}
 
               {/* Start Time - End Time */}
-              <JobTime>{`${moment(eMember.startTime).format('HH:mm A')} - ${formatTime(moment(eMember.endTime).format('HH:mm A'))}`}</JobTime>
+              <JobTime>{`${formatTime(moment(eMember.startTime).format('HH:mm A'))} - ${formatTime(moment(eMember.endTime).format('HH:mm A'))}`}</JobTime>
 
               {/* Event Member Description */}
               <JobDescription>{eMember.description}</JobDescription>
@@ -396,9 +429,14 @@ const SingleEvent = ({ event, user, userIsOrganizer, userIsMember, claimEventMem
             <Job>
               {/* Event Member Title */}
               <JobTitle>{eMember.jobTitle}</JobTitle>
-
+              {userIsOrganizer ?
+              <div>
+                <EditEventMember><i className="fa fa-pencil" aria-hidden="true"></i> Edit</EditEventMember>
+                <DeleteEventMember onClick={props.onClickDeleteEventMember.bind(null, eMember.eventMemberId)}><i className="fa fa-times" aria-hidden="true"></i> Remove</DeleteEventMember>
+              </div>
+              : ''}
               {/* Start Time - End Time */}
-              <JobTime>{`${moment(eMember.startTime).format('HH:mm A')} - ${formatTime(moment(eMember.endTime).format('HH:mm A'))}`}</JobTime>
+              <JobTime>{`${formatTime(moment(eMember.startTime).format('HH:mm A'))} - ${formatTime(moment(eMember.endTime).format('HH:mm A'))}`}</JobTime>
 
               {/* Event Member Description */}
               <JobDescription>{eMember.description}</JobDescription>
@@ -426,9 +464,15 @@ const SingleEvent = ({ event, user, userIsOrganizer, userIsMember, claimEventMem
             <Job>
               {/* Event Member Title */}
               <JobTitle>{eMember.jobTitle}</JobTitle>
+              {userIsOrganizer ?
+              <div>
+                <EditEventMember><i className="fa fa-pencil" aria-hidden="true"></i> Edit</EditEventMember>
+                <DeleteEventMember onClick={props.onClickDeleteEventMember.bind(null, eMember.eventMemberId)}><i className="fa fa-times" aria-hidden="true"></i> Remove</DeleteEventMember>
+              </div>
+              : ''}
 
               {/* Start Time - End Time */}
-              <JobTime>{`${moment(eMember.startTime).format('HH:mm A')} - ${formatTime(moment(eMember.endTime).format('HH:mm A'))}`}</JobTime>
+              <JobTime>{`${formatTime(moment(eMember.startTime).format('HH:mm A'))} - ${formatTime(moment(eMember.endTime).format('HH:mm A'))}`}</JobTime>
 
               {/* Event Member Description */}
               <JobDescription>{eMember.description}</JobDescription>
