@@ -26,6 +26,7 @@ class SingleEventContainer extends Component {
     this.handleOnClickAddPosition = this.handleOnClickAddPosition.bind(this);
     this.handleOnClickCancel = this.handleOnClickCancel.bind(this);
     this.handleOnClickDeleteEvent = this.handleOnClickDeleteEvent.bind(this);
+    this.handleOnClickDeleteEventMember = this.handleOnClickDeleteEventMember.bind(this);
   }
 
   handleOnClaimEventMember(eventMemberId) {
@@ -88,6 +89,10 @@ class SingleEventContainer extends Component {
     this.props.deleteEvent(this.props.eventById.eventId);
   }
 
+  handleOnClickDeleteEventMember(id) {
+    this.props.deleteEventMember(id);
+  }
+
   render() {
     const { eventById, user } = this.props;
     return (
@@ -104,7 +109,8 @@ class SingleEventContainer extends Component {
           unclaimEventMember={this.handleOnUnclaimEventMember}
           unclaimedEventMembers={this.state.unclaimedEventMembers}
           onClickAddPosition={this.handleOnClickAddPosition}
-          onClickDeleteEvent={this.handleOnClickDeleteEvent}>
+          onClickDeleteEvent={this.handleOnClickDeleteEvent}
+          onClickDeleteEventMember={this.handleOnClickDeleteEventMember}>
           <Collapse
             isOpened={this.state.addPosition && this.state.userIsOrganizer}
             springConfig={{stiffness: 200, damping: 20}}>

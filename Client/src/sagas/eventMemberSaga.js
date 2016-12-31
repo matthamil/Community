@@ -96,7 +96,7 @@ export function* watchUnclaimEventMember() {
 function* deleteEventMember({ id }) {
   try {
     yield call(axios.delete, `/eventmember/${id}`);
-    yield put(actions.deleteEventMemberSuccess());
+    yield put(actions.deleteEventMemberSuccess(id));
   } catch (error) {
     yield put(actions.deleteEventMemberFailure(error));
   }
