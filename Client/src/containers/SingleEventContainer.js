@@ -5,7 +5,6 @@ import * as actionCreators from '../actions/actionCreators';
 import SingleEvent from '../components/SingleEvent';
 import NewEventMemberContainer from './NewEventMemberContainer';
 import Collapse from 'react-collapse';
-console.log(Collapse);
 
 class SingleEventContainer extends Component {
   constructor(props) {
