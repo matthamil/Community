@@ -98,13 +98,13 @@ export default function eventReducer(state = event, action) {
         loadingPatchEvent: true,
         event: action.payload.event
       };
-    case a.PATCH_EVENT_SUCCESS:
+    case a.PATCH_EVENT_BY_ID_SUCCESS:
       return {
         ...state,
         loadingPatchEvent: false,
-        event: action.payload.event
+        eventById: action.payload.event
       };
-    case a.PATCH_EVENT_FAILURE:
+    case a.PATCH_EVENT_BY_ID_FAILURE:
       return {
         ...state,
         loadingPatchEvent: false,
@@ -170,6 +170,18 @@ export default function eventReducer(state = event, action) {
           eventMembers: [
             ...state.eventById.eventMembers.slice(0, state.eventById.eventMembers.indexOf(state.eventById.eventMembers.find(x => x.eventMemberId === action.payload.id)) - 1),
             ...state.eventById.eventMembers.slice(state.eventById.eventMembers.indexOf(state.eventById.eventMembers.find(x => x.eventMemberId === action.payload.id)) + 1)
+          ]
+        }
+      };
+    case a.PATCH_EVENT_MEMBER_SUCCESS:
+      return {
+        ...state,
+        eventById: {
+          ...state.eventById,
+          eventMembers: [
+            ...state.eventById.eventMembers.slice(0, state.eventById.eventMembers.indexOf(state.eventById.eventMembers.find(x => x.eventMemberId === action.payload.eventMember.eventMemberId))),
+            action.payload.eventMember,
+            ...state.eventById.eventMembers.slice(state.eventById.eventMembers.indexOf(state.eventById.eventMembers.find(x => x.eventMemberId === action.payload.eventMember.eventMemberId)) + 1)
           ]
         }
       };

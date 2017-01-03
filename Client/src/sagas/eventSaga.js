@@ -84,14 +84,14 @@ export function* watchPostEvent() {
 function* modifyEvent({ id, event }) {
   try {
     const { data } = yield call(axios.patch, `/event/${id}`, event);
-    yield put(actions.patchEventSuccess(data));
+    yield put(actions.patchEventByIdSuccess(data));
   } catch (error) {
-    yield put(actions.patchEventFailure(error));
+    yield put(actions.patchEventByIdFailure(error));
   }
 }
 export function* watchPatchEvent() {
   while (true) {
-    const { payload } = yield take(a.PATCH_EVENT);
+    const { payload } = yield take(a.PATCH_EVENT_BY_ID);
     yield fork(modifyEvent, payload);
   }
 }

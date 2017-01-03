@@ -144,16 +144,16 @@ export const postEventFailure = (error) => ({
   payload: { error }
 });
 
-export const patchEvent = (event) => ({
-  type: actions.PATCH_EVENT,
+export const patchEventById = (id, event) => ({
+  type: actions.PATCH_EVENT_BY_ID,
+  payload: { id, event }
+});
+export const patchEventByIdSuccess = (event) => ({
+  type: actions.PATCH_EVENT_BY_ID_SUCCESS,
   payload: { event }
 });
-export const patchEventSuccess = (event) => ({
-  type: actions.PATCH_EVENT_SUCCESS,
-  payload: { event }
-});
-export const patchEventFailure = (error) => ({
-  type: actions.PATCH_EVENT_FAILURE,
+export const patchEventByIdFailure = (error) => ({
+  type: actions.PATCH_EVENT_BY_ID_FAILURE,
   payload: { error }
 });
 
@@ -209,9 +209,9 @@ export const postEventMemberFailure = (error) => ({
   payload: { error }
 });
 
-export const patchEventMemberById = (eventMember) => ({
+export const patchEventMemberById = (id, eventMember) => ({
   type: actions.PATCH_EVENT_MEMBER,
-  payload: { eventMember }
+  payload: { id, eventMember }
 });
 export const patchEventMemberByIdSuccess = (eventMember) => ({
   type: actions.PATCH_EVENT_MEMBER_SUCCESS,

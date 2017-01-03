@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/actionCreators';
 import SingleEvent from '../components/SingleEvent';
 import NewEventMemberContainer from './NewEventMemberContainer';
+import EditEventModalContainer from './EditEventModalContainer';
 import Collapse from 'react-collapse';
 
 class SingleEventContainer extends Component {
@@ -16,7 +17,8 @@ class SingleEventContainer extends Component {
       claimedEventMembers: [],
       userIsMember: false,
       userIsOrganizer: false,
-      addPosition: false
+      addPosition: false,
+      isEditing: false
     };
 
     this.handleOnClaimEventMember = this.handleOnClaimEventMember.bind(this);
@@ -26,7 +28,7 @@ class SingleEventContainer extends Component {
     this.handleOnClickAddPosition = this.handleOnClickAddPosition.bind(this);
     this.handleOnClickCancel = this.handleOnClickCancel.bind(this);
     this.handleOnClickDeleteEvent = this.handleOnClickDeleteEvent.bind(this);
-    this.handleOnClickDeleteEventMember = this.handleOnClickDeleteEventMember.bind(this);
+    this.handleOnClickEditEvent = this.handleOnClickEditEvent.bind(this);
   }
 
   handleOnClaimEventMember(eventMemberId) {
@@ -89,8 +91,10 @@ class SingleEventContainer extends Component {
     this.props.deleteEvent(this.props.eventById.eventId);
   }
 
-  handleOnClickDeleteEventMember(id) {
-    this.props.deleteEventMember(id);
+  handleOnClickEditEvent() {
+    this.setState({
+      isEditing: !this.state.isEditing
+    });
   }
 
   render() {
@@ -110,14 +114,19 @@ class SingleEventContainer extends Component {
           unclaimedEventMembers={this.state.unclaimedEventMembers}
           onClickAddPosition={this.handleOnClickAddPosition}
           onClickDeleteEvent={this.handleOnClickDeleteEvent}
-          onClickDeleteEventMember={this.handleOnClickDeleteEventMember}>
+          onClickEditEvent={this.handleOnClickEditEvent}>
           <Collapse
             isOpened={this.state.addPosition && this.state.userIsOrganizer}
             springConfig={{stiffness: 200, damping: 20}}>
             <NewEventMemberContainer
               event={eventById}
+              eventId={eventById.eventId}
               onClickCancel={this.handleOnClickCancel}/>
           </Collapse>
+          <EditEventModalContainer
+            event={eventById}
+            isEditing={this.state.isEditing}
+            onCancel={this.handleOnClickEditEvent}/>
         </SingleEvent>
         :
         <div>
