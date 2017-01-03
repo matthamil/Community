@@ -235,36 +235,30 @@ namespace Community.Controllers
             if (ModelState.IsValid)
             {
                 var user = await GetCurrentUserAsync();
-                // Uncomment for testing
-                // ApplicationUser user = await context.ApplicationUser.SingleAsync(u => u.FirstName == "Steve");
-                Organization org = await context.Organization.Include(o => o.Organizer).Where(o => o.OrganizationId == orgEvent.OrganizationId && o.Organizer.Id == user.Id).SingleOrDefaultAsync();
-                if (org == null || org.Organizer != user)
+                Event evt = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Where(e => e.EventId == id && e.Organization.Organizer.Id == user.Id).SingleOrDefaultAsync();
+
+                if (evt == null)
                 {
-                    return BadRequest(new
-                    {
-                        Error = $"Can't find organization with id {orgEvent.OrganizationId} organized by user {user.FirstName} {user.LastName} with user id {user.Id}.",
-                        StatusCode = "400"
-                    });
+                    return BadRequest();
                 }
 
-                Event originalEvent = await context.Event.Include(e => e.Organization).ThenInclude(o => o.Organizer).Where(e => e.EventId == id).SingleOrDefaultAsync();
-                if (originalEvent == null) return NotFound();
+                evt.Name = orgEvent.Name;
+                evt.Description = orgEvent.Description;
+                evt.City = orgEvent.City;
+                evt.State = orgEvent.State;
+                evt.Address = orgEvent.Address;
+                evt.ZipCode = orgEvent.ZipCode;
+                evt.Date = orgEvent.Date;
+                evt.StartTime = orgEvent.StartTime;
+                evt.EndTime = orgEvent.EndTime;
 
-                originalEvent.Name = orgEvent.Name;
-                originalEvent.Description = orgEvent.Description;
-                originalEvent.City = orgEvent.City;
-                originalEvent.State = orgEvent.State;
-                originalEvent.Address = orgEvent.Address;
-                originalEvent.ZipCode = orgEvent.ZipCode;
-                originalEvent.Date = orgEvent.Date;
-                originalEvent.StartTime = orgEvent.StartTime;
-                originalEvent.EndTime = orgEvent.EndTime;
-
-                context.Entry(originalEvent).State = EntityState.Modified;
-                context.Update(originalEvent);
+                context.Entry(evt).State = EntityState.Modified;
+                context.Update(evt);
                 await context.SaveChangesAsync();
 
-                EventViewModel model = new EventViewModel(originalEvent);
+                List<EventMember> eMembers = await context.EventMember.Where(m => m.EventId == evt.EventId).ToListAsync();
+                EventViewModel model = new EventViewModel(evt, eMembers);
+
                 return Json(model);
             }
             return BadRequest(ModelState);

@@ -51,9 +51,9 @@ export function* watchPostEventMember() {
 function* modifyEventMember({ id, eventMember }) {
   try {
     const { data } = yield call(axios.patch, `/eventmember/${id}`, eventMember);
-    yield put(actions.patchEventMemberSuccess(data));
+    yield put(actions.patchEventMemberByIdSuccess(data));
   } catch (error) {
-    yield put(actions.patchEventMemberFailure(error));
+    yield put(actions.patchEventMemberByIdFailure(error));
   }
 }
 export function* watchPatchEventMember() {

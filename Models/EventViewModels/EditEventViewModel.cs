@@ -10,9 +10,6 @@ namespace Community.Models.EventViewModels
     public class EditEventViewModel
     {
         [Required]
-        public int OrganizationId { get; set; }
-
-        [Required]
         public string Name { get; set; }
 
         [Required]

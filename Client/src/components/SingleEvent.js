@@ -1,6 +1,9 @@
 import React, { PropTypes } from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
+import formatTime from '../helpers/formatTime';
+import JobContainer from '../containers/JobContainer';
+import ReactMarkdown from 'react-markdown';
 
 // const Wrapper = styled.div`
 //   width: 75vw;
@@ -48,7 +51,7 @@ const OrganizationName = styled.a`
   display: block;
 `;
 
-const Description = styled.p`
+const Description = styled.div`
   padding: 0 32.5px;
   margin: 20px 0;
   max-width: 60%;
@@ -142,31 +145,31 @@ const ClaimBtn = styled.button`
   display: block;
 `;
 
-const DeleteEventMember = styled.span`
-  margin-top: 2px;
-  color: #b9b9b9;
-  border-radius: 3px;
-  letter-spacing: 1px;
-  display: inline-block;
-  text-transform: uppercase;
-  &:hover {
-    cursor: pointer;
-    color: #E74C3C;
-  }
-`;
-const EditEventMember = styled.span`
-  margin-top: 2px;
-  color: #b9b9b9;
-  border-radius: 3px;
-  letter-spacing: 1px;
-  display: inline-block;
-  text-transform: uppercase;
-  margin-right: 5px;
-  &:hover {
-    cursor: pointer;
-    color: rgb(35, 218, 91);
-  }
-`;
+// const DeleteEventMember = styled.span`
+//   margin-top: 2px;
+//   color: #b9b9b9;
+//   border-radius: 3px;
+//   letter-spacing: 1px;
+//   display: inline-block;
+//   text-transform: uppercase;
+//   &:hover {
+//     cursor: pointer;
+//     color: #E74C3C;
+//   }
+// `;
+// const EditEventMember = styled.span`
+//   margin-top: 2px;
+//   color: #b9b9b9;
+//   border-radius: 3px;
+//   letter-spacing: 1px;
+//   display: inline-block;
+//   text-transform: uppercase;
+//   margin-right: 5px;
+//   &:hover {
+//     cursor: pointer;
+//     color: rgb(35, 218, 91);
+//   }
+// `;
 
 
 const UnclaimBtn = styled.button`
@@ -205,24 +208,24 @@ const EventMember = styled.div`
   flex-direction: row;
 `;
 
-const Job = styled.div`
-  padding-left: 25px;
-`;
+// const Job = styled.div`
+//   padding-left: 25px;
+// `;
 
-const JobTitle = styled.h3`
-  font-weight: bold;
-  margin: 0;
-  color: #3498DB;
-`;
+// const JobTitle = styled.h3`
+//   font-weight: bold;
+//   margin: 0;
+//   color: #3498DB;
+// `;
 
-const JobTime = styled.h4`
-  font-size: 1em;
-  margin: 5px 0 10px 0;
-`;
+// const JobTime = styled.h4`
+//   font-size: 1em;
+//   margin: 5px 0 10px 0;
+// `;
 
-const JobDescription = styled.p`
-  max-width: 90%;
-`;
+// const JobDescription = styled.p`
+//   max-width: 90%;
+// `;
 
 const AdminOptions = styled.div`
   float: right;
@@ -297,17 +300,6 @@ const AdminIcon = styled.i`
   font-size: 1em;
 `;
 
-const formatTime = (timeString) => {
-  const hour = timeString.split(':')[0];
-  const remainder = timeString.split(':')[1];
-
-  if (hour > 12) {
-    return hour - 12 + ':' + remainder;
-  } else {
-    return hour + ':' + remainder;
-  }
-};
-
 const SingleEvent = ({ event, user, userIsOrganizer, userIsMember, claimEventMember, unclaimEventMember, userEventMembers, claimedEventMembers, unclaimedEventMembers, ...props }) => (
   <div style={{display: 'flex', flexDirection: 'column'}}>
   <TopWrapper>
@@ -322,7 +314,7 @@ const SingleEvent = ({ event, user, userIsOrganizer, userIsMember, claimEventMem
     <OrganizationName href={`/organizations/${event.organization.organizationId}`}>{event.organization.name}</OrganizationName>
     {userIsOrganizer ?
       <OptionsWrapper>
-        <EditEvent>
+        <EditEvent onClick={props.onClickEditEvent}>
           <AdminIcon className="fa fa-pencil" aria-hidden="true"></AdminIcon>
           Edit
         </EditEvent>
@@ -336,7 +328,7 @@ const SingleEvent = ({ event, user, userIsOrganizer, userIsMember, claimEventMem
         </AddMember>
       </OptionsWrapper>
     : ''}
-    <Description>{event.description}</Description>
+    <Description><ReactMarkdown source={event.description}/></Description>
     <TimeAndAddress>
       <IconContent>
         <Icon className="fa fa-clock-o" aria-hidden="true"></Icon>
@@ -391,22 +383,11 @@ const SingleEvent = ({ event, user, userIsOrganizer, userIsMember, claimEventMem
             <ClaimBtnWrapper>
               <UnclaimBtn onClick={unclaimEventMember.bind(null, eMember.eventMemberId)}>UNCLAIM</UnclaimBtn>
             </ClaimBtnWrapper>
-            <Job>
-              {/* Event Member Title */}
-              <JobTitle>{eMember.jobTitle}</JobTitle>
-              {userIsOrganizer ?
-              <div>
-                <EditEventMember><i className="fa fa-pencil" aria-hidden="true"></i> Edit</EditEventMember>
-                <DeleteEventMember onClick={props.onClickDeleteEventMember.bind(null, eMember.eventMemberId)}><i className="fa fa-times" aria-hidden="true"></i> Remove</DeleteEventMember>
-              </div>
-              : ''}
-
-              {/* Start Time - End Time */}
-              <JobTime>{`${formatTime(moment(eMember.startTime).format('HH:mm A'))} - ${formatTime(moment(eMember.endTime).format('HH:mm A'))}`}</JobTime>
-
-              {/* Event Member Description */}
-              <JobDescription>{eMember.description}</JobDescription>
-            </Job>
+            <JobContainer
+              eMember={eMember}
+              userIsOrganizer={userIsOrganizer}
+              onClickDeleteEventMember={props.onClickDeleteEventMember}
+              event={event}/>
           </EventMember>
         );
       })}
@@ -426,21 +407,10 @@ const SingleEvent = ({ event, user, userIsOrganizer, userIsMember, claimEventMem
             <ClaimBtnWrapper>
               <ClaimBtn onClick={claimEventMember.bind(null, eMember.eventMemberId)}>CLAIM</ClaimBtn>
             </ClaimBtnWrapper>
-            <Job>
-              {/* Event Member Title */}
-              <JobTitle>{eMember.jobTitle}</JobTitle>
-              {userIsOrganizer ?
-              <div>
-                <EditEventMember><i className="fa fa-pencil" aria-hidden="true"></i> Edit</EditEventMember>
-                <DeleteEventMember onClick={props.onClickDeleteEventMember.bind(null, eMember.eventMemberId)}><i className="fa fa-times" aria-hidden="true"></i> Remove</DeleteEventMember>
-              </div>
-              : ''}
-              {/* Start Time - End Time */}
-              <JobTime>{`${formatTime(moment(eMember.startTime).format('HH:mm A'))} - ${formatTime(moment(eMember.endTime).format('HH:mm A'))}`}</JobTime>
-
-              {/* Event Member Description */}
-              <JobDescription>{eMember.description}</JobDescription>
-            </Job>
+            <JobContainer
+              eMember={eMember}
+              userIsOrganizer={userIsOrganizer}
+              event={event}/>
           </EventMember>
         );
       })}
@@ -461,22 +431,10 @@ const SingleEvent = ({ event, user, userIsOrganizer, userIsMember, claimEventMem
             <ClaimBtnWrapper>
               <ClaimedBtn disabled="true">CLAIMED</ClaimedBtn>
             </ClaimBtnWrapper>
-            <Job>
-              {/* Event Member Title */}
-              <JobTitle>{eMember.jobTitle}</JobTitle>
-              {userIsOrganizer ?
-              <div>
-                <EditEventMember><i className="fa fa-pencil" aria-hidden="true"></i> Edit</EditEventMember>
-                <DeleteEventMember onClick={props.onClickDeleteEventMember.bind(null, eMember.eventMemberId)}><i className="fa fa-times" aria-hidden="true"></i> Remove</DeleteEventMember>
-              </div>
-              : ''}
-
-              {/* Start Time - End Time */}
-              <JobTime>{`${formatTime(moment(eMember.startTime).format('HH:mm A'))} - ${formatTime(moment(eMember.endTime).format('HH:mm A'))}`}</JobTime>
-
-              {/* Event Member Description */}
-              <JobDescription>{eMember.description}</JobDescription>
-            </Job>
+            <JobContainer
+              eMember={eMember}
+              userIsOrganizer={userIsOrganizer}
+              event={event}/>
           </EventMember>
         );
       })}

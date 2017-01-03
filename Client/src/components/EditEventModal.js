@@ -1,12 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
+import Select from 'react-select';
+import unitedStatesList from '../helpers/unitedStatesList';
 
 const Wrapper = styled.div`
   background-color: #fff;
   color: #fff;
   background-color: #2980B9;
-  background-image: ${props => props.editing ? 'none' : 'linear-gradient(to bottom, #2b678e, #2980B9 1.5%, #2980B9)'};
   width: 100%;
   padding: 20px;
   width: 100%
@@ -127,50 +128,92 @@ const ButtonWrapper = styled.div`
   margin-top: 15px;
 `;
 
+const CenterAlign = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 30vw;
+  margin: 0 auto;
+`;
+
 const formatDefaultInputTime = (time) => {
   return moment(time).format('HH:mm');
 };
 
-const NewEventMember = ({ eMember, ...props }) => (
+const formatDefaultInputDate = (date) => {
+  return date.split('T')[0];
+}
+
+const EditEventModal = ({ event, ...props }) => (
   <Wrapper editing={props.editing}>
     <TitleWrapper>
-      <FormTitle>{props.editing ? 'Edit' : 'New'} Position</FormTitle>
+      <FormTitle>Edit Event</FormTitle>
       <CloseIcon onClick={props.onCancel} className="fa fa-times-circle-o" aria-hidden="true"></CloseIcon>
     </TitleWrapper>
 
     <FormWrapper>
       <Center>
-        <Label>Job Title</Label>
-        <FormError>{props.validationErrors.get('jobTitle')}</FormError>
-        <Input type="text" onChange={props.onChange.bind(null, 'jobTitle')} defaultValue={eMember ? eMember.jobTitle : ''}/>
+        <Label>Name</Label>
+        <FormError>{props.validationErrors.get('name')}</FormError>
+        <Input type="text" onChange={props.onChange.bind(null, 'name')} defaultValue={event.name}/>
       </Center>
 
       <Center>
         <Label>Description</Label>
         <FormError>{props.validationErrors.get('description')}</FormError>
-        <DescriptionInput onChange={props.onChange.bind(null, 'description')} defaultValue={eMember ? eMember.description : ''}/>
+        <DescriptionInput onChange={props.onChange.bind(null, 'description')} defaultValue={event.description}/>
+      </Center>
+
+      <CenterAlign>
+        <TimeWrapper>
+          <Label>Address</Label>
+          <FormError>{props.validationErrors.get('address')}</FormError>
+          <Input type="text" onChange={props.onChange.bind(null, 'address')} defaultValue={event.address}/>
+        </TimeWrapper>
+
+        <TimeWrapper>
+          <Label>City</Label>
+          <FormError>{props.validationErrors.get('city')}</FormError>
+          <Input type="text" onChange={props.onChange.bind(null, 'city')} defaultValue={event.city}/>
+        </TimeWrapper>
+      </CenterAlign>
+
+      <Center>
+        <Label>State</Label>
+        <Select style={{marginBottom: '5px', fontSize: '16px'}}
+          name="event-state"
+          value={event.state}
+          options={unitedStatesList}
+          onChange={props.onChangeState}/>
+      </Center>
+
+      <Center>
+        <Label>Date</Label>
+        <FormError>{props.validationErrors.get('date')}</FormError>
+        <Input type="date" onChange={props.onChange.bind(null, 'date')} defaultValue={formatDefaultInputDate(event.date)}/>
       </Center>
 
       <TimeInputs>
         <TimeWrapper>
           <Label>Start Time</Label>
           <FormError>{props.validationErrors.get('startTime')}</FormError>
-          <Input type="time" onChange={props.onChange.bind(null, 'startTime')} defaultValue={eMember ? formatDefaultInputTime(eMember.startTime) : ''}/>
+          <Input type="time" onChange={props.onChange.bind(null, 'startTime')} defaultValue={formatDefaultInputTime(event.startTime)}/>
         </TimeWrapper>
 
         <TimeWrapper>
           <Label>End Time</Label>
           <FormError>{props.validationErrors.get('endTime')}</FormError>
-          <Input type="time" onChange={props.onChange.bind(null, 'endTime')} defaultValue={eMember ? formatDefaultInputTime(eMember.endTime) : ''}/>
+          <Input type="time" onChange={props.onChange.bind(null, 'endTime')} defaultValue={formatDefaultInputTime(event.endTime)}/>
         </TimeWrapper>
       </TimeInputs>
 
       <ButtonWrapper>
-        <AddBtn type="button" onClick={props.editing ? props.onSubmitEdit : props.onSubmit}>{props.editing ? 'Save' : 'Add'}</AddBtn>
+        <AddBtn type="button" onClick={props.onSubmit}>Save</AddBtn>
         <CancelBtn type="button" onClick={props.onCancel}>Cancel</CancelBtn>
       </ButtonWrapper>
     </FormWrapper>
   </Wrapper>
 );
 
-export default NewEventMember;
+export default EditEventModal;

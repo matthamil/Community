@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/actionCreators';
 import NewEventMember from '../components/NewEventMember';
+import moment from 'moment';
 
 class NewEventMemberContainer extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      eventId: null,
       jobTitle: '',
       description: '',
       startTime: null,
@@ -22,6 +22,7 @@ class NewEventMemberContainer extends Component {
     this.handleOnChangeFormInput = this.handleOnChangeFormInput.bind(this);
     this.handleOnClickCancel = this.handleOnClickCancel.bind(this);
     this.validateTime = this.validateTime.bind(this);
+    this.handleOnSubmitEdit = this.handleOnSubmitEdit.bind(this);
   }
 
   handleOnChangeFormInput(field, e) {
@@ -32,20 +33,20 @@ class NewEventMemberContainer extends Component {
 
   handleValidateForm() {
     const validationErrors = new Map();
-    if (this.state.jobTitle.trim() === '') {
+    if (this.state.jobTitle.trim() === '' && this.props.eMember === undefined) {
       validationErrors.set('jobTitle', 'Required.');
     }
     if (this.state.description.trim() === '') {
       validationErrors.set('description', 'Required.');
     }
-    if (this.state.startTime === null) {
+    if (this.state.startTime === null && this.props.eMember === undefined) {
       validationErrors.set('startTime', 'Required.');
-    } else if (this.validateTime().size) {
+    } else if (this.props.eMember === undefined || this.validateTime().size) {
       this.validateTime().forEach((value, key) => {
         validationErrors.set(key, value);
       });
     }
-    if (this.state.endTime === null) {
+    if (this.state.endTime === null && this.props.eMember === undefined) {
       validationErrors.set('endTime', 'Required.');
     }
 
@@ -62,10 +63,11 @@ class NewEventMemberContainer extends Component {
     const eventEndHour = parseInt(this.props.event.endTime.split('T')[1].split(':')[0], 10);
     const eventEndMinute = parseInt(this.props.event.endTime.split('T')[1].split(':')[1], 10);
 
-    const startHour = parseInt(this.state.startTime.split(':')[0], 10);
-    const startMinute = parseInt(this.state.startTime.split(':')[1], 10);
-    const endHour = parseInt(this.state.endTime.split(':')[0], 10);
-    const endMinute = parseInt(this.state.endTime.split(':')[1], 10);
+    const { eMember } = this.props;
+    const startHour = eMember ? parseInt(eMember.startTime.split('T')[1].split(':')[0], 10) : parseInt(this.state.startTime.split(':')[0], 10);
+    const startMinute = eMember ? parseInt(eMember.startTime.split('T')[1].split(':')[1], 10) : parseInt(this.state.startTime.split(':')[1], 10);
+    const endHour = eMember ? parseInt(eMember.endTime.split('T')[1].split(':')[0], 10) : parseInt(this.state.endTime.split(':')[0], 10);
+    const endMinute = eMember ? parseInt(eMember.endTime.split('T')[1].split(':')[1], 10) : parseInt(this.state.endTime.split(':')[1], 10);
 
     const validationErrors = new Map();
 
@@ -95,7 +97,7 @@ class NewEventMemberContainer extends Component {
     if (formValidated) {
       setTimeout(() => {
         this.props.postEventMember({
-          eventId: this.props.event.eventId,
+          eventId: this.props.eventId,
           jobTitle: this.state.jobTitle.trim(),
           description: this.state.description.trim(),
           startTime: `${this.props.event.date.split('T')[0]}${'T'.concat(this.state.startTime)}:00`,
@@ -112,13 +114,45 @@ class NewEventMemberContainer extends Component {
     this.props.onClickCancel();
   }
 
+  handleOnSubmitEdit() {
+    const formValidated = this.handleValidateForm();
+    if (formValidated) {
+      const { eventMemberId } = this.props.eMember;
+      this.props.patchEventMemberById(eventMemberId, {
+        jobTitle: this.state.jobTitle.trim(),
+        description: this.state.description.trim(),
+        startTime: this.state.startTime ? `${this.props.event.date.split('T')[0]}${'T'.concat(this.state.startTime)}:00` : this.props.eMember.startTime,
+        endTime: this.state.endTime ? `${this.props.event.date.split('T')[0]}${'T'.concat(this.state.endTime)}:00` : this.props.eMember.endTime,
+        chatMuted: false,
+        attendeePoints: 250 // Feature planned to be implemented in version 2
+      });
+      this.props.onClickCancel();
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.eMember) {
+      const { eMember } = nextProps;
+      this.setState({
+        jobTitle: eMember.jobTitle,
+        description: eMember.description,
+        startTime: moment(eMember.startTime).format('HH:mm'),
+        endTime: moment(eMember.startTime).format('HH:mm'),
+        validationErrors: new Map()
+      });
+    }
+  }
+
   render() {
     return (
       <NewEventMember
+        eMember={this.props.eMember}
+        editing={this.props.editing}
         validationErrors={this.state.validationErrors}
         onChange={this.handleOnChangeFormInput}
         onCancel={this.handleOnClickCancel}
-        onSubmit={this.handleOnSubmit}/>
+        onSubmit={this.handleOnSubmit}
+        onSubmitEdit={this.handleOnSubmitEdit}/>
     );
   }
 }
