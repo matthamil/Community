@@ -83,7 +83,7 @@ const TimeAndAddress = styled.div`
 `;
 
 const MemberOfEvent = styled.div`
-  margin: 40px 0;
+  margin: 20px 0;
   width: 30%;
   display: flex;
   flex-direction: row;
@@ -96,7 +96,7 @@ const MemberOfEvent = styled.div`
 `;
 
 const NotAMember = styled.div`
-  margin: 40px 0;
+  margin: 20px 0;
   width: 40%;
   display: flex;
   flex-direction: row;
@@ -145,33 +145,6 @@ const ClaimBtn = styled.button`
   display: block;
 `;
 
-// const DeleteEventMember = styled.span`
-//   margin-top: 2px;
-//   color: #b9b9b9;
-//   border-radius: 3px;
-//   letter-spacing: 1px;
-//   display: inline-block;
-//   text-transform: uppercase;
-//   &:hover {
-//     cursor: pointer;
-//     color: #E74C3C;
-//   }
-// `;
-// const EditEventMember = styled.span`
-//   margin-top: 2px;
-//   color: #b9b9b9;
-//   border-radius: 3px;
-//   letter-spacing: 1px;
-//   display: inline-block;
-//   text-transform: uppercase;
-//   margin-right: 5px;
-//   &:hover {
-//     cursor: pointer;
-//     color: rgb(35, 218, 91);
-//   }
-// `;
-
-
 const UnclaimBtn = styled.button`
   margin-top: 3px;
   color: #fff;
@@ -207,25 +180,6 @@ const EventMember = styled.div`
   display: flex;
   flex-direction: row;
 `;
-
-// const Job = styled.div`
-//   padding-left: 25px;
-// `;
-
-// const JobTitle = styled.h3`
-//   font-weight: bold;
-//   margin: 0;
-//   color: #3498DB;
-// `;
-
-// const JobTime = styled.h4`
-//   font-size: 1em;
-//   margin: 5px 0 10px 0;
-// `;
-
-// const JobDescription = styled.p`
-//   max-width: 90%;
-// `;
 
 const AdminOptions = styled.div`
   float: right;

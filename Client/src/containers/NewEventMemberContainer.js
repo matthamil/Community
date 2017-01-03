@@ -36,12 +36,12 @@ class NewEventMemberContainer extends Component {
     if (this.state.jobTitle.trim() === '' && this.props.eMember === undefined) {
       validationErrors.set('jobTitle', 'Required.');
     }
-    if (this.state.description.trim() === '') {
+    if (this.state.description.trim() === '' && this.props.eMember === undefined) {
       validationErrors.set('description', 'Required.');
     }
     if (this.state.startTime === null && this.props.eMember === undefined) {
       validationErrors.set('startTime', 'Required.');
-    } else if (this.props.eMember === undefined || this.validateTime().size) {
+    } else if (this.validateTime().size) {
       this.validateTime().forEach((value, key) => {
         validationErrors.set(key, value);
       });
@@ -64,10 +64,10 @@ class NewEventMemberContainer extends Component {
     const eventEndMinute = parseInt(this.props.event.endTime.split('T')[1].split(':')[1], 10);
 
     const { eMember } = this.props;
-    const startHour = eMember ? parseInt(eMember.startTime.split('T')[1].split(':')[0], 10) : parseInt(this.state.startTime.split(':')[0], 10);
-    const startMinute = eMember ? parseInt(eMember.startTime.split('T')[1].split(':')[1], 10) : parseInt(this.state.startTime.split(':')[1], 10);
-    const endHour = eMember ? parseInt(eMember.endTime.split('T')[1].split(':')[0], 10) : parseInt(this.state.endTime.split(':')[0], 10);
-    const endMinute = eMember ? parseInt(eMember.endTime.split('T')[1].split(':')[1], 10) : parseInt(this.state.endTime.split(':')[1], 10);
+    const startHour = this.state.startTime ? parseInt(this.state.startTime.split(':')[0], 10) : parseInt(eMember.startTime.split('T')[1].split(':')[0], 10);
+    const startMinute = this.state.startTime ? parseInt(this.state.startTime.split(':')[1], 10) : parseInt(eMember.startTime.split('T')[1].split(':')[1], 10);
+    const endHour = this.state.endTime ? parseInt(this.state.endTime.split(':')[0], 10) : parseInt(eMember.endTime.split('T')[1].split(':')[0], 10);
+    const endMinute = this.state.endTime ? parseInt(this.state.endTime.split(':')[1], 10) : parseInt(eMember.endTime.split('T')[1].split(':')[1], 10);
 
     const validationErrors = new Map();
 
@@ -79,6 +79,8 @@ class NewEventMemberContainer extends Component {
     // eslint-disable-next-line no-mixed-operators
     } else if (startHour === eventStartHour && endMinute > eventEndMinute) {
       validationErrors.set('endTime', 'Can\'t end after the event is over.' )
+    } else if (endHour > eventEndHour) {
+      validationErrors.set('endTime', 'Position can\'t end after the event.');
     } else if (startHour > endHour) {
       validationErrors.set('startTime', 'Must be before the end time.');
     // eslint-disable-next-line no-mixed-operators
@@ -119,8 +121,8 @@ class NewEventMemberContainer extends Component {
     if (formValidated) {
       const { eventMemberId } = this.props.eMember;
       this.props.patchEventMemberById(eventMemberId, {
-        jobTitle: this.state.jobTitle.trim(),
-        description: this.state.description.trim(),
+        jobTitle: this.state.jobTitle.trim() ? this.state.jobTitle.trim() : this.props.eMember.jobTitle,
+        description: this.state.description.trim() ? this.state.description.trim() : this.props.eMember.description,
         startTime: this.state.startTime ? `${this.props.event.date.split('T')[0]}${'T'.concat(this.state.startTime)}:00` : this.props.eMember.startTime,
         endTime: this.state.endTime ? `${this.props.event.date.split('T')[0]}${'T'.concat(this.state.endTime)}:00` : this.props.eMember.endTime,
         chatMuted: false,
