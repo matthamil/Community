@@ -48,11 +48,12 @@ const EventItemWrapper = styled.div`
   borderRadius: ${calculateBorderRadius};
   border-bottom: ${props => props.lastItem ? '' : 'none'};
   background-color: #fff;
-  width: ${props => props.orgEvent ? '' : '75vw'};
+  width: ${props => props.orgEvent ? '' : '75%'};
+  max-width: 960px;
   margin: 0 auto;
 
   @media (max-width: 600px) {
-    width: 100vw;
+    width: 100%;
   }
 `;
 
@@ -109,7 +110,9 @@ const EventItem = ({ event, firstItem, lastItem, orgEvent = false }) => (
       {_formatTime(event)}
     </TimeBlock>
     <div>
-      {orgEvent === false ? <OrganizationName>{event.organization.name}</OrganizationName> : ''}
+      {orgEvent === false ?
+      <OrganizationName>{event.organization.name}</OrganizationName>
+      : ''}
       <EventName
         to={{ pathname: `events/${event.eventId}`, orgEvent }}>
         {event.name}

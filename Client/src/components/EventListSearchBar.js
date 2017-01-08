@@ -2,32 +2,42 @@ import React, { PropTypes } from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
+  width: 100%;
+  position: absolute;
+  transform: translateY(-30px);
+
+  @media (max-width: 950px) {
+    transform: none;
+  }
+`;
+
+const InnerWrapper = styled.div`
   width: 75vw;
+  max-width: 960px;
   padding: 10px;
   margin: 0 auto;
   background-color: #0f1721;
-  position: absolute;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  transform: translateY(-30px) translateX(12.5vw);
 
   @media (max-width: 950px) {
     flex-direction: column;
-    position: static;
-    transform: none;
-    width: 100vw;
+    width: 100%;
     padding: 20px 10px;
   }
 `;
 
 const Search = styled.input`
   height: 40px;
-  width: 30vw;
+  width: 300px;
   border: none;
   padding: 0 15px;
   border-radius: 2px 0 0 2px;
+  &:focus {
+    outline: 0;
+  }
 
   @media (max-width: 950px) {
     width: 60vw;
@@ -100,6 +110,10 @@ const Type = styled.li`
   padding: 10px 20px;
   background-color: ${props => props.selected ? 'rgba(255,255,255,.2)!important' : ''};
   box-shadow: ${props => props.selected ? 'inset -1px 1px 2px 0 rgba(0,0,0,.54)' : ''};
+  user-select: none;
+  &:hover {
+    cursor: pointer;
+  }
   @media (max-width: 950px) {
     width: 40vw;
     text-align: center;
@@ -114,6 +128,7 @@ const SearchLabel = styled.label`
 
 const EventListSearchBar = (props) => (
   <Wrapper>
+  <InnerWrapper>
     <SearchWrapper>
       <Search type="text" onChange={props.onChangeSearch}/>
       <SearchButton type="button" onClick={props.onSubmit}><i className="fa fa-search" aria-hidden="true"></i></SearchButton>
@@ -132,6 +147,7 @@ const EventListSearchBar = (props) => (
       <Type selected={props.searchType === 'organization'} onClick={props.onChangeSearchType.bind(null, 'organization')}>Organizations</Type>
     </TypeOptions>
 
+  </InnerWrapper>
   </Wrapper>
 );
 
