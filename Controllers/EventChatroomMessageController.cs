@@ -103,7 +103,7 @@ namespace Community.Controllers
         }
 
         /**
-         * POST /eventchatroommessage/
+         * POST /eventchatroommessage/3
          * Purpose: Posts a new message to an event chatroom
          * Args:
          *      CreateEventChatroomMessageViewModel message - new message from the client
@@ -111,13 +111,14 @@ namespace Community.Controllers
          *      EventChatroomMessageViewModel
          */
         [HttpPost]
-        [Route("[controller]")]
+        [Route("[controller]/{id}")]
         // [Authorize]
-        public async Task<IActionResult> Post([FromBody]CreateEventChatroomMessageViewModel message)
+        public async Task<IActionResult> Post([FromRoute]int id, [FromBody]CreateEventChatroomMessageViewModel message)
         {
             if (ModelState.IsValid)
             {
-                EventMember eventMember = await _context.EventMember.Include(m => m.ApplicationUser).Where(e => e.EventMemberId == message.EventMemberId).SingleOrDefaultAsync();
+                var user = await GetCurrentUserAsync();
+                EventMember eventMember = await _context.EventMember.Include(m => m.ApplicationUser).Where(e => e.EventMemberId == id && e.ApplicationUser.Id == user.Id).SingleOrDefaultAsync();
                 if (eventMember == null) return NotFound();
 
                 EventChatroomMessage newMessage = new EventChatroomMessage()
