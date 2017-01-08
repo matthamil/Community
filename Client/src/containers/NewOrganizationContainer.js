@@ -21,6 +21,7 @@ class NewOrganizationContainer extends Component {
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
     this.handleOnChangeFormInput = this.handleOnChangeFormInput.bind(this);
     this.handleOnChangeState = this.handleOnChangeState.bind(this);
+    this.handleOnCancel = this.handleOnCancel.bind(this);
   }
 
   handleOnChangeFormInput(field, e) {
@@ -70,10 +71,14 @@ class NewOrganizationContainer extends Component {
     }
   }
 
+  handleOnCancel() {
+    browserHistory.push('/organizations/');
+  }
+
   componentWillMount() {
-    if (!this.props.loggedIn) {
-      browserHistory.push('/');
-    }
+    // if (!this.props.loggedIn) {
+    //   browserHistory.push('/');
+    // }
   }
 
   render() {
@@ -82,6 +87,7 @@ class NewOrganizationContainer extends Component {
         validationErrors={this.state.validationErrors}
         onChange={this.handleOnChangeFormInput}
         onSubmit={this.handleOnSubmit}
+        onCancel={this.handleOnCancel}
         selectedState={this.state.state}
         onChangeState={this.handleOnChangeState}/>
     );

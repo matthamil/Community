@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/actionCreators';
-import { browserHistory } from 'react-router';
 import UserOrganizationsItemListContainer from './UserOrganizationsItemListContainer';
 import userOrganizationsEventsSelector from '../selectors/userOrganizationEventsSelector';
 

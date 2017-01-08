@@ -53,8 +53,18 @@ namespace Community.Controllers
             // Uncomment for testing
             // ApplicationUser user = await context.ApplicationUser.SingleAsync(u => u.FirstName == "Matt");
 
-            EventMember eMember = await _context.EventMember.Include(e => e.ApplicationUser).Where(e => e.ApplicationUser == user && e.EventId == eventId).SingleOrDefaultAsync();
-            return eMember != null ? true : false;
+            EventMember eMember = await _context.EventMember.Include(e => e.ApplicationUser)
+                .Include(e => e.Event)
+                .Where(e => e.ApplicationUser == user && e.EventId == eventId)
+                .SingleOrDefaultAsync();
+
+            // If the user is the event organizer, eventForChatroom should not be null.
+            Event eventForChatroom = await _context.Event.Include(e => e.Organization)
+                .ThenInclude(o => o.Organizer)
+                .Where(e => e.EventId == eventId && e.Organization.Organizer.Id == user.Id)
+                .SingleOrDefaultAsync();
+
+            return (eMember != null || eventForChatroom != null);
         }
 
         /**
@@ -93,7 +103,7 @@ namespace Community.Controllers
         }
 
         /**
-         * POST /eventchatroommessage/
+         * POST /eventchatroommessage/3
          * Purpose: Posts a new message to an event chatroom
          * Args:
          *      CreateEventChatroomMessageViewModel message - new message from the client
@@ -101,13 +111,14 @@ namespace Community.Controllers
          *      EventChatroomMessageViewModel
          */
         [HttpPost]
-        [Route("[controller]")]
+        [Route("[controller]/{id}")]
         // [Authorize]
-        public async Task<IActionResult> Post([FromBody]CreateEventChatroomMessageViewModel message)
+        public async Task<IActionResult> Post([FromRoute]int id, [FromBody]CreateEventChatroomMessageViewModel message)
         {
             if (ModelState.IsValid)
             {
-                EventMember eventMember = await _context.EventMember.Include(m => m.ApplicationUser).Where(e => e.EventMemberId == message.EventMemberId).SingleOrDefaultAsync();
+                var user = await GetCurrentUserAsync();
+                EventMember eventMember = await _context.EventMember.Include(m => m.ApplicationUser).Where(e => e.EventMemberId == id && e.ApplicationUser.Id == user.Id).SingleOrDefaultAsync();
                 if (eventMember == null) return NotFound();
 
                 EventChatroomMessage newMessage = new EventChatroomMessage()

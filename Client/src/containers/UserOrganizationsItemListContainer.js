@@ -2,10 +2,6 @@ import React, { Component } from 'react';
 import UserOrganizationsItemList from '../components/UserOrganizationsItemList';
 
 class UserOrganizationsItemListContainer extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <UserOrganizationsItemList
