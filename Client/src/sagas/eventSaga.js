@@ -26,6 +26,7 @@ function* loadEventById({ id }) {
     yield put(actions.getEventByIdSuccess(data));
   } catch (error) {
     yield put(actions.getEventByIdFailure(error));
+    browserHistory.push(`/404/`);
   }
 }
 export function* watchGetEventById() {
@@ -38,7 +39,7 @@ export function* watchGetEventById() {
 function* loadEventsByOrganizationId({ id }) {
   try {
     const { data } = yield call(axios, `/event/org/${id}`);
-    yield put(actions.getEventsByOrganizationIdSuccess(data));
+    yield put(actions.getEventsByOrganizationIdSuccess(data, id));
   } catch (error) {
     yield put(actions.getEventsByOrganizationIdFailure(error));
   }
@@ -100,6 +101,7 @@ function* deleteEvent({ id }) {
   try {
     yield call(axios.delete, `/event/${id}`);
     yield put(actions.deleteEventSuccess());
+    browserHistory.push(`/events/`);
   } catch (error) {
     yield put(actions.deleteEventFailure(error));
   }

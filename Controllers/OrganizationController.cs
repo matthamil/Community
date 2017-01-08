@@ -109,7 +109,7 @@ namespace Community.Controllers
         [Route("[controller]/organizerId/{id}")]
         public async Task<IActionResult> OrganizerId([FromRoute]string id)
         {
-            Organization[] organizations = await context.Organization.Include(o => o.Organizer).Where(o => o.Organizer.Id == id).ToArrayAsync();
+            Organization[] organizations = await context.Organization.Include(o => o.Organizer).Where(o => o.Organizer.Id == id && o.IsActive == true).ToArrayAsync();
             if (organizations == null) return NotFound();
             List<OrganizationViewModel> model = new List<OrganizationViewModel>();
             foreach (Organization org in organizations)
@@ -167,33 +167,32 @@ namespace Community.Controllers
          * Return:
          *      OrganizationViewModel
          */
-        [HttpPost]
+        [HttpPatch]
         [Route("[controller]/{id}")]
         // [Authorize]
-        public async Task<IActionResult> Patch([FromRoute]int id, [FromBody]OrganizationViewModel organization)
+        public async Task<IActionResult> Patch([FromRoute]int id, [FromBody]EditOrganizationViewModel organization)
         {
-            // Confirm that the logged in user is the organizer
-            var user = await GetCurrentUserAsync();
-
-            // For testing purposes
-            // ApplicationUser user = await context.ApplicationUser.SingleOrDefaultAsync(u => u.FirstName == "Matt");
-
-            Organization originalOrg = await context.Organization.Include(o => o.Organizer).SingleOrDefaultAsync(o => o.OrganizationId == id);
-
-            // Organization must be organized by the current user
-            if (originalOrg == null || originalOrg.Organizer != user) {
-                return BadRequest(new
-                {
-                    Error = $"Can't find organization with id {organization.OrganizationId} organized by user {user.FirstName} {user.LastName} with user id {user.Id}.",
-                    StatusCode = "400"
-                });
-            }
-
             if (ModelState.IsValid)
             {
+                // Confirm that the logged in user is the organizer
+                var user = await GetCurrentUserAsync();
+
+                // For testing purposes
+                // ApplicationUser user = await context.ApplicationUser.SingleOrDefaultAsync(u => u.FirstName == "Matt");
+
+                Organization originalOrg = await context.Organization.Include(o => o.Organizer).Where(o => o.Organizer.Id == user.Id).SingleOrDefaultAsync();
+
+                // Organization must be organized by the current user
+                if (originalOrg == null) {
+                    return BadRequest(new
+                    {
+                        Error = $"Can't find organization with id {id} organized by user {user.FirstName} {user.LastName} with user id {user.Id}.",
+                        StatusCode = "400"
+                    });
+                }
+
                 originalOrg.Name = organization.Name;
                 originalOrg.Description = organization.Description;
-                originalOrg.IsActive = organization.IsActive;
                 originalOrg.City = organization.City;
                 originalOrg.State = organization.State;
 
@@ -203,7 +202,6 @@ namespace Community.Controllers
 
                 return Json(new OrganizationViewModel(originalOrg, new ApplicationUserViewModel(user)));
             }
-
             return Json(ModelState);
         }
 

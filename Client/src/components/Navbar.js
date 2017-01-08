@@ -60,6 +60,7 @@ const LoginButton = styled.button`
   align-items: center;
   justify-content: space-between;
   transition: background-color 0.15s ease-out;
+  border-radius: 3px;
 
   &:hover {
     background-color: #3498DB;
@@ -134,7 +135,7 @@ const Navbar = ({ user, userOrganizations, loggedIn }) => (
             <LoginIcon>
               <i className="fa fa-users" aria-hidden="true"></i>
             </LoginIcon>
-            <span>Your Organizations</span>
+            <span>Organizations</span>
           </LoginButton>
         </Link>
         : ''}
@@ -144,7 +145,7 @@ const Navbar = ({ user, userOrganizations, loggedIn }) => (
             <LoginIcon>
               <i className="fa fa-calendar" aria-hidden="true"></i>
             </LoginIcon>
-            <span>{window.screen.availWidth > 600 ? 'Your Events' : 'Events'}</span>
+            <span>Events</span>
           </LoginButton>
         </Link>
       </LoginRegisterWrapper>

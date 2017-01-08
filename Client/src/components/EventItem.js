@@ -30,7 +30,7 @@ const OrganizationName = styled.h3`
 
 const EventName = styled(Link)`
   font-weight: bold;
-  margin: 5px 0 0 0;
+  margin: ${props => props.orgEvent ? '' : '5px 0 0 0'};
   font-size: 2em;
   color: #000;
   &:hover {
@@ -48,7 +48,7 @@ const EventItemWrapper = styled.div`
   borderRadius: ${calculateBorderRadius};
   border-bottom: ${props => props.lastItem ? '' : 'none'};
   background-color: #fff;
-  width: 75vw;
+  width: ${props => props.orgEvent ? '' : '75vw'};
   margin: 0 auto;
 
   @media (max-width: 600px) {
@@ -77,8 +77,8 @@ const VolunteerCount = styled.h4`
 // Organization Name
 // Event Name
 // How many people are going
-//    Maybe show something like:
-//    2/6 volunteers
+//    Show something like:
+//    "2/6 volunteers"
 function _calculateNeededVolunteers(eventMembers) {
   // Return a string representing a fraction of total volunteers
   // that have signed up for an event
@@ -100,14 +100,20 @@ const _formatTime = (event) => (
   </Time>
 );
 
-const EventItem = ({ event, firstItem, lastItem }) => (
-  <EventItemWrapper firstItem={firstItem} lastItem={lastItem}>
+const EventItem = ({ event, firstItem, lastItem, orgEvent = false }) => (
+  <EventItemWrapper
+    firstItem={firstItem}
+    lastItem={lastItem}
+    orgEvent={orgEvent}>
     <TimeBlock>
       {_formatTime(event)}
     </TimeBlock>
     <div>
-      <OrganizationName>{event.organization.name}</OrganizationName>
-      <EventName to={`events/${event.eventId}`}>{event.name}</EventName>
+      {orgEvent === false ? <OrganizationName>{event.organization.name}</OrganizationName> : ''}
+      <EventName
+        to={{ pathname: `events/${event.eventId}`, orgEvent }}>
+        {event.name}
+      </EventName>
       {_calculateNeededVolunteers(event.eventMembers)}
     </div>
   </EventItemWrapper>
@@ -144,7 +150,8 @@ EventItem.propTypes = {
     endTime: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     eventMembers: PropTypes.arrayOf(PropTypes.object)
-  })
+  }),
+  orgEvent: PropTypes.bool
 };
 
 export default EventItem;

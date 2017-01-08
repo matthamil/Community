@@ -80,19 +80,19 @@ export default function organizationReducer(state = org, action) {
         loading: false,
         error: action.payload.error
       };
-    case a.PATCH_ORGANIZATION:
+    case a.PATCH_ORGANIZATION_BY_ID:
       return {
         ...state,
         loading: true,
         organization: action.payload.organization
       };
-    case a.PATCH_ORGANIZATION_SUCCESS:
+    case a.PATCH_ORGANIZATION_BY_ID_SUCCESS:
       return {
         ...state,
         loading: false,
-        organization: action.payload.organization
+        orgById: action.payload.organization
       };
-    case a.PATCH_ORGANIZATION_FAILURE:
+    case a.PATCH_ORGANIZATION_BY_ID_FAILURE:
       return {
         ...state,
         loading: false,
@@ -104,6 +104,15 @@ export default function organizationReducer(state = org, action) {
         loading: true,
         id: action.payload.id
       };
+    case a.DELETE_ORGANIZATION_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        userOrganizations: [
+          ...state.userOrganizations.slice(0, state.userOrganizations.indexOf(state.userOrganizations.find(x => x.organizationId === action.payload.id))),
+          ...state.userOrganizations.slice(state.userOrganizations.indexOf(state.userOrganizations.find(x => x.organizationId === action.payload.id)) + 1)
+        ]
+      }
     default:
       return state;
   }

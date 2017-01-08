@@ -24,6 +24,7 @@ function* loadOrganizationById({ id }) {
   try {
     const { data } = yield call(axios, `/organization/${id}`);
     yield put(actions.getOrganizationByIdSuccess(data));
+    yield put(actions.getEventsByOrganizationId(id));
   } catch (error) {
     yield put(actions.getOrganizationByIdFailure(error));
   }
@@ -68,15 +69,15 @@ export function* watchPostOrganization() {
 
 function* modifyOrganization({ id, organization }) {
   try {
-    const success = yield call(axios.patch, `/organization/${id}`, organization);
-    yield put(actions.patchOrganizationSuccess(success));
+    const { data } = yield call(axios.patch, `/organization/${id}`, organization);
+    yield put(actions.patchOrganizationByIdSuccess(data));
   } catch (error) {
-    yield put(actions.patchOrganizationFailure(error));
+    yield put(actions.patchOrganizationByIdFailure(error));
   }
 }
 export function* watchPatchOrganization() {
   while (true) {
-    const { payload } = yield take(a.PATCH_ORGANIZATION);
+    const { payload } = yield take(a.PATCH_ORGANIZATION_BY_ID);
     yield fork(modifyOrganization, payload);
   }
 }
@@ -84,7 +85,8 @@ export function* watchPatchOrganization() {
 function* deleteOrganization({ id }) {
   try {
     yield call(axios.delete, `/organization/${id}`);
-    yield put(actions.deleteOrganizationSuccess());
+    yield put(actions.deleteOrganizationSuccess(id));
+    browserHistory.push(`/organizations/`);
   } catch (error) {
     yield put(actions.deleteOrganizationFailure(error));
   }

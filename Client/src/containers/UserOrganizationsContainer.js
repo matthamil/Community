@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/actionCreators';
 import { browserHistory } from 'react-router';
+import UserOrganizationsItemListContainer from './UserOrganizationsItemListContainer';
+import userOrganizationsEventsSelector from '../selectors/userOrganizationEventsSelector';
 
 class UserOrganizationsContainer extends Component {
   // constructor(props) {
@@ -10,35 +12,31 @@ class UserOrganizationsContainer extends Component {
   // }
 
   componentWillMount() {
-    if (!this.props.loggedIn) {
-      browserHistory.push('/');
-    }
+    // if (!this.props.loggedIn) {
+    //   browserHistory.push('/');
+    // }
   }
 
   componentDidMount() {
-
-  }
-
-  componentDidUpdate() {
-    window.scrollTo(0, 0);
+    this.props.getEventList('Nashville', 'TN');
   }
 
   render() {
+    const { userOrganizations } = this.props;
     return (
       <div>
-        {this.props.userOrganizations.length > 0 ?
-          this.props.userOrganizations.map((org, index) => <pre key={index}>{JSON.stringify(org, null, ' ')}</pre>)
-        : <h1>You haven't started any organizations yet.</h1>}
+        <UserOrganizationsItemListContainer
+          userOrganizations={userOrganizations}/>
       </div>
     );
   }
 }
 
 const mapDispatchToProps = (dispatch) => bindActionCreators(actionCreators, dispatch);
-const mapStateToProps = ({ account, organization }) => ({
-  user: account.user,
-  userOrganizations: organization.userOrganizations,
-  loggedIn: account.loggedIn
+const mapStateToProps = (state) => ({
+  user: state.account.user,
+  userOrganizations: userOrganizationsEventsSelector(state),
+  loggedIn: state.account.loggedIn,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserOrganizationsContainer);
