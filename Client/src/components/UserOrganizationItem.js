@@ -48,6 +48,7 @@ const EditIcon = styled.i`
 const Name = styled(Link)`
   margin: 0;
   font-size: 2em;
+  font-weight: bold;
   color: #2C3E50;
   &:hover {
     text-decoration: none;

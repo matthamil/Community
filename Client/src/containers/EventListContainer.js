@@ -5,6 +5,7 @@ import * as actionCreators from '../actions/actionCreators';
 import NextEvent from '../components/NextEvent';
 import EventListSearchBar from '../components/EventListSearchBar';
 import ListView from '../components/ListView';
+import organizationAndEventsSelector from '../selectors/organizationAndEventsSelector';
 
 class EventListContainer extends Component {
   constructor(props) {
@@ -121,12 +122,12 @@ class EventListContainer extends Component {
   }
 }
 
-const mapStateToProps = ({ event, account, organization }) => ({
-  events: event.events,
-  nextEvent: event.nextEvent,
-  loading: event.loading,
-  user: account.user,
-  organizations: organization.organizations
+const mapStateToProps = (state) => ({
+  events: state.event.events,
+  nextEvent: state.event.nextEvent,
+  loading: state.event.loading,
+  user: state.account.user,
+  organizations: organizationAndEventsSelector(state)
 });
 const mapDispatchToProps = (dispatch) => bindActionCreators(actionCreators, dispatch);
 

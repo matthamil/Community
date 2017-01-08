@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import moment from 'moment';
 
 const Background = styled.div`
-  width: 100vw;
+  width: 100%;
   background-color: #2C3E50;
   padding: 10px 0 50px 0;
 
@@ -14,7 +14,8 @@ const Background = styled.div`
 `;
 
 const NextEventWrapper = styled.div`
-  max-width: 75vw;
+  width: 75vw;
+  max-width: 960px;
   margin: 0 auto;
   color: #FFF;
   padding: 20px;

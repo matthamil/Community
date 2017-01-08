@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import styled from 'styled-components';
 
 const NavWrapper = styled.nav`
-  width: 100vw;
+  width: 100%;
   height: 12.5vh;
   display: flex;
   align-items: center;
@@ -66,6 +66,11 @@ const LoginButton = styled.button`
     background-color: #3498DB;
   }
 
+  &:focus {
+    outline: 0;
+    background-color: #3498DB;
+  }
+
   @media (max-width: 650px) {
     height: 12.5vh;
     background: none;
@@ -89,30 +94,6 @@ const LoginIcon = styled.div`
   margin-right: 10px;
 `;
 
-const StartAnOrganizationLink = styled.div`
-  border: none;
-  background-color: #fff;
-  font-weight: 600;
-  color: #2C3E50;
-  height: 40px;
-  min-width: 80px;
-  padding: 5px 15px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  margin-right: 5px;
-
-  &:hover {
-    text-decoration: underline;
-  }
-
-  @media (max-width: 650px) {
-    font-size: 1.5em;
-    margin: 0;
-  }
-`;
-
 const Navbar = ({ user, userOrganizations, loggedIn }) => (
   <NavWrapper>
     <InnerNav>
@@ -120,16 +101,6 @@ const Navbar = ({ user, userOrganizations, loggedIn }) => (
       {/* If the user is logged in, hide the LogIn and Register buttons */
       loggedIn ?
       <LoginRegisterWrapper>
-        <Link to="/organizations/new" style={{ textDecoration: 'none' }}>
-          <StartAnOrganizationLink>
-            <LoginIcon>
-              <i className="fa fa-plus" style={{ color: '#E74C3C' }} aria-hidden="true"></i>
-            </LoginIcon>
-            <span>{window.screen.availWidth > 600 ? 'Start an Organization' : 'Organization'}</span>
-          </StartAnOrganizationLink>
-        </Link>
-
-        {userOrganizations.length > 0 ?
         <Link to="/organizations" style={{ textDecoration: 'none', marginRight: '5px' }}>
           <LoginButton>
             <LoginIcon>
@@ -138,7 +109,6 @@ const Navbar = ({ user, userOrganizations, loggedIn }) => (
             <span>Organizations</span>
           </LoginButton>
         </Link>
-        : ''}
 
         <Link to="/events" style={{ textDecoration: 'none' }}>
           <LoginButton>
