@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Community.Models.AccountViewModels;
 using Community.Models.EventMemberViewModels;
 
 namespace Community.Models.EventChatroomMessageViewModels
@@ -18,9 +19,24 @@ namespace Community.Models.EventChatroomMessageViewModels
             EventMember = new EventMemberViewModel(message.EventMember);
             Message = message.Message;
             Timestamp = message.DateCreated;
+            LastModified = message.LastModified;
         }
-        [Required]
+        public EventChatroomMessageViewModel(EventChatroomMessage message, ApplicationUser admin)
+        {
+            EventChatroomMessageId = message.EventChatroomMessageId;
+            Message = message.Message;
+            if (message.EventMember != null)
+            {
+                EventMember = new EventMemberViewModel(message.EventMember);
+            }
+            Timestamp = message.DateCreated;
+            LastModified = message.LastModified;
+            Admin = new ApplicationUserViewModel(admin);
+        }
+
         public EventMemberViewModel EventMember { get; set; }
+
+        public ApplicationUserViewModel Admin { get; set; }
 
         public int EventChatroomMessageId { get; set; }
 

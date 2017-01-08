@@ -53,8 +53,18 @@ namespace Community.Controllers
             // Uncomment for testing
             // ApplicationUser user = await context.ApplicationUser.SingleAsync(u => u.FirstName == "Matt");
 
-            EventMember eMember = await _context.EventMember.Include(e => e.ApplicationUser).Where(e => e.ApplicationUser == user && e.EventId == eventId).SingleOrDefaultAsync();
-            return eMember != null ? true : false;
+            EventMember eMember = await _context.EventMember.Include(e => e.ApplicationUser)
+                .Include(e => e.Event)
+                .Where(e => e.ApplicationUser == user && e.EventId == eventId)
+                .SingleOrDefaultAsync();
+
+            // If the user is the event organizer, eventForChatroom should not be null.
+            Event eventForChatroom = await _context.Event.Include(e => e.Organization)
+                .ThenInclude(o => o.Organizer)
+                .Where(e => e.EventId == eventId && e.Organization.Organizer.Id == user.Id)
+                .SingleOrDefaultAsync();
+
+            return (eMember != null || eventForChatroom != null);
         }
 
         /**
