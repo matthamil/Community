@@ -38,7 +38,6 @@ namespace Community.Models.OrganizationViewModels
 
         public string Name { get; set; }
 
-        [StringLength(255, ErrorMessage = "The organization description cannot exceed 255 characters. ")]
         public string Description { get; set; }
 
         public string City { get; set; }

@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import moment from 'moment';
+import { Link } from 'react-router';
 import styled from 'styled-components';
 import formatTime from '../helpers/formatTime';
 import JobContainer from '../containers/JobContainer';
@@ -44,7 +45,7 @@ const EventName = styled.h1`
   display: inline-block;
 `;
 
-const OrganizationName = styled.a`
+const OrganizationName = styled(Link)`
   margin: 5px 0;
   font-size: 1.75em;
   font-weight: 300;
@@ -265,7 +266,7 @@ const SingleEvent = ({ event, user, userIsOrganizer, userIsMember, claimEventMem
           Your Event
         </YourEvent>
       </AdminOptions> : ''}
-    <OrganizationName href={`/organizations/${event.organization.organizationId}`}>{event.organization.name}</OrganizationName>
+    <OrganizationName to={`/organizations/${event.organization.organizationId}`}>{event.organization.name}</OrganizationName>
     {userIsOrganizer ?
       <OptionsWrapper>
         <EditEvent onClick={props.onClickEditEvent}>

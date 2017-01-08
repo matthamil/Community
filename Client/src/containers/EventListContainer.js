@@ -25,6 +25,12 @@ class EventListContainer extends Component {
     this.filterEvents = this.filterEvents.bind(this);
   }
 
+  static defaultProps = {
+    nextEvent: {
+      eventMembers: []
+    }
+  }
+
   handleOnSubmit() {
 
   }

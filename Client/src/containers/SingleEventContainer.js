@@ -40,26 +40,24 @@ class SingleEventContainer extends Component {
   }
 
   handleOnClickAddPosition() {
-    this.setState({
-      addPosition: !this.state.addPosition
-    });
+    this.setState((prevState, props) => ({ addPosition: !prevState.addPosition }));
   }
 
   componentDidMount() {
-    const id = this.props.params.id;
+    const { id } = this.props.params;
     this.props.getEventById(id);
   }
 
-  componentDidUpdate() {
-    // window.scrollTo(0, 0);
-  }
-
   componentWillReceiveProps(nextProps) {
-    if (nextProps.eventById.eventMembers === undefined) return;
+    const hasEMembers = nextProps.eventById.eventMembers.length > 0;
+    if (hasEMembers) {
+      this.setState({
+        userEventMembers: nextProps.eventById.eventMembers.filter((eMember) => eMember.volunteer !== null && eMember.volunteer.id === nextProps.user.id),
+        unclaimedEventMembers: nextProps.eventById.eventMembers.filter((eMember) => eMember.volunteer === null),
+        claimedEventMembers: nextProps.eventById.eventMembers.filter((eMember) => eMember.volunteer !== null && eMember.volunteer.id !== nextProps.user.id),
+      });
+    }
     this.setState({
-      userEventMembers: nextProps.eventById.eventMembers.filter((eMember) => eMember.volunteer !== null && eMember.volunteer.id === nextProps.user.id),
-      unclaimedEventMembers: nextProps.eventById.eventMembers.filter((eMember) => eMember.volunteer === null),
-      claimedEventMembers: nextProps.eventById.eventMembers.filter((eMember) => eMember.volunteer !== null && eMember.volunteer.id !== nextProps.user.id),
       userIsMember: this._checkIfUserIsMemberOfEvent(nextProps),
       userIsOrganizer: this._checkIfUserIsOrganizer(nextProps)
     });
@@ -92,9 +90,7 @@ class SingleEventContainer extends Component {
   }
 
   handleOnClickEditEvent() {
-    this.setState({
-      isEditing: !this.state.isEditing
-    });
+    this.setState((prevState, props) => ({ isEditing: !prevState.isEditing }));
   }
 
   render() {

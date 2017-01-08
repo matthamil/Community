@@ -53,16 +53,16 @@ export const postOrganizationFailure = (error) => ({
   payload: { error }
 });
 
-export const patchOrganization = (organization) => ({
-  type: actions.PATCH_ORGANIZATION,
+export const patchOrganizationById = (id, organization) => ({
+  type: actions.PATCH_ORGANIZATION_BY_ID,
+  payload: { id, organization }
+});
+export const patchOrganizationByIdSuccess = (organization) => ({
+  type: actions.PATCH_ORGANIZATION_BY_ID_SUCCESS,
   payload: { organization }
 });
-export const patchOrganizationSuccess = (organization) => ({
-  type: actions.PATCH_ORGANIZATION_SUCCESS,
-  payload: { organization }
-});
-export const patchOrganizatoinFailure = (error) => ({
-  type: actions.PATCH_ORGANIZATION_FAILURE,
+export const patchOrganizationByIdFailure = (error) => ({
+  type: actions.PATCH_ORGANIZATION_BY_ID_FAILURE,
   payload: { error }
 });
 
@@ -70,8 +70,9 @@ export const deleteOrganization = (id) => ({
   type: actions.DELETE_ORGANIZATION,
   payload: { id }
 });
-export const deleteOrganizationSuccess = () => ({
-  type: actions.DELETE_ORGANIZATION_SUCCESS
+export const deleteOrganizationSuccess = (id) => ({
+  type: actions.DELETE_ORGANIZATION_SUCCESS,
+  payload: { id }
 });
 export const deleteOrganizationFailure = (error) => ({
   type: actions.DELETE_ORGANIZATION_FAILURE,
@@ -110,9 +111,9 @@ export const getEventsByOrganizationId = (id) => ({
   type: actions.GET_EVENTS_BY_ORGANIZATION_ID,
   payload: { id }
 });
-export const getEventsByOrganizationIdSuccess = (events) => ({
+export const getEventsByOrganizationIdSuccess = (events, id) => ({
   type: actions.GET_EVENTS_BY_ORGANIZATION_ID_SUCCESS,
-  payload: { events }
+  payload: { events, id }
 });
 export const getEventsByOrganizationIdFailure = (error) => ({
   type: actions.GET_EVENTS_BY_ORGANIZATION_ID_FAILURE,

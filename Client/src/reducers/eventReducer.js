@@ -49,7 +49,7 @@ export default function eventReducer(state = event, action) {
       return {
         ...state,
         loadingEventsByOrgId: false,
-        orgEvents: action.payload.events
+        orgEvents: action.payload.events,
       };
     case a.GET_EVENTS_BY_ORGANIZATION_ID_FAILURE:
       return {
