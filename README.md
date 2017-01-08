@@ -21,7 +21,7 @@ Community is a full-stack application helping connect volunteers with local nonp
 
 Community is my full-stack capstone project for [Nashville Software School](http://www.nashvillesoftwareschool).
 
-Community is a platform to connect volunteers with local nonprofit organizations. It serves nonprofit organizations by creating a platform where volunteers can sign up for events and event organizers can send all event-related communications through the application. Volunteers are rewarded for their service with badges and points. Stretch goals include offering local businesses the opportunity to create business accounts to sponsor events. Businesses can sponsor events by offering incentives to volunteers to help nonprofit organizations by offering discounts or coupons to those who contribute their time (e.g. a coffee shop offering a free cup of coffee for anyone who volunteers at an event).
+Community is a platform to connect volunteers with local nonprofit organizations. It serves nonprofit organizations by creating a platform where volunteers can sign up for events and event organizers can send all event-related communications through the application. Users can create accounts, search for events in their area, and attend events.
 
 This project is scheduled to be completed by Nashville Software School's Demo Day on January 10, 2017.
 
@@ -33,6 +33,7 @@ Clone or download the project to your machine and run the following commands:
 
 ```sh
 dotnet restore
+dotnet ef database update
 dotnet run
 ```
 
