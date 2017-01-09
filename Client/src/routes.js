@@ -8,6 +8,7 @@ import UserEventMemberListContainer from './containers/UserEventMemberListContai
 import NewOrganizationContainer from './containers/NewOrganizationContainer';
 import UserOrganizationsContainer from './containers/UserOrganizationsContainer';
 import NewEventContainer from './containers/NewEventContainer';
+import EventChatroomContainer from './containers/EventChatroomContainer';
 
 export default (
   <Route path="/" component={NavbarContainer}>
@@ -18,5 +19,6 @@ export default (
     <Route path="events" component={UserEventMemberListContainer}/>
     <Route path="events/new" component={NewEventContainer}/>
     <Route path="events/:id" component={SingleEventContainer}/>
+    <Route path="chat/:eventId" component={EventChatroomContainer}/>
   </Route>
 );

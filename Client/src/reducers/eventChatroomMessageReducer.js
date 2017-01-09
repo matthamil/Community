@@ -32,7 +32,8 @@ export default function eventChatroomMessageReducer(state = eventChatroom, actio
       return {
         ...state,
         loading: false,
-        message: action.payload.message
+        message: action.payload.message,
+        messages: [...state.messages, Object.assign({}, action.payload.message)].sort((a, b) => new Date(a.timestamp) < new Date(b.timestamp))
       };
     case a.POST_EVENT_CHATROOM_MESSAGE_FAILURE:
       return {

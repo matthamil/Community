@@ -314,14 +314,21 @@ namespace Community.Controllers
             // For testing purposes
             // ApplicationUser user = await context.ApplicationUser.SingleOrDefaultAsync(u => u.FirstName == "Steve");
 
-            EventMember eMember = await context.EventMember.Include(e => e.Event).ThenInclude(ev => ev.Organization).ThenInclude(o => o.Organizer).Where(e => e.EventMemberId == id && e.Event.Organization.Organizer.Id == user.Id).SingleOrDefaultAsync();
+            EventMember eMember = await context.EventMember.Include(e => e.Event)
+                .ThenInclude(ev => ev.Organization).ThenInclude(o => o.Organizer)
+                .Where(e => e.EventMemberId == id && e.Event.Organization.Organizer.Id == user.Id)
+                .SingleOrDefaultAsync();
 
             if (eMember == null) {
                 return new ForbidResult($"Can't delete event member with ID {id}");
             }
 
             // Delete event member and chatroom messages associated
-            EventChatroomMessage[] chatMessages = await context.EventChatroomMessage.Include(e => e.EventMember).Where(e => e.EventMember.ApplicationUser == user && e.EventMember.EventMemberId == eMember.EventMemberId).ToArrayAsync();
+            EventChatroomMessage[] chatMessages = await (
+                from messages in context.EventChatroomMessage
+                where messages.AuthorId == eMember.ApplicationUser.Id
+                select messages
+            ).ToArrayAsync();
 
             if (chatMessages != null)
             {

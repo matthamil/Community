@@ -295,7 +295,7 @@ namespace Community.Controllers
 
             // Delete all event members and chatroom messages associated with event
             EventMember[] eventMembers = await context.EventMember.Where(e => e.EventId == id).ToArrayAsync();
-            EventChatroomMessage[] chatMessages = await context.EventChatroomMessage.Include(e => e.EventMember).Where(e => e.EventMember.EventId == id).ToArrayAsync();
+            EventChatroomMessage[] chatMessages = await context.EventChatroomMessage.Where(e => e.EventId == id).ToArrayAsync();
             Event eventToDelete = await context.Event.Where(e => e.EventId == id).SingleOrDefaultAsync();
 
             context.RemoveRange(chatMessages);

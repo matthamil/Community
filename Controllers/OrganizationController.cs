@@ -241,7 +241,12 @@ namespace Community.Controllers
             // Remove all event members from future events from database
             EventMember[] eventMembers = await context.EventMember.Include(e => e.Event).ThenInclude(ev => ev.Organization).Where(e => e.Event.Organization.OrganizationId == id && e.Event.Date > DateTime.Now).ToArrayAsync();
             // Remove all chatroom messages from future events from database
-            EventChatroomMessage[] chatMessages = await context.EventChatroomMessage.Include(e => e.EventMember).ThenInclude(ev => ev.Event).ThenInclude(eve => eve.Organization).Where(e => e.EventMember.Event.Organization.OrganizationId == id && e.EventMember.Event.Date > DateTime.Now).ToArrayAsync();
+            EventChatroomMessage[] chatMessages = await (
+                from messages in context.EventChatroomMessage
+                from hostedEvent in context.Event.Include(e => e.Organization)
+                where messages.EventId == hostedEvent.EventId && hostedEvent.Organization.OrganizationId == originalOrg.OrganizationId
+                select messages
+            ).ToArrayAsync();
 
             context.RemoveRange(chatMessages);
             context.RemoveRange(eventMembers);
