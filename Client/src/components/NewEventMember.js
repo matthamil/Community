@@ -8,9 +8,9 @@ const Wrapper = styled.div`
   background-color: #2980B9;
   background-image: ${props => props.editing ? 'none' : 'linear-gradient(to bottom, #2b678e, #2980B9 1.5%, #2980B9)'};
   padding: 20px;
-  width: 100%
+  width: 100%;
   margin: 0 auto;
-  width: 75vw;
+  width: 100%;
   max-width: 960px;
   margin: 0 auto;
 

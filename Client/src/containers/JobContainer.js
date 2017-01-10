@@ -58,20 +58,8 @@ class JobContainer extends Component {
             isOpen={this.state.isEditing}
             contentLabel="Edit Job"
             onRequestClose={this.handleCloseModal}
-              style={{
-              overlay: {
-                backgroundColor: 'rgba(0,0,0,0.2)'
-              },
-              content: {
-                padding: '0',
-                bottom: '0 !important',
-                border: 'none',
-                left: '0',
-                right: '0',
-                margin: '0 auto',
-                maxWidth: '33vw'
-              }
-            }}>
+            className="responsiveModal"
+            overlayClassName="responsiveModal--overlay">
             <NewEventMemberContainer
               editing={true}
               eMember={this.props.eMember}
