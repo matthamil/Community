@@ -10,9 +10,9 @@
 
 /// <reference path="..\..\SignalR.Client.JS\Scripts\jquery-1.6.4.js" />
 /// <reference path="jquery.signalR.js" />
-(function ($, window, undefined) {
+(function ($, window, undefined) { // eslint-disable-line no-shadow-restricted-names
     /// <param name="$" type="jQuery" />
-    "use strict";
+    "use strict"; // eslint-disable-line strict
 
     if (typeof ($.signalR) !== "function") {
         throw new Error("SignalR: SignalR is not loaded. Please ensure jquery.signalR-x.js is referenced before ~/signalr/js.");

@@ -6,6 +6,7 @@ import SingleEvent from '../components/SingleEvent';
 import NewEventMemberContainer from './NewEventMemberContainer';
 import EditEventModalContainer from './EditEventModalContainer';
 import Collapse from 'react-collapse';
+import Loading from '../components/Loading';
 
 class SingleEventContainer extends Component {
   constructor(props) {
@@ -49,6 +50,7 @@ class SingleEventContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (nextProps.loading) { return; }
     const hasEMembers = nextProps.eventById.eventMembers.length > 0;
     if (hasEMembers) {
       this.setState({
@@ -94,10 +96,10 @@ class SingleEventContainer extends Component {
   }
 
   render() {
-    const { eventById, user } = this.props;
+    const { eventById, user, loading } = this.props;
     return (
       <div>
-        {Object.keys(eventById).length > 0 ?
+        {Object.keys(eventById).length > 0 && !loading ?
         <SingleEvent
           event={eventById}
           userIsOrganizer={this.state.userIsOrganizer}
@@ -125,10 +127,7 @@ class SingleEventContainer extends Component {
             onCancel={this.handleOnClickEditEvent}/>
         </SingleEvent>
         :
-        <div>
-          <i className="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
-          <span className="sr-only">Loading...</span>
-        </div>}
+        <Loading/>}
       </div>
     );
   }
@@ -137,7 +136,8 @@ class SingleEventContainer extends Component {
 const mapDispatchToProps = (dispatch) => bindActionCreators(actionCreators, dispatch);
 const mapStateToProps = ({ event, account }) => ({
   eventById: event.eventById,
-  user: account.user
+  user: account.user,
+  loading: event.loadingEventById
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleEventContainer);

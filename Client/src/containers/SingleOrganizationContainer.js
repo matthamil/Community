@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/actionCreators';
 import SingleOrganization from '../components/SingleOrganization';
 import EditOrganizationModalContainer from './EditOrganizationModalContainer';
+import Loading from '../components/Loading';
 
 class SingleOrganizationContainer extends Component {
   constructor(props) {
@@ -20,7 +21,8 @@ class SingleOrganizationContainer extends Component {
   static defaultProps = {
     userIsOrganizer: false,
     orgById: { organizationId: null, organizer: { id: null } },
-    user: { id: null }
+    user: { id: null },
+    loading: true
   }
 
   componentDidMount() {
@@ -38,12 +40,13 @@ class SingleOrganizationContainer extends Component {
   }
 
   render() {
-    const { orgById, events, user } = this.props;
+    const { orgById, events, user, loading, loadingEvents } = this.props;
     return (
       <div>
-      {Object.keys(orgById).length > 0 && events ?
+      {Object.keys(orgById).length > 0 && events && !loading ?
       <SingleOrganization
         organization={orgById}
+        loadingEvents={loadingEvents}
         events={events}
         onClickEdit={this.handleOnClickEditOrganization}
         onClickDelete={this.handleOnClickDeleteOrganization}
@@ -53,7 +56,7 @@ class SingleOrganizationContainer extends Component {
           isEditing={this.state.isEditing}
           onCancel={this.handleOnClickEditOrganization}/>
       </SingleOrganization>
-      : 'Loading...' }
+      : <Loading/>}
       </div>
     );
   }
@@ -61,7 +64,9 @@ class SingleOrganizationContainer extends Component {
 
 const mapDispatchToProps = (dispatch) => bindActionCreators(actionCreators, dispatch);
 const mapStateToProps = ({ organization, event, account }) => ({
+  loading: organization.loading,
   orgById: organization.orgById,
+  loadingEvents: event.loadingEventsByOrgId,
   events: event.orgEvents,
   user: account.user
 });

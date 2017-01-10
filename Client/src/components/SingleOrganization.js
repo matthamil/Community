@@ -177,7 +177,7 @@ const NoEvents = styled.p`
   margin-top: 10px;
 `;
 
-const SingleOrganization = ({ organization, events, userIsOrganizer, ...props }) => (
+const SingleOrganization = ({ organization, events, userIsOrganizer, loadingEvents, ...props }) => (
   <Wrapper>
     <Name>{organization.name}</Name>
     <LocationWrapper>
@@ -224,7 +224,10 @@ const SingleOrganization = ({ organization, events, userIsOrganizer, ...props })
       {organization.isActive ?
       <div>
         <EventsHeader>Upcoming Events</EventsHeader>
-        {events.length > 0 ?
+        {loadingEvents ?
+        'Loading upcoming events...'
+        :
+        events.length > 0 ?
         <EventList
           events={events}
           orgEventList={true}/>
