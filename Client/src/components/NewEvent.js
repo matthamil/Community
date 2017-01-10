@@ -227,7 +227,7 @@ const NewEvent = (props) => (
         <Label>State</Label>
         <Select style={{marginBottom: '5px', fontSize: '16px'}}
           name="event-state"
-          value={props.state}
+          value={props.selectedState}
           options={unitedStatesList}
           onChange={props.onChangeState}/>
       </Center>

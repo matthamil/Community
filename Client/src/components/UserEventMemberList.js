@@ -72,7 +72,7 @@ const UserEventMemberList = (props) => (
   <Wrapper>
     <MyEvents>
       <Header>My Events</Header>
-      <CreateBtn to={'events/new'}>Host Event</CreateBtn>
+      <CreateBtn to={'/events/new'}>Host Event</CreateBtn>
     </MyEvents>
     <EventMemberList>
       {props.userEventMembers.map((eMember, index) =>
