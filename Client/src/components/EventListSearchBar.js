@@ -6,8 +6,9 @@ const Wrapper = styled.div`
   position: absolute;
   transform: translateY(-30px);
 
-  @media (max-width: 950px) {
+  @media (max-width: 970px) {
     transform: none;
+    position: static;
   }
 `;
 
@@ -22,10 +23,11 @@ const InnerWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
 
-  @media (max-width: 950px) {
+  @media (max-width: 970px) {
     flex-direction: column;
     width: 100%;
     padding: 20px 10px;
+    max-width: 100%;
   }
 `;
 
@@ -39,7 +41,7 @@ const Search = styled.input`
     outline: 0;
   }
 
-  @media (max-width: 950px) {
+  @media (max-width: 970px) {
     width: 60vw;
   }
   @media (max-width: 600px) {
@@ -61,7 +63,7 @@ const SearchButton = styled.button`
     outline: none;
   }
 
-  @media (max-width: 950px) {
+  @media (max-width: 970px) {
     width: 20vw;
   }
   @media (max-width: 600px) {
@@ -81,7 +83,7 @@ const Location = styled.input`
   border: none;
   color: #fff;
   border-bottom: 1px dotted rgba(255,255,255,.2);
-  @media (max-width: 950px) {
+  @media (max-width: 970px) {
     margin: 15px 0;
     font-weight: bold;
   }
@@ -97,7 +99,7 @@ const TypeOptions = styled.ul`
   margin: 0;
   padding: 0;
 
-  @media (max-width: 950px) {
+  @media (max-width: 970px) {
     width: 80vw;
   }
 `;
@@ -114,7 +116,7 @@ const Type = styled.li`
   &:hover {
     cursor: pointer;
   }
-  @media (max-width: 950px) {
+  @media (max-width: 970px) {
     width: 40vw;
     text-align: center;
   }
