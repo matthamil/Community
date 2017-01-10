@@ -13,7 +13,7 @@ export default function eventMemberReducer(state = eventMember, action) {
       return {
         ...state,
         loadingUserEventMembers: false,
-        userEventMembers: action.payload.userEventMembers
+        userEventMembers: [ ...action.payload.userEventMembers ].sort((a, b) => new Date(a.timestamp) > (b.timestamp))
       };
     case a.GET_EVENT_MEMBERS_FAILURE:
       return {
@@ -31,7 +31,7 @@ export default function eventMemberReducer(state = eventMember, action) {
       return {
         ...state,
         loading: false,
-        eventMembers: action.payload.eventMembers
+        eventMembers: [ ...action.payload.eventMembers ].sort((a, b) => new Date(a.timestamp) > (b.timestamp))
       };
     case a.GET_EVENT_MEMBERS_BY_ID_FAILURE:
       return {

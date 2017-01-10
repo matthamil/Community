@@ -13,7 +13,7 @@ export default function eventReducer(state = event, action) {
       return {
         ...state,
         loadingEventList: false,
-        events: action.payload.events
+        events: [ ...action.payload.events ].sort((a, b) => new Date(a.timestamp) > (b.timestamp))
       };
     case a.GET_EVENT_LIST_FAILURE:
       return {

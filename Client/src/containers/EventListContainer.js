@@ -7,6 +7,15 @@ import EventListSearchBar from '../components/EventListSearchBar';
 import ListView from '../components/ListView';
 import organizationAndEventsSelector from '../selectors/organizationAndEventsSelector';
 import Loading from '../components/Loading';
+import styled from 'styled-components';
+
+const Warn = styled.h1`
+  font-size: 2em;
+  text-align: center;
+  width: 100%;
+  margin: 20px 0;
+  color: #2C3E50;
+`;
 
 class EventListContainer extends Component {
   constructor(props) {
@@ -112,7 +121,7 @@ class EventListContainer extends Component {
                 return false;
               }
             })}/>
-          : <h1>You haven't signed up for an event yet!</h1>
+          : <Warn>You haven't signed up for an event yet!</Warn>
         : <Loading/> }
         <EventListSearchBar
           onSubmit={this.handleOnSubmit}
