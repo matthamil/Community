@@ -26,6 +26,7 @@ namespace Community.Models.EventViewModels
             Address = e.Address;
             ZipCode = e.ZipCode;
             Date = e.Date;
+            Timestamp = e.Date.Subtract(new DateTime(1970,1,1,0,0,0,DateTimeKind.Utc)).TotalMilliseconds;
             StartTime = e.StartTime;
             EndTime = e.EndTime;
             Description = e.Description;
@@ -40,6 +41,7 @@ namespace Community.Models.EventViewModels
             Address = e.Address;
             ZipCode = e.ZipCode;
             Date = e.Date;
+            Timestamp = e.Date.Subtract(new DateTime(1970,1,1,0,0,0,DateTimeKind.Utc)).TotalMilliseconds;
             StartTime = e.StartTime;
             EndTime = e.EndTime;
             Description = e.Description;
@@ -64,6 +66,8 @@ namespace Community.Models.EventViewModels
         public string ZipCode { get; set; }
 
         public DateTime Date { get; set; }
+
+        public double Timestamp { get; set; }
 
         public DateTime StartTime { get; set; }
 

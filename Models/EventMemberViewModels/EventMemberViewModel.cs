@@ -24,6 +24,7 @@ namespace Community.Models.EventMemberViewModels
             JobTitle = e.JobTitle;
             Description = e.Description;
             StartTime = e.StartTime;
+            Timestamp = e.StartTime.Subtract(new DateTime(1970,1,1,0,0,0,DateTimeKind.Utc)).TotalMilliseconds;
             EndTime = e.EndTime;
             ChatMuted = e.ChatMuted;
             AttendeePoints = e.AttendeePoints;
@@ -38,6 +39,8 @@ namespace Community.Models.EventMemberViewModels
         public string JobTitle { get; set; }
 
         public string Description { get; set; }
+
+        public double Timestamp { get; set; }
 
         public DateTime StartTime { get; set; }
 

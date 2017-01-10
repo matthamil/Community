@@ -2,9 +2,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/actionCreators';
-import { browserHistory } from 'react-router';
 import Loading from '../components/Loading';
 import UserEventMemberList from '../components/UserEventMemberList';
+import styled from 'styled-components';
+
+const Warning = styled.h1`
+  text-align: center;
+  margin: 0 auto;
+  color: #2C3E50;
+`;
 
 class UserEventMemberListContainer extends Component {
   constructor(props) {
@@ -23,7 +29,7 @@ class UserEventMemberListContainer extends Component {
           userEventMembers ?
           <UserEventMemberList
             userEventMembers={userEventMembers}/>
-          : <h1>You aren't signed up for any events yet.</h1>
+          : <Warning>You aren't signed up for any events yet.</Warning>
         : <Loading/>}
       </div>
     );
