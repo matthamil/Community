@@ -2,3 +2,48 @@ body {
   background-color: rgb(250, 250, 250);
   font-family: 'Open Sans', sans-serif;
 }
+
+/* Styling modals here because styled-components */
+/* doesn't work with the react-modal library     */
+.responsiveModal {
+  padding: 0;
+  bottom: 0 !important;
+  border: none;
+  position: absolute;
+  top: 10%;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  max-width: 33vw;
+  overflow: auto;
+  -webkit-overflow-scrolling: 'touch';
+  border-radius: 3px;
+  outline: none;
+}
+
+.responsiveModal--overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.1);
+}
+
+@media (max-width: 1200px) {
+  .responsiveModal {
+    max-width: 66vw;
+  }
+}
+
+@media (max-width: 600px) {
+  .responsiveModal {
+    max-width: 66vw;
+  }
+}
+
+@media (max-width: 500px) {
+  .responsiveModal {
+    max-width: 95vw;
+  }
+}
