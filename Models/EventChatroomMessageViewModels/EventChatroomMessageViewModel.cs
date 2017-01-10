@@ -18,7 +18,7 @@ namespace Community.Models.EventChatroomMessageViewModels
             EventChatroomMessageId = message.EventChatroomMessageId;
             Author = new Author(eMember);
             Message = message.Message;
-            Timestamp = message.DateCreated;
+            Timestamp = message.DateCreated.Subtract(new DateTime(1970,1,1,0,0,0,DateTimeKind.Utc)).TotalMilliseconds;
             LastModified = message.LastModified;
         }
         public EventChatroomMessageViewModel(EventChatroomMessage message, ApplicationUser organizer)
@@ -26,7 +26,7 @@ namespace Community.Models.EventChatroomMessageViewModels
             EventChatroomMessageId = message.EventChatroomMessageId;
             Author = new Author(organizer);
             Message = message.Message;
-            Timestamp = message.DateCreated;
+            Timestamp = message.DateCreated.Subtract(new DateTime(1970,1,1,0,0,0,DateTimeKind.Utc)).TotalMilliseconds;
             LastModified = message.LastModified;
         }
         public EventChatroomMessageViewModel(EventChatroomMessage message, ApplicationUser organizer, EventMember[] eMember)
@@ -34,7 +34,7 @@ namespace Community.Models.EventChatroomMessageViewModels
             EventChatroomMessageId = message.EventChatroomMessageId;
             Author = new Author(organizer, eMember);
             Message = message.Message;
-            Timestamp = message.DateCreated;
+            Timestamp = message.DateCreated.Subtract(new DateTime(1970,1,1,0,0,0,DateTimeKind.Utc)).TotalMilliseconds;
             LastModified = message.LastModified;
         }
 
@@ -47,7 +47,7 @@ namespace Community.Models.EventChatroomMessageViewModels
         public string Message { get; set; }
 
         [Required]
-        public DateTime Timestamp { get; set; }
+        public double Timestamp { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime? LastModified { get; set; }

@@ -6,8 +6,7 @@ import * as actionCreators from '../actions/actionCreators';
 window.jQuery = require('jquery');
 window.$ = require('jquery');
 require('signalr');
-console.log(window.$.signalR);
-require('../helpers/signalR');
+require('../helpers/signalR'); // SignalR script to connect to the server
 
 class EventChatroomContainer extends Component {
   constructor(props) {
@@ -33,31 +32,6 @@ class EventChatroomContainer extends Component {
     });
   }
 
-  componentWillMount() {
-    console.log('componentWillMount: ', window.jQuery); //es-lint ignore-line
-
-    // Thank you MDN for this function
-    // const importScript = (function (oHead) {
-    //   function loadError (oError) {
-    //     throw new URIError("The script " + oError.target.src + " is not accessible.");
-    //   }
-
-    //   return function (sSrc, fOnload) {
-    //     var oScript = document.createElement("script");
-    //     oScript.onerror = loadError;
-    //     if (fOnload) { oScript.onload = fOnload; }
-    //     oHead.appendChild(oScript);
-    //     oScript.src = sSrc;
-    //   }
-    // })(document.head || document.getElementsByTagName("head")[0]);
-    // Promise.resolve(importScript('/signalr/hubs', function() { console.log( 'we did it?' ); }));
-
-    // const script = document.createElement('script');
-    // script.src = '/signalr/hubs';
-    // script.async = false;
-    // document.body.appendChild(script);
-  }
-
   handleAddNewMessage(message) {
     this.setState((prevState, props) => ({
       messages: [ ...prevState.messages, Object.assign({}, message) ]
@@ -65,7 +39,7 @@ class EventChatroomContainer extends Component {
   }
 
   handleOnSubmit() {
-    this.props.postEventChatroomMessage(this.props.params.eventId, { message: this.state.message })
+    this.props.postEventChatroomMessage(this.props.params.eventId, { message: this.state.message });
   }
 
   componentDidMount() {
@@ -77,9 +51,10 @@ class EventChatroomContainer extends Component {
     const { eventId } = this.props.params;
     this.props.getEventById(eventId);
     this.props.getEventChatroomMessages(eventId);
-    console.log('inside component did mount', window.$.connection);
-    window.$.connection.broadcaster.client.addChatMessage = this.handleAddNewMessage;
-    window.$.connection.hub.logging = true;
+
+    window.$.connection.broadcaster.client.addChatMessage = this.props.receivedNewChatroomMessage;
+    window.$.connection.hub.logging = true; // for debugging
+    // Connect to the SignalR server
     window.$.connection.hub.start().done(function(signalR) {
       console.log('Connected!');
       window.$.connection.broadcaster.server.subscribe(eventId);
@@ -89,10 +64,11 @@ class EventChatroomContainer extends Component {
   }
 
   render() {
+    console.log(this.props.messages);
     return (
       <div>
         Hello world!
-        {this.props.messages.map((message, index) => <p key={index}>{message.author.firstName + ' ' + message.author.lastName + ' (' + message.author.title + ') ' + message.message}</p>)}
+        {this.props.messages.map((message, index) => <p key={index}>{(message.author.organizer ? '(Organizer) ' : '') + message.author.firstName + ' ' + message.author.lastName + (message.author.titles ? message.author.titles.map(title => title).join(', ') : '') + message.message}</p>)}
         <input type="text" onChange={this.handleOnChangeInput}/>
         <button onClick={this.handleOnSubmit}>Send</button>
       </div>

@@ -50,10 +50,10 @@ namespace Community.Controllers
             // Uncomment for testing
             // ApplicationUser user = await context.ApplicationUser.SingleAsync(u => u.FirstName == "Matt");
 
-            EventMember eMember = await _context.EventMember.Include(e => e.ApplicationUser)
+            EventMember[] eMember = await _context.EventMember.Include(e => e.ApplicationUser)
                 .Include(e => e.Event)
                 .Where(e => e.ApplicationUser == user && e.EventId == eventId)
-                .SingleOrDefaultAsync();
+                .ToArrayAsync();
 
             // If the user is the event organizer, eventForChatroom should not be null.
             Event eventForChatroom = await _context.Event.Include(e => e.Organization)
@@ -61,7 +61,7 @@ namespace Community.Controllers
                 .Where(e => e.EventId == eventId && e.Organization.Organizer.Id == user.Id)
                 .SingleOrDefaultAsync();
 
-            return (eMember != null || eventForChatroom != null);
+            return (eMember != null || eMember.Length == 0 || eventForChatroom != null);
         }
 
         /**
@@ -88,9 +88,35 @@ namespace Community.Controllers
                 foreach(EventChatroomMessage m in messages)
                 {
                     EventMember[] allEventMembersForAuthorOfMessage = await _context.EventMember
+                        .Include(e => e.ApplicationUser)
+                        .Include(e => e.Event)
+                        .Include(e => e.Event.Organization)
                         .Where(e => e.ApplicationUser.Id == m.AuthorId && e.EventId == eventId)
                         .ToArrayAsync();
-                    model.Add(new EventChatroomMessageViewModel(m, allEventMembersForAuthorOfMessage));
+
+                    // If message author is the event organizer, hostedEvents hould be null
+                    Event hostedEvent = await _context.Event.Include(e => e.Organization)
+                        .ThenInclude(o => o.Organizer)
+                        .Where(e => e.Organization.Organizer.Id == m.AuthorId && e.EventId == m.EventId)
+                        .SingleOrDefaultAsync();
+
+                    var organizer = await _context.ApplicationUser.Where(u => u.Id == m.AuthorId).SingleOrDefaultAsync();
+
+                    // If the author is the event organizer and not an event member
+                    if (allEventMembersForAuthorOfMessage == null || allEventMembersForAuthorOfMessage.Length == 0 && hostedEvent != null)
+                    {
+                        model.Add(new EventChatroomMessageViewModel(m, organizer));
+                    }
+                    // If the author is an event member and not the organizer
+                    else if (allEventMembersForAuthorOfMessage != null && allEventMembersForAuthorOfMessage.Length > 0 && hostedEvent == null)
+                    {
+                        model.Add(new EventChatroomMessageViewModel(m, allEventMembersForAuthorOfMessage));
+                    }
+                    // If the author is the organizer and is an event member
+                    else if (allEventMembersForAuthorOfMessage != null && allEventMembersForAuthorOfMessage.Length > 0 && hostedEvent != null)
+                    {
+                        model.Add(new EventChatroomMessageViewModel(m, organizer, allEventMembersForAuthorOfMessage));
+                    }
                 }
                 return Json(model);
             }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Community.Models.EventChatroomMessageViewModels
@@ -10,19 +11,16 @@ namespace Community.Models.EventChatroomMessageViewModels
         {
             FirstName = eMember[0].ApplicationUser.FirstName;
             LastName = eMember[0].ApplicationUser.LastName;
-            if (eMember.Length > 1)
+            Titles = new List<string>();
+            if (eMember.Length > 0)
             {
-                for (int i = 0; i < eMember.Length - 1; i++)
+                foreach (EventMember member in eMember)
                 {
-                    if (!Title.Contains(eMember[i].JobTitle))
+                    if (!Titles.Contains(member.JobTitle))
                     {
-                        Title += eMember[i].JobTitle + ", ";
+                        Titles.Add(member.JobTitle);
                     }
                 }
-            }
-            else
-            {
-                Title = eMember[0].JobTitle;
             }
         }
         public Author(ApplicationUser organizer)
@@ -36,25 +34,22 @@ namespace Community.Models.EventChatroomMessageViewModels
             FirstName = organizer.FirstName;
             LastName = organizer.LastName;
             Organizer = true;
-            if (eMember.Length > 1)
+            Titles = new List<string>();
+            if (eMember.Length > 0)
             {
-                for (int i = 0; i < eMember.Length - 1; i++)
+                foreach (EventMember member in eMember)
                 {
-                    if (!Title.Contains(eMember[i].JobTitle))
+                    if (!Titles.Contains(member.JobTitle))
                     {
-                        Title += eMember[i].JobTitle + ", ";
+                        Titles.Add(member.JobTitle);
                     }
                 }
-            }
-            else
-            {
-                Title = eMember[0].JobTitle;
             }
         }
 
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Title { get; set; }
+        public List<string> Titles { get; set; }
         public bool Organizer { get; set; }
     }
 }

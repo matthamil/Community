@@ -276,6 +276,10 @@ export const getEventChatroomMessagesFailure = (error) => ({
   type: actions.GET_EVENT_CHATROOM_MESSAGES_FAILURE,
   payload: { error }
 });
+export const receivedNewChatroomMessage = (message) => ({
+  type: actions.RECEIVED_NEW_CHATROOM_MESSAGE,
+  payload: { message }
+});
 
 export const postEventChatroomMessage = (eventId, message) => ({
   type: actions.POST_EVENT_CHATROOM_MESSAGE,
