@@ -10,6 +10,11 @@ const Wrapper = styled.div`
   margin: 0 auto;
   margin-top: 25px;
   border-radius: 3px;
+
+  @media (max-width: 600px) {
+    max-width: 100%;
+    width: 100%;
+  }
 `;
 
 const InnerWrapper = styled.div`
@@ -18,6 +23,10 @@ const InnerWrapper = styled.div`
   border: 1px solid #ededed;
   border-radius: 0 0 3px 3px;
   border-top: none;
+
+  @media (max-width: 600px) {
+    padding: 0 20px 20px 20px;
+  }
 `;
 
 const Name = styled.h1`
@@ -49,6 +58,12 @@ const LocationWrapper = styled.div`
   transform: translateY(-17.5px);
   width: 75vw;
   max-width: 960px;
+
+  @media (max-width: 600px) {
+    display: block;
+    position: static;
+    margin: 0 auto;
+  }
 `
 
 const Description = styled.div`
@@ -81,19 +96,29 @@ const OptionsWrapper = styled.div`
   flex-direction: row;
   align-items: center;
   margin-bottom: 20px;
+
+  @media (max-width: 600px) {
+    justify-content: space-around;
+    margin-top: 10px;
+  }
 `;
 const AdminOptions = styled.div`
   float: right;
   display: flex;
   flex-direction: row;
   align-items: flex-end;
+
+  @media (max-width: 600px) {
+    float: none;
+    justify-content: space-around;
+  }
 `;
 const YourOrganization = styled.span`
-  background-color: #b9b9b9;
+  background-color: #fff;
   letter-spacing: 1px;
   text-align: center;
   border-radius: 2px;
-  color: #fff;
+  color: rgb(255, 181, 10);
   padding: 3px 8px;
   text-transform: uppercase;
   display: block;
@@ -148,6 +173,10 @@ const InactiveIcon = styled.i`
   font-size: 1em;
 `;
 
+const NoEvents = styled.p`
+  margin-top: 10px;
+`;
+
 const SingleOrganization = ({ organization, events, userIsOrganizer, ...props }) => (
   <Wrapper>
     <Name>{organization.name}</Name>
@@ -195,9 +224,11 @@ const SingleOrganization = ({ organization, events, userIsOrganizer, ...props })
       {organization.isActive ?
       <div>
         <EventsHeader>Upcoming Events</EventsHeader>
+        {events.length > 0 ?
         <EventList
           events={events}
           orgEventList={true}/>
+        : <NoEvents>No upcoming events.</NoEvents>}
       </div>
       : ''}
     </InnerWrapper>
