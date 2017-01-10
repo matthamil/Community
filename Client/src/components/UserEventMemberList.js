@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router';
-import UserOrganizationItemContainer from '../containers/UserOrganizationItemContainer';
+import UserEventMemberItem from './UserEventMemberItem';
 
 const Wrapper = styled.div`
   width: 75vw;
@@ -15,7 +15,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const MyOrganizations = styled.div`
+const MyEvents = styled.div`
   border: 1px solid rgb(238, 238, 238);
   background-color: #fff;
   padding: 20px;
@@ -61,28 +61,28 @@ const CreateBtn = styled(Link)`
   }
 `;
 
-const OrganizationList = styled.div`
+const EventMemberList = styled.div`
   margin-top: 25px;
   background-color: #fff;
   border-radius: 3px;
   border: 1px solid rgb(238, 238, 238);
 `;
 
-const UserOrganizationsItemList = (props) => (
+const UserEventMemberList = (props) => (
   <Wrapper>
-    <MyOrganizations>
-      <Header>My Organizations</Header>
-      <CreateBtn to={'organizations/new'}>Create</CreateBtn>
-    </MyOrganizations>
-    <OrganizationList>
-      {props.userOrganizations.map((org, index) =>
-        <UserOrganizationItemContainer
+    <MyEvents>
+      <Header>My Events</Header>
+      <CreateBtn to={'/events/new'}>Host Event</CreateBtn>
+    </MyEvents>
+    <EventMemberList>
+      {props.userEventMembers.map((eMember, index) =>
+        <UserEventMemberItem
           key={index}
-          borderBottom={index !== props.userOrganizations.length - 1}
-          organization={org}/>)}
-    </OrganizationList>
+          borderBottom={index !== props.userEventMembers.length - 1}
+          eventMember={eMember}/>)}
+    </EventMemberList>
   </Wrapper>
 );
 
-export default UserOrganizationsItemList;
+export default UserEventMemberList;
 

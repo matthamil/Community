@@ -9,7 +9,7 @@ const Wrapper = styled.div`
   background-color: #2980B9;
   width: 100%;
   padding: 20px;
-  width: 100%
+  width: 100%;
   margin: 0 auto;
 `;
 
@@ -40,6 +40,10 @@ const FormTitle = styled.h1`
   font-size: 1.5em;
   margin-bottom: 5px;
   text-shadow: 0 2px 2px #2a5b7b;
+
+  @media (max-width: 500px) {
+    width: 60%;
+  }
 `;
 
 const FormWrapper = styled.div`
@@ -78,6 +82,14 @@ const DescriptionInput = styled.textarea`
 const Center = styled.div`
   width: 30vw;
   margin: 0 auto;
+
+  @media (max-width: 1200px) {
+    width: 60vw;
+  }
+
+  @media (max-width: 500px) {
+    width: 90%;
+  }
 `;
 
 const FormError = styled.div`
@@ -93,6 +105,10 @@ const AddBtn = styled.button`
   font-weight: bold;
   display: block;
   width: 14.25vw;
+
+  @media (max-width: 650px) {
+    width: 45%
+  }
 `;
 
 const CancelBtn = styled.button`
@@ -102,6 +118,10 @@ const CancelBtn = styled.button`
   font-weight: bold;
   display: block;
   width: 14.25vw;
+
+  @media (max-width: 650px) {
+    width: 45%
+  }
 `;
 
 const ButtonWrapper = styled.div`
@@ -112,6 +132,10 @@ const ButtonWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-top: 15px;
+
+  @media (max-width: 650px) {
+    width: 90%;
+  }
 `;
 
 const EditOrganizationModal = ({ organization, ...props }) => (

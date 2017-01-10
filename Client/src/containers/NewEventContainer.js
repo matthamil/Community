@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/actionCreators';
+import { browserHistory } from 'react-router';
 import NewEvent from '../components/NewEvent';
+import Loading from '../components/Loading';
 
 class NewEventContainer extends Component {
   constructor(props) {
@@ -18,7 +20,15 @@ class NewEventContainer extends Component {
       date: null,
       startTime: null,
       endTime: null,
-      validationErrors: new Map()
+      validationErrors: new Map(),
+      // This is a messy line here, but it's working.
+      userOrganizations: this.props.userOrganizations.reduce((all, organization) => {
+        all.push({
+          label: organization.name,
+          value: organization.organizationId
+        });
+        return all;
+      }, [])
     };
 
     this.handleValidateForm = this.handleValidateForm.bind(this);
@@ -26,6 +36,7 @@ class NewEventContainer extends Component {
     this.handleOnChangeFormInput = this.handleOnChangeFormInput.bind(this);
     this.handleOnChangeOrganization = this.handleOnChangeOrganization.bind(this);
     this.handleOnChangeState = this.handleOnChangeState.bind(this);
+    this.handleOnCancel = this.handleOnCancel.bind(this);
   }
 
   handleOnChangeFormInput(field, e) {
@@ -109,8 +120,12 @@ class NewEventContainer extends Component {
     }
   }
 
+  handleOnCancel() {
+    browserHistory.push('/events/');
+  }
+
   componentWillReceiveProps(nextProps) {
-    if (nextProps.userOrganizations === undefined) return;
+    //if (nextProps.userOrganizations === undefined && this.props.userOrganizations === undefined) return;
     const formattedOrganizations = nextProps.userOrganizations.reduce((all, organization) => {
       all.push({
         label: organization.name,
@@ -119,19 +134,16 @@ class NewEventContainer extends Component {
       return all;
     }, []);
 
-    this.setState({
+    this.setState((nextState, props) => ({
       userOrganizations: formattedOrganizations
-    });
-  }
-
-  componentWillMount() {
-    // if (!this.props.loggedIn) {
-    //   browserHistory.push('/');
-    // }
+    }));
   }
 
   render() {
+    const { loading } = this.props;
     return (
+      <div>
+      {!loading ?
       <NewEvent
         validationErrors={this.state.validationErrors}
         onChange={this.handleOnChangeFormInput}
@@ -140,14 +152,19 @@ class NewEventContainer extends Component {
         selectedOrganization={this.state.organizationId}
         selectedState={this.state.state}
         onChangeState={this.handleOnChangeState}
-        onChangeOrganization={this.handleOnChangeOrganization}/>
+        onChangeOrganization={this.handleOnChangeOrganization}
+        onCancel={this.handleOnCancel}/>
+      :
+      <Loading/>}
+      </div>
     );
   }
 }
 
 const mapDispatchToProps = (dispatch) => bindActionCreators(actionCreators, dispatch);
 const mapStateToProps = ({ account, organization }) => ({
-  loggedIn: account.loggedIn,
+  user: account.user,
+  loading: organization.loadingOrgsByOrganizerId,
   userOrganizations: organization.userOrganizations
 });
 export default connect(mapStateToProps, mapDispatchToProps)(NewEventContainer);

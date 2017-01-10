@@ -6,6 +6,9 @@ import SingleEvent from '../components/SingleEvent';
 import NewEventMemberContainer from './NewEventMemberContainer';
 import EditEventModalContainer from './EditEventModalContainer';
 import Collapse from 'react-collapse';
+import Loading from '../components/Loading';
+import Modal from 'react-modal';
+import EventChatroomContainer from './EventChatroomContainer';
 
 class SingleEventContainer extends Component {
   constructor(props) {
@@ -18,7 +21,8 @@ class SingleEventContainer extends Component {
       userIsMember: false,
       userIsOrganizer: false,
       addPosition: false,
-      isEditing: false
+      isEditing: false,
+      isChatting: false
     };
 
     this.handleOnClaimEventMember = this.handleOnClaimEventMember.bind(this);
@@ -29,6 +33,7 @@ class SingleEventContainer extends Component {
     this.handleOnClickCancel = this.handleOnClickCancel.bind(this);
     this.handleOnClickDeleteEvent = this.handleOnClickDeleteEvent.bind(this);
     this.handleOnClickEditEvent = this.handleOnClickEditEvent.bind(this);
+    this.handleOnClickToggleChat = this.handleOnClickToggleChat.bind(this);
   }
 
   handleOnClaimEventMember(eventMemberId) {
@@ -43,12 +48,17 @@ class SingleEventContainer extends Component {
     this.setState((prevState, props) => ({ addPosition: !prevState.addPosition }));
   }
 
+  handleOnClickToggleChat() {
+    this.setState((prevState, props) => ({ isChatting: !prevState.isChatting }));
+  }
+
   componentDidMount() {
     const { id } = this.props.params;
     this.props.getEventById(id);
   }
 
   componentWillReceiveProps(nextProps) {
+    if (nextProps.loading) { return; }
     const hasEMembers = nextProps.eventById.eventMembers.length > 0;
     if (hasEMembers) {
       this.setState({
@@ -94,10 +104,10 @@ class SingleEventContainer extends Component {
   }
 
   render() {
-    const { eventById, user } = this.props;
+    const { eventById, user, loading } = this.props;
     return (
       <div>
-        {Object.keys(eventById).length > 0 ?
+        {Object.keys(eventById).length > 0 && !loading ?
         <SingleEvent
           event={eventById}
           userIsOrganizer={this.state.userIsOrganizer}
@@ -110,7 +120,8 @@ class SingleEventContainer extends Component {
           unclaimedEventMembers={this.state.unclaimedEventMembers}
           onClickAddPosition={this.handleOnClickAddPosition}
           onClickDeleteEvent={this.handleOnClickDeleteEvent}
-          onClickEditEvent={this.handleOnClickEditEvent}>
+          onClickEditEvent={this.handleOnClickEditEvent}
+          onClickToggleChat={this.handleOnClickToggleChat}>
           <Collapse
             isOpened={this.state.addPosition && this.state.userIsOrganizer}
             springConfig={{stiffness: 200, damping: 20}}>
@@ -123,12 +134,18 @@ class SingleEventContainer extends Component {
             event={eventById}
             isEditing={this.state.isEditing}
             onCancel={this.handleOnClickEditEvent}/>
+          <Modal
+            isOpen={this.state.isChatting}
+            contentLabel="Chat"
+
+            className="responsiveModal"
+            overlayClassName="responsiveModal--overlay">
+            <EventChatroomContainer
+              eventId={eventById.eventId}/>
+          </Modal>
         </SingleEvent>
         :
-        <div>
-          <i className="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
-          <span className="sr-only">Loading...</span>
-        </div>}
+        <Loading/>}
       </div>
     );
   }
@@ -137,7 +154,8 @@ class SingleEventContainer extends Component {
 const mapDispatchToProps = (dispatch) => bindActionCreators(actionCreators, dispatch);
 const mapStateToProps = ({ event, account }) => ({
   eventById: event.eventById,
-  user: account.user
+  user: account.user,
+  loading: event.loadingEventById
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleEventContainer);

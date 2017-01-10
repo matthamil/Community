@@ -6,6 +6,7 @@ import NextEvent from '../components/NextEvent';
 import EventListSearchBar from '../components/EventListSearchBar';
 import ListView from '../components/ListView';
 import organizationAndEventsSelector from '../selectors/organizationAndEventsSelector';
+import Loading from '../components/Loading';
 
 class EventListContainer extends Component {
   constructor(props) {
@@ -27,7 +28,7 @@ class EventListContainer extends Component {
   }
 
   static defaultProps = {
-
+    nextEvent: {}
   }
 
   handleOnSubmit() {
@@ -96,15 +97,23 @@ class EventListContainer extends Component {
   }
 
   render() {
-    const { nextEvent, user } = this.props;
+    const { nextEvent, user, loading, loadingUser } = this.props;
     return (
       <div>
-        {nextEvent.eventMembers ?
-        <NextEvent
-          nextEvent={nextEvent}
-          user={user}
-          userEventMember={nextEvent.eventMembers.find((member) => member.volunteer.id === user.id)}/>
-        : 'You aren\'t signed up for an event yet.' }
+        {!loading && !loadingUser ?
+        nextEvent.eventMembers ?
+          <NextEvent
+            nextEvent={nextEvent}
+            user={user}
+            userEventMember={nextEvent.eventMembers.find((member) => {
+              if (member.volunteer) {
+                return member.volunteer.id === user.id;
+              } else {
+                return false;
+              }
+            })}/>
+          : <h1>You haven't signed up for an event yet!</h1>
+        : <Loading/> }
         <EventListSearchBar
           onSubmit={this.handleOnSubmit}
           onChangeSearch={this.handleOnChangeSearch}
@@ -121,10 +130,11 @@ class EventListContainer extends Component {
 }
 
 const mapStateToProps = (state) => ({
+  loading: state.event.loadingNextEvent,
   events: state.event.events,
   nextEvent: state.event.nextEvent,
-  loading: state.event.loading,
   user: state.account.user,
+  loadingUser: state.account.loading,
   organizations: organizationAndEventsSelector(state)
 });
 const mapDispatchToProps = (dispatch) => bindActionCreators(actionCreators, dispatch);

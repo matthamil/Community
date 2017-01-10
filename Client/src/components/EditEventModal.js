@@ -10,7 +10,6 @@ const Wrapper = styled.div`
   background-color: #2980B9;
   width: 100%;
   padding: 20px;
-  width: 100%
   margin: 0 auto;
 `;
 
@@ -79,6 +78,14 @@ const DescriptionInput = styled.textarea`
 const Center = styled.div`
   width: 30vw;
   margin: 0 auto;
+
+  @media (max-width: 1200px) {
+    width: 60vw;
+  }
+
+  @media (max-width: 500px) {
+    width: 90%;
+  }
 `;
 
 const TimeInputs = styled.div`
@@ -88,10 +95,26 @@ const TimeInputs = styled.div`
   align-items: center;
   width: 30vw;
   margin: 0 auto;
+
+  @media (max-width: 1200px) {
+    width: 60vw;
+  }
+
+  @media (max-width: 500px) {
+    width: 90%;
+  }
 `;
 
 const TimeWrapper = styled.div`
   width: 14.25vw;
+
+  @media (max-width: 1200px) {
+    width: 28.5vw;
+  }
+
+  @media (max-width: 500px) {
+    width: 45.125%;
+  }
 `;
 
 const FormError = styled.div`
@@ -107,6 +130,14 @@ const AddBtn = styled.button`
   font-weight: bold;
   display: block;
   width: 14.25vw;
+
+  @media (max-width: 1200px) {
+    width: 28.5vw;
+  }
+
+  @media (max-width: 500px) {
+    width: 45.125%;
+  }
 `;
 
 const CancelBtn = styled.button`
@@ -116,6 +147,14 @@ const CancelBtn = styled.button`
   font-weight: bold;
   display: block;
   width: 14.25vw;
+
+  @media (max-width: 1200px) {
+    width: 28.5vw;
+  }
+
+  @media (max-width: 500px) {
+    width: 45.125%;
+  }
 `;
 
 const ButtonWrapper = styled.div`
@@ -126,6 +165,14 @@ const ButtonWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-top: 15px;
+
+  @media (max-width: 1200px) {
+    width: 60vw;
+  }
+
+  @media (max-width: 500px) {
+    width: 90%;
+  }
 `;
 
 const CenterAlign = styled.div`
@@ -135,6 +182,14 @@ const CenterAlign = styled.div`
   align-items: center;
   width: 30vw;
   margin: 0 auto;
+
+  @media (max-width: 1200px) {
+    width: 60vw;
+  }
+
+  @media (max-width: 500px) {
+    width: 90%;
+  }
 `;
 
 const formatDefaultInputTime = (time) => {

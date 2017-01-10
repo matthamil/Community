@@ -47,6 +47,10 @@ const EditEventMember = styled.span`
     cursor: pointer;
     color: rgb(35, 218, 91);
   }
+
+  @media (max-width: 600px) {
+    margin-right: 30px;
+  }
 `;
 
 

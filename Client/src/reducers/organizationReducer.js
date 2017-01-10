@@ -44,19 +44,19 @@ export default function organizationReducer(state = org, action) {
     case a.GET_ORGANIZATIONS_BY_ORGANIZER_ID:
       return {
         ...state,
-        loading: true,
+        loadingOrgsByOrganizerId: true,
         id: action.payload.id
       };
     case a.GET_ORGANIZATIONS_BY_ORGANIZER_ID_SUCCESS:
       return {
         ...state,
-        loading: false,
+        loadingOrgsByOrganizerId: false,
         userOrganizations: action.payload.organizations
       };
     case a.GET_ORGANIZATIONS_BY_ORGANIZER_ID_FAILURE:
       return {
         ...state,
-        loading: false,
+        loadingOrgsByOrganizerId: false,
         error: action.payload.error
       };
     case a.POST_ORGANIZATION:

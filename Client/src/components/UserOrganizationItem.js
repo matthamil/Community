@@ -38,6 +38,10 @@ const Edit = styled.span`
     cursor: pointer;
     color: rgb(35, 218, 91);
   }
+
+  @media (max-width: 575px) {
+    font-size: 1.25em;
+  }
 `;
 
 const EditIcon = styled.i`
@@ -61,6 +65,10 @@ const Flex = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+
+  @media (max-width: 575px) {
+    flex-direction: column;
+  }
 `;
 
 const Events = styled.h2`
@@ -78,6 +86,11 @@ const Events = styled.h2`
 const Upcoming = styled.div`
   margin-bottom: 20px;
   padding-left: 40px;
+
+  @media (max-width: 575px) {
+    padding-left: 0;
+    text-align: center;
+  }
 `;
 
 function calculateUpcomingEventsText(events) {

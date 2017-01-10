@@ -3,32 +3,28 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/actionCreators';
 import { browserHistory } from 'react-router';
+import Loading from '../components/Loading';
+import UserEventMemberList from '../components/UserEventMemberList';
 
 class UserEventMemberListContainer extends Component {
-  // constructor(props) {
-  //   super(props);
-  // }
-
-  componentWillMount() {
-    if (!this.props.loggedIn) {
-      browserHistory.push('/');
-    }
+  constructor(props) {
+    super(props);
   }
 
   componentDidMount() {
     this.props.getEventMembers();
   }
 
-  componentDidUpdate() {
-    window.scrollTo(0, 0);
-  }
-
   render() {
+    const { loading, userEventMembers } = this.props;
     return (
       <div>
-        {this.props.userEventMembers.length > 0 ?
-          this.props.userEventMembers.map((eMember, index) => <pre key={index}>{JSON.stringify(eMember, null, ' ')}</pre>)
-        : <h1>You haven't signed up for any events yet.</h1>}
+        {!loading ?
+          userEventMembers ?
+          <UserEventMemberList
+            userEventMembers={userEventMembers}/>
+          : <h1>You aren't signed up for any events yet.</h1>
+        : <Loading/>}
       </div>
     );
   }
@@ -37,7 +33,8 @@ class UserEventMemberListContainer extends Component {
 const mapDispatchToProps = (dispatch) => bindActionCreators(actionCreators, dispatch);
 const mapStateToProps = ({ eventMember, account }) => ({
   userEventMembers: eventMember.userEventMembers,
-  loggedIn: account.loggedIn
+  loggedIn: account.loggedIn,
+  loading: eventMember.loadingUserEventMembers
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserEventMemberListContainer);

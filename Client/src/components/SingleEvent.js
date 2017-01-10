@@ -26,6 +26,11 @@ const TopWrapper = styled.div`
   background-color: #fff;
   border: 1px solid #ededed;
   border-bottom: none;
+
+  @media (max-width: 600px) {
+    max-width: 100%;
+    width: 100%;
+  }
 `;
 
 const BottomWrapper = styled.div`
@@ -37,12 +42,22 @@ const BottomWrapper = styled.div`
   background-color: #fff;
   border: 1px solid #ededed;
   border-top: none;
+
+  @media (max-width: 600px) {
+    max-width: 100%;
+    width: 100%;
+  }
 `;
 
 const EventName = styled.h1`
   margin: 0;
   font-weight: bold;
   display: inline-block;
+
+  @media (max-width: 600px) {
+    text-align: center;
+    display: block;
+  }
 `;
 
 const OrganizationName = styled(Link)`
@@ -50,12 +65,25 @@ const OrganizationName = styled(Link)`
   font-size: 1.75em;
   font-weight: 300;
   display: block;
+
+  @media (max-width: 600px) {
+    text-align: center;
+  }
 `;
 
 const Description = styled.div`
   padding: 0 32.5px;
   margin: 20px 0;
   max-width: 60%;
+
+  @media (max-width: 800px) {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  @media (max-width: 400px) {
+    padding: 0;
+  }
 `;
 
 const Icon = styled.i`
@@ -94,6 +122,23 @@ const MemberOfEvent = styled.div`
   padding: 10px 15px;
   border: 1px solid rgb(35, 218, 91);
   border-radius: 3px;
+
+  @media (max-width: 960px) {
+    width: 40%;
+  }
+
+  @media (max-width: 850px) {
+    width: 45%;
+  }
+
+  @media (max-width: 600px) {
+    width: 50%;
+  }
+
+  @media (max-width: 400px) {
+    width: 80%;
+    margin: 20px auto;
+  }
 `;
 
 const NotAMember = styled.div`
@@ -107,6 +152,23 @@ const NotAMember = styled.div`
   color: #E74C3C;
   padding: 10px 15px;
   border-radius: 3px;
+
+  @media (max-width: 960px) {
+    width: 40%;
+  }
+
+  @media (max-width: 850px) {
+    width: 45%;
+  }
+
+  @media (max-width: 600px) {
+    width: 50%;
+  }
+
+  @media (max-width: 400px) {
+    width: 80%;
+    margin: 20px auto;
+  }
 `;
 
 const MemberContent = styled.p`
@@ -187,6 +249,15 @@ const AdminOptions = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-end;
+
+  @media (max-width: 700px) {
+    float: none;
+    margin-top: 10px;
+  }
+
+  @media (max-width: 600px) {
+    justify-content: space-around;
+  }
 `;
 const YourEvent = styled.span`
   background-color: #b9b9b9;
@@ -244,10 +315,30 @@ const AddMember = styled.span`
   }
 `;
 
+const Chatroom = styled(Link)`
+  display: inline-block;
+  background-color: #fff;
+  color: #b9b9b9;
+  letter-spacing: 1px;
+  text-align: left;
+  border-radius: 2px;
+  padding: 3px 8px;
+  margin-right: 5px;
+  text-transform: uppercase;
+  &:hover {
+    cursor: pointer;
+    color: #3498DB;
+  }
+`;
+
 const OptionsWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+
+  @media (max-width: 600px) {
+    justify-content: space-between;
+  }
 `;
 
 const AdminIcon = styled.i`
@@ -279,7 +370,7 @@ const SingleEvent = ({ event, user, userIsOrganizer, userIsMember, claimEventMem
         </DeleteEvent>
         <AddMember onClick={props.onClickAddPosition}>
           <AdminIcon className="fa fa-plus" aria-hidden="true"></AdminIcon>
-          Add Position
+          Position
         </AddMember>
       </OptionsWrapper>
     : ''}
@@ -298,10 +389,7 @@ const SingleEvent = ({ event, user, userIsOrganizer, userIsMember, claimEventMem
     </TimeAndAddress>
     </TopWrapper>
 
-    <div style={{width: '75vw', maxWidth: '960px', margin: '0 auto'}}>
-      {props.children}
-    </div>
-
+    {props.children}
 
     <BottomWrapper>
 
@@ -320,6 +408,13 @@ const SingleEvent = ({ event, user, userIsOrganizer, userIsMember, claimEventMem
       <MemberContent>You are not a member of this event.</MemberContent>
     </NotAMember>
     }
+
+    {userIsMember || userIsOrganizer ?
+    <Chatroom to={`/chat/${event.eventId}`}>
+      <AdminIcon className="fa fa-comments" aria-hidden="true"></AdminIcon>
+      Chatroom
+    </Chatroom>
+    : ''}
 
     {userEventMembers.length > 0 ?
     <div>

@@ -10,6 +10,16 @@ const Wrapper = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
+
+  @media (max-width: 960px) {
+    margin: 20px auto;
+    width: 100%;
+    flex-direction: column;
+  }
+
+  @media (max-width: 600px) {
+    margin: 10px auto;
+  }
 `;
 
 const List = styled.div`
@@ -17,6 +27,15 @@ const List = styled.div`
   border-radius: 3px;
   border: 1px solid rgb(238, 238, 238);
   background: #fff;
+
+  @media (max-width: 960px) {
+    width: 75%;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 600px) {
+    width: 100%;
+  }
 `;
 
 const CreateBox = styled.div`
@@ -25,6 +44,21 @@ const CreateBox = styled.div`
   border: 1px solid rgb(238, 238, 238);
   padding: 40px 20px;
   background-color: #fff;
+
+  @media (max-width: 960px) {
+    order: -1;
+    width: 75%;
+    margin: 0 auto;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 600px) {
+    order: -1;
+    width: 100%;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 1.5em;
+  }
 `;
 
 const Organization = styled.div`

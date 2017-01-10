@@ -7,7 +7,6 @@ const Wrapper = styled.div`
   color: #2C3E50;
   width: 100%;
   padding: 20px;
-  width: 100%
   margin: 0 auto;
   margin-top: 20px;
 `;
@@ -24,6 +23,10 @@ const FormTitle = styled.h1`
   text-align: center;
   font-size: 1.5em;
   margin-bottom: 5px;
+
+  @media (max-width: 600px) {
+    width: 60%;
+  }
 `;
 
 const FormWrapper = styled.div`
@@ -63,6 +66,18 @@ const DescriptionInput = styled.textarea`
 const Center = styled.div`
   width: 30vw;
   margin: 0 auto;
+
+  @media (max-width: 800px) {
+    width: 60%;
+  }
+
+  @media (max-width: 700px) {
+    width: 70%;
+  }
+
+  @media (max-width: 400px) {
+    width: 90%;
+  }
 `;
 
 const FormError = styled.div`
@@ -79,6 +94,10 @@ const AddBtn = styled.button`
   font-weight: bold;
   display: block;
   width: 14.25vw;
+
+  @media (max-width: 700px) {
+    width: 45%;
+  }
 `;
 
 const CancelBtn = styled.button`
@@ -89,6 +108,10 @@ const CancelBtn = styled.button`
   display: block;
   width: 14.25vw;
   color: #fff;
+
+  @media (max-width: 700px) {
+    width: 45%;
+  }
 `;
 
 const ButtonWrapper = styled.div`
@@ -99,6 +122,14 @@ const ButtonWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-top: 15px;
+
+  @media (max-width: 700px) {
+    width: 70%;
+  }
+
+  @media (max-width: 400px) {
+    width: 90%;
+  }
 `;
 
 const EditOrganizationModal = (props) => (

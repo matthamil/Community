@@ -88,20 +88,8 @@ class EditOrganizationModalContainer extends Component {
         isOpen={this.props.isEditing}
         contentLabel="Edit Organization"
         onRequestClose={this.props.onCancel}
-        style={{
-          overlay: {
-            backgroundColor: 'rgba(0,0,0,0.2)'
-          },
-          content: {
-            padding: '0',
-            bottom: '0 !important',
-            border: 'none',
-            left: '0',
-            right: '0',
-            margin: '0 auto',
-            maxWidth: '33vw'
-          }
-        }}>
+        className="responsiveModal"
+        overlayClassName="responsiveModal--overlay">
         <EditOrganizationModal
           organization={this.props.organization}
           validationErrors={this.state.validationErrors}

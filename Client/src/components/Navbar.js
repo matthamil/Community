@@ -41,9 +41,9 @@ const NavHeader = styled.h1`
   letter-spacing: -2px;
 
   @media (max-width: 600px) {
-    font-size: 1.25em;
-    margin-top: 10px;
-    display: none;
+    font-size: 1.5em;
+    margin: 10px 0;
+    display: block;
   }
 `;
 
@@ -68,11 +68,11 @@ const LoginButton = styled.button`
 
   &:focus {
     outline: 0;
-    background-color: #3498DB;
+    background-color: #2C3E50;
   }
 
   @media (max-width: 650px) {
-    height: 12.5vh;
+    height: 20%;
     background: none;
     color: #2C3E50;
     font-size: 1.5em;
