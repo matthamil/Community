@@ -7,6 +7,8 @@ import NewEventMemberContainer from './NewEventMemberContainer';
 import EditEventModalContainer from './EditEventModalContainer';
 import Collapse from 'react-collapse';
 import Loading from '../components/Loading';
+import Modal from 'react-modal';
+import EventChatroomContainer from './EventChatroomContainer';
 
 class SingleEventContainer extends Component {
   constructor(props) {
@@ -19,7 +21,8 @@ class SingleEventContainer extends Component {
       userIsMember: false,
       userIsOrganizer: false,
       addPosition: false,
-      isEditing: false
+      isEditing: false,
+      isChatting: false
     };
 
     this.handleOnClaimEventMember = this.handleOnClaimEventMember.bind(this);
@@ -30,6 +33,7 @@ class SingleEventContainer extends Component {
     this.handleOnClickCancel = this.handleOnClickCancel.bind(this);
     this.handleOnClickDeleteEvent = this.handleOnClickDeleteEvent.bind(this);
     this.handleOnClickEditEvent = this.handleOnClickEditEvent.bind(this);
+    this.handleOnClickToggleChat = this.handleOnClickToggleChat.bind(this);
   }
 
   handleOnClaimEventMember(eventMemberId) {
@@ -42,6 +46,10 @@ class SingleEventContainer extends Component {
 
   handleOnClickAddPosition() {
     this.setState((prevState, props) => ({ addPosition: !prevState.addPosition }));
+  }
+
+  handleOnClickToggleChat() {
+    this.setState((prevState, props) => ({ isChatting: !prevState.isChatting }));
   }
 
   componentDidMount() {
@@ -112,7 +120,8 @@ class SingleEventContainer extends Component {
           unclaimedEventMembers={this.state.unclaimedEventMembers}
           onClickAddPosition={this.handleOnClickAddPosition}
           onClickDeleteEvent={this.handleOnClickDeleteEvent}
-          onClickEditEvent={this.handleOnClickEditEvent}>
+          onClickEditEvent={this.handleOnClickEditEvent}
+          onClickToggleChat={this.handleOnClickToggleChat}>
           <Collapse
             isOpened={this.state.addPosition && this.state.userIsOrganizer}
             springConfig={{stiffness: 200, damping: 20}}>
@@ -125,6 +134,15 @@ class SingleEventContainer extends Component {
             event={eventById}
             isEditing={this.state.isEditing}
             onCancel={this.handleOnClickEditEvent}/>
+          <Modal
+            isOpen={this.state.isChatting}
+            contentLabel="Chat"
+
+            className="responsiveModal"
+            overlayClassName="responsiveModal--overlay">
+            <EventChatroomContainer
+              eventId={eventById.eventId}/>
+          </Modal>
         </SingleEvent>
         :
         <Loading/>}

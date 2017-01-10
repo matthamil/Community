@@ -315,6 +315,22 @@ const AddMember = styled.span`
   }
 `;
 
+const Chatroom = styled(Link)`
+  display: inline-block;
+  background-color: #fff;
+  color: #b9b9b9;
+  letter-spacing: 1px;
+  text-align: left;
+  border-radius: 2px;
+  padding: 3px 8px;
+  margin-right: 5px;
+  text-transform: uppercase;
+  &:hover {
+    cursor: pointer;
+    color: #3498DB;
+  }
+`;
+
 const OptionsWrapper = styled.div`
   display: flex;
   flex-direction: row;
@@ -392,6 +408,13 @@ const SingleEvent = ({ event, user, userIsOrganizer, userIsMember, claimEventMem
       <MemberContent>You are not a member of this event.</MemberContent>
     </NotAMember>
     }
+
+    {userIsMember || userIsOrganizer ?
+    <Chatroom to={`/chat/${event.eventId}`}>
+      <AdminIcon className="fa fa-comments" aria-hidden="true"></AdminIcon>
+      Chatroom
+    </Chatroom>
+    : ''}
 
     {userEventMembers.length > 0 ?
     <div>
