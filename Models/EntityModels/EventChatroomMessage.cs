@@ -13,7 +13,11 @@ namespace Community.Models
         [Key]
         public int EventChatroomMessageId { get; set; }
 
-        public EventMember EventMember { get; set; }
+        public int EventId { get; set; }
+
+        [ForeignKey("Author")]
+        public string AuthorId { get; set; }
+        public ApplicationUser Author { get; set; }
 
         [Required]
         public string Message { get; set; }

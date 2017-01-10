@@ -83,6 +83,29 @@ namespace Community.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "EventChatroomMessage",
+                columns: table => new
+                {
+                    EventChatroomMessageId = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    AuthorId = table.Column<string>(nullable: true),
+                    DateCreated = table.Column<DateTime>(nullable: false, defaultValueSql: "strftime('%Y-%m-%d %H:%M:%S')"),
+                    EventId = table.Column<int>(nullable: false),
+                    LastModified = table.Column<DateTime>(nullable: true),
+                    Message = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EventChatroomMessage", x => x.EventChatroomMessageId);
+                    table.ForeignKey(
+                        name: "FK_EventChatroomMessage_AspNetUsers_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Organization",
                 columns: table => new
                 {
@@ -282,28 +305,6 @@ namespace Community.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "EventChatroomMessage",
-                columns: table => new
-                {
-                    EventChatroomMessageId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    DateCreated = table.Column<DateTime>(nullable: false, defaultValueSql: "strftime('%Y-%m-%d %H:%M:%S')"),
-                    EventMemberId = table.Column<int>(nullable: false),
-                    LastModified = table.Column<DateTime>(nullable: true),
-                    Message = table.Column<string>(maxLength: 1000, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EventChatroomMessage", x => x.EventChatroomMessageId);
-                    table.ForeignKey(
-                        name: "FK_EventChatroomMessage_EventMember_EventMemberId",
-                        column: x => x.EventMemberId,
-                        principalTable: "EventMember",
-                        principalColumn: "EventMemberId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
                 table: "AspNetUsers",
@@ -321,9 +322,9 @@ namespace Community.Migrations
                 column: "OrganizationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EventChatroomMessage_EventMemberId",
+                name: "IX_EventChatroomMessage_AuthorId",
                 table: "EventChatroomMessage",
-                column: "EventMemberId");
+                column: "AuthorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EventMember_EventId",
@@ -383,6 +384,9 @@ namespace Community.Migrations
                 name: "EventChatroomMessage");
 
             migrationBuilder.DropTable(
+                name: "EventMember");
+
+            migrationBuilder.DropTable(
                 name: "VolunteerAchievements");
 
             migrationBuilder.DropTable(
@@ -401,16 +405,13 @@ namespace Community.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "EventMember");
+                name: "Event");
 
             migrationBuilder.DropTable(
                 name: "Achievement");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "Event");
 
             migrationBuilder.DropTable(
                 name: "Organization");

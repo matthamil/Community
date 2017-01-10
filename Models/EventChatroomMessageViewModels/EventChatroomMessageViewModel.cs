@@ -13,30 +13,32 @@ namespace Community.Models.EventChatroomMessageViewModels
     public class EventChatroomMessageViewModel
     {
         public EventChatroomMessageViewModel() { }
-        public EventChatroomMessageViewModel(EventChatroomMessage message)
+        public EventChatroomMessageViewModel(EventChatroomMessage message, EventMember[] eMember)
         {
             EventChatroomMessageId = message.EventChatroomMessageId;
-            EventMember = new EventMemberViewModel(message.EventMember);
+            Author = new Author(eMember);
             Message = message.Message;
-            Timestamp = message.DateCreated;
+            Timestamp = message.DateCreated.Subtract(new DateTime(1970,1,1,0,0,0,DateTimeKind.Utc)).TotalMilliseconds;
             LastModified = message.LastModified;
         }
-        public EventChatroomMessageViewModel(EventChatroomMessage message, ApplicationUser admin)
+        public EventChatroomMessageViewModel(EventChatroomMessage message, ApplicationUser organizer)
         {
             EventChatroomMessageId = message.EventChatroomMessageId;
+            Author = new Author(organizer);
             Message = message.Message;
-            if (message.EventMember != null)
-            {
-                EventMember = new EventMemberViewModel(message.EventMember);
-            }
-            Timestamp = message.DateCreated;
+            Timestamp = message.DateCreated.Subtract(new DateTime(1970,1,1,0,0,0,DateTimeKind.Utc)).TotalMilliseconds;
             LastModified = message.LastModified;
-            Admin = new ApplicationUserViewModel(admin);
+        }
+        public EventChatroomMessageViewModel(EventChatroomMessage message, ApplicationUser organizer, EventMember[] eMember)
+        {
+            EventChatroomMessageId = message.EventChatroomMessageId;
+            Author = new Author(organizer, eMember);
+            Message = message.Message;
+            Timestamp = message.DateCreated.Subtract(new DateTime(1970,1,1,0,0,0,DateTimeKind.Utc)).TotalMilliseconds;
+            LastModified = message.LastModified;
         }
 
-        public EventMemberViewModel EventMember { get; set; }
-
-        public ApplicationUserViewModel Admin { get; set; }
+        public Author Author { get; set; }
 
         public int EventChatroomMessageId { get; set; }
 
@@ -45,7 +47,7 @@ namespace Community.Models.EventChatroomMessageViewModels
         public string Message { get; set; }
 
         [Required]
-        public DateTime Timestamp { get; set; }
+        public double Timestamp { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime? LastModified { get; set; }

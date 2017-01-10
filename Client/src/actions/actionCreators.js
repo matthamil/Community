@@ -276,10 +276,14 @@ export const getEventChatroomMessagesFailure = (error) => ({
   type: actions.GET_EVENT_CHATROOM_MESSAGES_FAILURE,
   payload: { error }
 });
-
-export const postEventChatroomMessage = (message) => ({
-  type: actions.POST_EVENT_CHATROOM_MESSAGE,
+export const receivedNewChatroomMessage = (message) => ({
+  type: actions.RECEIVED_NEW_CHATROOM_MESSAGE,
   payload: { message }
+});
+
+export const postEventChatroomMessage = (eventId, message) => ({
+  type: actions.POST_EVENT_CHATROOM_MESSAGE,
+  payload: { eventId, message }
 });
 export const postEventChatroomMessageSuccess = (message) => ({
   type: actions.POST_EVENT_CHATROOM_MESSAGE_SUCCESS,
@@ -290,9 +294,9 @@ export const postEventChatroomMessageFailure = (error) => ({
   payload: { error }
 });
 
-export const patchEventChatroomMessage = (message) => ({
+export const patchEventChatroomMessage = (eventId, messageId, message) => ({
   type: actions.PATCH_EVENT_CHATROOM_MESSAGE,
-  payload: { message }
+  payload: { eventId, messageId, message }
 });
 export const patchEventChatroomMessageSuccess = (message) => ({
   type: actions.PATCH_EVENT_CHATROOM_MESSAGE_SUCCESS,
@@ -307,8 +311,9 @@ export const deleteEventChatroomMessage = (id) => ({
   type: actions.DELETE_EVENT_CHATROOM_MESSAGE,
   payload: { id }
 });
-export const deleteEventChatroomMessageSuccess = () => ({
-  type: actions.DELETE_EVENT_CHATROOM_MESSAGE_SUCCESS
+export const deleteEventChatroomMessageSuccess = (id) => ({
+  type: actions.DELETE_EVENT_CHATROOM_MESSAGE_SUCCESS,
+  payload: { id }
 });
 export const deleteEventChatroomMessageFailure = (error) => ({
   type: actions.DELETE_EVENT_CHATROOM_MESSAGE_FAILURE,

@@ -150,21 +150,22 @@ namespace Community.Migrations
                     b.Property<int>("EventChatroomMessageId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("AuthorId");
+
                     b.Property<DateTime>("DateCreated")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasDefaultValueSql("strftime('%Y-%m-%d %H:%M:%S')");
 
-                    b.Property<int>("EventMemberId");
+                    b.Property<int>("EventId");
 
                     b.Property<DateTime?>("LastModified");
 
                     b.Property<string>("Message")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 1000);
+                        .IsRequired();
 
                     b.HasKey("EventChatroomMessageId");
 
-                    b.HasIndex("EventMemberId");
+                    b.HasIndex("AuthorId");
 
                     b.ToTable("EventChatroomMessage");
                 });
@@ -379,10 +380,9 @@ namespace Community.Migrations
 
             modelBuilder.Entity("Community.Models.EventChatroomMessage", b =>
                 {
-                    b.HasOne("Community.Models.EventMember", "EventMember")
+                    b.HasOne("Community.Models.ApplicationUser", "Author")
                         .WithMany()
-                        .HasForeignKey("EventMemberId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AuthorId");
                 });
 
             modelBuilder.Entity("Community.Models.EventMember", b =>

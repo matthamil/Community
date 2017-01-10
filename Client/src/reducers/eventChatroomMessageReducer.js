@@ -40,6 +40,14 @@ export default function eventChatroomMessageReducer(state = eventChatroom, actio
         loading: false,
         error: action.payload.error
       };
+    case a.RECEIVED_NEW_CHATROOM_MESSAGE:
+      return {
+        ...state,
+        messages: [
+          ...state.messages,
+          action.payload.message
+        ].sort((a, b) => new Date(a.timestamp) > (b.timestamp))
+      }
     case a.PATCH_EVENT_CHATROOM_MESSAGE:
       return {
         ...state,

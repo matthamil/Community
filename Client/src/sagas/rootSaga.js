@@ -4,6 +4,7 @@ import * as organization from './organizationSaga';
 import * as event from './eventSaga';
 import * as eventMember from './eventMemberSaga';
 import * as user from './userSaga';
+import * as eventChatroom from './eventChatroomMessageSaga';
 
 function startSagas(...sagas) {
   return function* rootSaga() {
@@ -35,6 +36,11 @@ const rootSaga = startSagas(
   eventMember.watchClaimEventMember,
   eventMember.watchUnclaimEventMember,
   eventMember.watchDeleteEventMember,
+
+  eventChatroom.watchGetEventChatroomMessages,
+  eventChatroom.watchPostEventChatroomMessage,
+  eventChatroom.watchPatchEventChatroomMessage,
+  eventChatroom.watchDeleteEventChatroomMessage,
 
   user.watchGetUser
 );

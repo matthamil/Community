@@ -27,9 +27,7 @@ class EventListContainer extends Component {
   }
 
   static defaultProps = {
-    nextEvent: {
-      eventMembers: []
-    }
+
   }
 
   handleOnSubmit() {
@@ -101,12 +99,12 @@ class EventListContainer extends Component {
     const { nextEvent, user } = this.props;
     return (
       <div>
-        {Object.getOwnPropertyNames(nextEvent).length > 0 ?
+        {nextEvent.eventMembers ?
         <NextEvent
           nextEvent={nextEvent}
           user={user}
           userEventMember={nextEvent.eventMembers.find((member) => member.volunteer.id === user.id)}/>
-        : undefined }
+        : 'You aren\'t signed up for an event yet.' }
         <EventListSearchBar
           onSubmit={this.handleOnSubmit}
           onChangeSearch={this.handleOnChangeSearch}
