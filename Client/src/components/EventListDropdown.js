@@ -12,6 +12,10 @@ const Wrapper = styled.div`
 
 const Event = styled.div`
   padding: 0 40px;
+
+  @media (max-width: 575px) {
+    text-align: center;
+  }
 `;
 
 const Flex = styled.div`
@@ -19,6 +23,10 @@ const Flex = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+
+  @media (max-width: 575px) {
+    flex-direction: column;
+  }
 `;
 
 const Name = styled(Link)`

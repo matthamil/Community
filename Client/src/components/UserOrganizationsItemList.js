@@ -9,6 +9,10 @@ const Wrapper = styled.div`
   position: relative;
   margin: 0 auto;
   margin-top: 25px;
+
+  @media (max-width: 575px) {
+    width: 100%;
+  }
 `;
 
 const MyOrganizations = styled.div`
@@ -20,6 +24,11 @@ const MyOrganizations = styled.div`
   align-items: center;
   justify-content: space-between;
   border-radius: 3px;
+
+  @media (max-width: 575px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const Header = styled.h1`
@@ -41,6 +50,14 @@ const CreateBtn = styled(Link)`
     background-color: rgb(35, 218, 91);
     text-decoration: none;
     cursor: pointer;
+  }
+
+  @media (max-width: 575px) {
+    display: block;
+    width: 100%;
+    margin-top: 20px;
+    text-align: center;
+    font-size: 1.5em;
   }
 `;
 
