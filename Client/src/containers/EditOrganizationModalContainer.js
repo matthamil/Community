@@ -90,7 +90,7 @@ class EditOrganizationModalContainer extends Component {
         onRequestClose={this.props.onCancel}
         style={{
           overlay: {
-            backgroundColor: 'rgba(0,0,0,0.2)'
+            backgroundColor: 'rgba(0,0,0,0.1)'
           },
           content: {
             padding: '0',
