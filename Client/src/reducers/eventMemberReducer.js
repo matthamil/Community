@@ -7,18 +7,18 @@ export default function eventMemberReducer(state = eventMember, action) {
     case a.GET_EVENT_MEMBERS:
       return {
         ...state,
-        loading: true,
+        loadingUserEventMembers: true,
       };
     case a.GET_EVENT_MEMBERS_SUCCESS:
       return {
         ...state,
-        loading: false,
+        loadingUserEventMembers: false,
         userEventMembers: action.payload.userEventMembers
       };
     case a.GET_EVENT_MEMBERS_FAILURE:
       return {
         ...state,
-        loading: false,
+        loadingUserEventMembers: false,
         error: action.payload.error
       };
     case a.GET_EVENT_MEMBERS_BY_ID:
