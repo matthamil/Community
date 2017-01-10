@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/actionCreators';
+import { browserHistory } from 'react-router';
 import NewEvent from '../components/NewEvent';
 
 class NewEventContainer extends Component {
@@ -26,6 +27,7 @@ class NewEventContainer extends Component {
     this.handleOnChangeFormInput = this.handleOnChangeFormInput.bind(this);
     this.handleOnChangeOrganization = this.handleOnChangeOrganization.bind(this);
     this.handleOnChangeState = this.handleOnChangeState.bind(this);
+    this.handleOnCancel = this.handleOnCancel.bind(this);
   }
 
   handleOnChangeFormInput(field, e) {
@@ -45,6 +47,8 @@ class NewEventContainer extends Component {
       state: state ? state.value : null
     });
   }
+
+
 
   handleValidateForm() {
     const { userOrganizations } = this.props;
@@ -109,6 +113,10 @@ class NewEventContainer extends Component {
     }
   }
 
+  handleOnCancel() {
+    browserHistory.push('/events/');
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.userOrganizations === undefined) return;
     const formattedOrganizations = nextProps.userOrganizations.reduce((all, organization) => {
@@ -140,7 +148,8 @@ class NewEventContainer extends Component {
         selectedOrganization={this.state.organizationId}
         selectedState={this.state.state}
         onChangeState={this.handleOnChangeState}
-        onChangeOrganization={this.handleOnChangeOrganization}/>
+        onChangeOrganization={this.handleOnChangeOrganization}
+        onCancel={this.handleOnCancel}/>
     );
   }
 }

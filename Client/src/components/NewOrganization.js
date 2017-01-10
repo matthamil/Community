@@ -23,6 +23,10 @@ const FormTitle = styled.h1`
   text-align: center;
   font-size: 1.5em;
   margin-bottom: 5px;
+
+  @media (max-width: 600px) {
+    width: 60%;
+  }
 `;
 
 const FormWrapper = styled.div`
