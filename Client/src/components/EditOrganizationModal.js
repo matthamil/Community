@@ -10,6 +10,7 @@ const Wrapper = styled.div`
   width: 100%;
   padding: 20px;
   width: 100%;
+  border-radius: 3px;
   margin: 0 auto;
 `;
 

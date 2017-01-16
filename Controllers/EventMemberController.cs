@@ -314,7 +314,8 @@ namespace Community.Controllers
             // For testing purposes
             // ApplicationUser user = await context.ApplicationUser.SingleOrDefaultAsync(u => u.FirstName == "Steve");
 
-            EventMember eMember = await context.EventMember.Include(e => e.Event)
+            EventMember eMember = await context.EventMember
+                .Include(e => e.Event)
                 .ThenInclude(ev => ev.Organization).ThenInclude(o => o.Organizer)
                 .Where(e => e.EventMemberId == id && e.Event.Organization.Organizer.Id == user.Id)
                 .SingleOrDefaultAsync();
@@ -325,12 +326,12 @@ namespace Community.Controllers
 
             // Delete event member and chatroom messages associated
             EventChatroomMessage[] chatMessages = await (
-                from messages in context.EventChatroomMessage
-                where messages.AuthorId == eMember.ApplicationUser.Id
+                from messages in context.EventChatroomMessage.Include(m => m.Author)
+                where eMember.ApplicationUser != null && messages.AuthorId == eMember.ApplicationUser.Id
                 select messages
             ).ToArrayAsync();
 
-            if (chatMessages != null)
+            if (chatMessages != null && chatMessages.Length > 0)
             {
                 context.RemoveRange(chatMessages);
             }
