@@ -1,7 +1,6 @@
 # Community
 
-[![GitHub issues](https://img.shields.io/github/issues/matthamil/community.svg)](https://github.com/matthamil/Community/issues/)
-[![](https://img.shields.io/github/issues-closed-raw/matthamil/Community.svg)]()
+> :warning: This was my full-stack project while at [Nashville Software School](http://nashvillesoftwareschool.com/).
 
 Community is a full-stack application helping connect volunteers with local nonprofit organizations. Community uses an ASP.NET backend with a React client.
 
@@ -16,8 +15,6 @@ Community is a full-stack application helping connect volunteers with local nonp
 * [License](#license)
 
 ## Background
-
-Community is my full-stack capstone project for [Nashville Software School](http://www.nashvillesoftwareschool).
 
 Community is a platform to connect volunteers with local nonprofit organizations. It serves nonprofit organizations by creating a platform where volunteers can sign up for events and event organizers can send all event-related communications through the application. Users can create accounts, search for events in their area, and attend events.
 
